@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "components/home/RedirectBoxContent.js"
+    "app/home/RedirectBoxContent.js"
   ],
   "exclude": ["node_modules"]
 }

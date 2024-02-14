@@ -1,0 +1,7 @@
+/* This class exists to make the border on the right side of the box thicker in Firefox since
+the default scrollbar is extremely thin. */
+@supports (-moz-appearance: none) {
+  div.firefoxborder {
+    border-right: solid 12px #52525b;
+  }
+}

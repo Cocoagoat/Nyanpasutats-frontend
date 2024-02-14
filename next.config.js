@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  cssModules: true,
   async redirects() {
     return [
       {
@@ -7,6 +8,11 @@ const nextConfig = {
         destination: "/home",
         permanent: true,
       },
+      // {
+      //   source: "/:username+/history",
+      //   destination: "/history",
+      //   permanent: true,
+      // },
     ];
   },
   images: {
