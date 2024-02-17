@@ -13,20 +13,23 @@ export default function SearchSeason() {
 
   const dispatch = React.useContext(SeasonalDispatchContext)!;
 
-  const { handleResetFilter, handleFilterByName } = useHandlers(dispatch);
+  const { handleResetFilter, handleFilterByName } = useHandlers(
+    dispatch,
+    "seasonal",
+  );
 
   return (
     <div ref={ref} className="relative">
       <SettingsButton onClick={() => setIsOpen(!isOpen)}>Search</SettingsButton>
       {isOpen && (
-        <div className="absolute left-0 mt-2 bg-zinc-700 shadow-lg rounded-lg p-4 z-50">
+        <div className="absolute left-0 z-50 mt-2 rounded-lg bg-zinc-700 p-4 shadow-lg">
           <div className="flex flex-col space-y-4">
             <input
               type="text"
               placeholder="Search"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="bg-zinc-700 border border-zinc-600 text-white focus:border-sky-550"
+              className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
             />
             {/* <button
               onClick={() => handleFilterByName(searchText)}

@@ -1,15 +1,23 @@
 import { RecommendationType } from "@/app/interfaces";
+import { checkValidYear } from "@/utils/checkValidValues";
 
-export const FILTER_BY_YEAR_RANGE = "FILTER_BY_YEAR_RANGE";
+export const FILTER_BY_YEAR = "FILTER_BY_YEAR";
 export const FILTER_BY_TAG = "FILTER_BY_TAG";
 export const FILTER_BY_MAL_SCORE = "FILTER_BY_MAL_SCORE";
 export const SORT_BY_PREDICTION_SCORE = "SORT_BY_PREDICTION_SCORE";
 export const SORT_BY_SCORE_DIFFERENCE = "SORT_BY_SCORE_DIFFERENCE";
 export const TOGGLE_SORT = "TOGGLE_SORT";
+export const TOGGLE_WATCHED = "TOGGLE_WATCHED";
+export const GENERATE_DISPLAYED_RECS = "GENERATE_DISPLAYED_RECS";
+export const RESET_FILTER = "RESET_FILTER";
+
+function FilterOutWatchedRecs(recs: RecommendationType[]) {
+  return [...recs].filter((rec) => !rec.UserScore);
+}
 
 export interface FilterByYearRangeAction {
-  type: typeof FILTER_BY_YEAR_RANGE;
-  payload: { min: number; max: number };
+  type: typeof FILTER_BY_YEAR;
+  payload: { startYear: number; endYear: number };
 }
 
 export interface FilterByTagAction {
@@ -32,7 +40,19 @@ export interface SortByScoreDifferenceAction {
 
 export interface ToggleSortAction {
   type: typeof TOGGLE_SORT;
-  payload: "PredictedScore" | "ScoreDiff";
+  payload: "SORT_BY_SCORE_DIFFERENCE" | "SORT_BY_PREDICTION_SCORE";
+}
+
+export interface ToggleWatchedAction {
+  type: typeof TOGGLE_WATCHED;
+}
+
+export interface GenerateDisplayedRecsAction {
+  type: typeof GENERATE_DISPLAYED_RECS;
+}
+
+export interface ResetFilterAction {
+  type: typeof RESET_FILTER;
 }
 
 export type RecommendationAction =
@@ -41,61 +61,76 @@ export type RecommendationAction =
   | FilterByMALScoreAction
   | SortByPredictionScoreAction
   | SortByScoreDifferenceAction
-  | ToggleSortAction;
+  | ToggleSortAction
+  | ToggleWatchedAction
+  | GenerateDisplayedRecsAction
+  | ResetFilterAction;
 
 export type initialStateType = {
   recs: RecommendationType[];
+  // recsNoWatched: RecommendationType[];
   recsSortedByDiff: RecommendationType[];
+  // recsNoWatchedSortedByDiff: RecommendationType[];
   displayedRecs: RecommendationType[];
   startYear: number;
   endYear: number;
   tag: string;
   minMALScore: number;
   maxMALScore: number;
-  sortByPredictionScore: boolean;
-  sortByScoreDifference: boolean;
+  noWatchedOnly: boolean;
+  // sortByPredictionScore: boolean;
+  // sortByScoreDifference: boolean;
   sortedBy: string;
 };
 
 export const recReducer = (
   state: initialStateType,
-  action: RecommendationAction
+  action: RecommendationAction,
 ) => {
   switch (action.type) {
-    case SORT_BY_PREDICTION_SCORE:
-      if (state.sortedBy == SORT_BY_PREDICTION_SCORE)
-        return {
-          ...state,
-          recs: [...state.recs].reverse(),
-        };
-      return {
-        ...state,
-        recs: [...state.recs].sort(
-          (a, b) => b.PredictedScore - a.PredictedScore
-        ),
-        sortedBy: SORT_BY_PREDICTION_SCORE,
-      };
-    case SORT_BY_SCORE_DIFFERENCE:
-      if (state.sortedBy == SORT_BY_SCORE_DIFFERENCE)
-        return {
-          ...state,
-          recs: [...state.recs].reverse(),
-        };
-      return {
-        ...state,
-        recs: [...state.recs].sort(
-          (a, b) =>
-            b.PredictedScore - b.MALScore - (a.PredictedScore - a.MALScore)
-        ),
-        sortedBy: SORT_BY_SCORE_DIFFERENCE,
-      };
     case TOGGLE_SORT:
       return {
         ...state,
-        displayedRecs:
-          action.payload == "PredictedScore"
-            ? state.recs
-            : state.recsSortedByDiff,
+        sortedBy: action.payload,
+      };
+    case TOGGLE_WATCHED:
+      return {
+        ...state,
+        noWatchedOnly: !state.noWatchedOnly,
+      };
+
+    case FILTER_BY_YEAR:
+      if (!checkValidYear(action.payload.startYear))
+        action.payload.startYear = 1960;
+      if (!checkValidYear(action.payload.endYear))
+        action.payload.endYear = new Date().getFullYear();
+      return {
+        ...state,
+        startYear: action.payload.startYear,
+        endYear: action.payload.endYear,
+      };
+
+    case RESET_FILTER:
+      return {
+        ...state,
+        startYear: 1960,
+        endYear: new Date().getFullYear(),
+      };
+
+    case GENERATE_DISPLAYED_RECS:
+      let displayRecs =
+        state.sortedBy === SORT_BY_PREDICTION_SCORE
+          ? state.recs
+          : state.recsSortedByDiff;
+      displayRecs = displayRecs.filter(
+        (rec) => rec.Year >= state.startYear && rec.Year <= state.endYear,
+      );
+      displayRecs = state.noWatchedOnly
+        ? FilterOutWatchedRecs(displayRecs)
+        : displayRecs;
+      return {
+        ...state,
+        displayedRecs: displayRecs,
       };
 
     default:

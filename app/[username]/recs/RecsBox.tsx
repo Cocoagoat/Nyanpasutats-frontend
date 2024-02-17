@@ -1,60 +1,90 @@
 "use client";
 import { RecommendationType } from "@/app/interfaces";
 import Rec from "./Rec";
-import { useReducer, useState } from "react";
+import { useMemo, useReducer, useState } from "react";
 
 import {
   recReducer,
   SORT_BY_PREDICTION_SCORE,
-  SORT_BY_SCORE_DIFFERENCE,
   TOGGLE_SORT,
+  TOGGLE_WATCHED,
 } from "./RecReducer";
 import LargeButton from "@/components/general/LargeButton";
 import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
 import { tooltipsContent } from "@/utils/TooltipsContent";
 import { Nav } from "@/components/general/Nav";
+import { useHandlers } from "../seasonal/reducer/useHandlers";
+import FilterDropdown from "../seasonal/dropdowns/FilterDropdown";
+
+// function sortRecsByDiff(recs: RecommendationType[]) {
+//   return [...recs].sort(
+//     (a, b) => b.PredictedScore - b.MALScore - (a.PredictedScore - a.MALScore),
+//   );
+// }
 
 export default function RecsBox({
-  recs_sorted_by_score,
+  recs,
+  recs_sorted_by_diff,
 }: {
-  recs_sorted_by_score: RecommendationType[];
+  recs: RecommendationType[];
+  recs_sorted_by_diff: RecommendationType[];
 }) {
   // Remove this later when fixed in back-end
-  const RECS_TO_SHOW = 50;
-  const recs = recs_sorted_by_score.slice(0, RECS_TO_SHOW);
-  const recs_sorted_by_diff = recs_sorted_by_score
-    .slice(0, RECS_TO_SHOW)
-    .sort(
-      (a, b) => b.PredictedScore - b.MALScore - (a.PredictedScore - a.MALScore)
-    );
-  console.log("-------------------------------------------------");
-  console.log(recs_sorted_by_diff.slice(0, 4));
+  // console.log(recs_sorted_by_score.slice(0, 4));
+  // console.log(recs_sorted_by_score.length);
+  // const RECS_TO_SHOW = 50;
+  // recs = recs.slice(0, RECS_TO_SHOW);
+  // recs_no_watched = recs_no_watched.slice(0, RECS_TO_SHOW);
+
+  // const recs_sorted_by_diff = recs_sorted_by_score
+  //   .slice(0, RECS_TO_SHOW)
+  //   .sort(
+  //     (a, b) => b.PredictedScore - b.MALScore - (a.PredictedScore - a.MALScore),
+  //   );
+  // console.log(recs[0]["ShowName"]);
+  // console.log(recs_no_watched[0]["ShowName"]);
+
+  // const recs_sorted_by_diff = useMemo(() => {
+  //   return sortRecsByDiff(recs);
+  // }, [recs]);
+
+  // const recs_no_watched_sorted_by_diff = useMemo(() => {
+  //   return sortRecsByDiff(recs_no_watched);
+  // }, [recs_no_watched]);
+
+  // console.log("-------------------");
+  // console.log(recs[0]["ShowName"]);
+  // console.log(recs_no_watched[0]["ShowName"]);
+
+  // console.log(recs.slice(0, 10));
+  // console.log(recs_no_watched.slice(0, 10));
+  // console.log(recs_sorted_by_diff.slice(0, 10));
+  // console.log(recs_no_watched_sorted_by_diff.slice(0, 10));
+  // console.log(recs_sorted_by_diff.slice(0, 4));
   const initialState = {
+    // Saving all 4 recs arrays to state for toggling between them to avoid extra computation
+    // in case users go ham on the sorting buttons
     recs: recs,
+    // recsNoWatched: recs_no_watched,
     recsSortedByDiff: recs_sorted_by_diff,
+    // recsNoWatchedSortedByDiff: recs_no_watched_sorted_by_diff,
     displayedRecs: recs,
     startYear: 1960,
     endYear: new Date().getFullYear(),
     tag: "",
     minMALScore: 6.5,
     maxMALScore: 10,
-    sortByPredictionScore: true,
-    sortByScoreDifference: false,
-    sortedBy: "",
+    // sortByPredictionScore: true,
+    // sortByScoreDifference: false,
+    sortedBy: SORT_BY_PREDICTION_SCORE,
+    noWatchedOnly: false,
   };
+
+  // console.log(initialState);
   const [state, dispatch] = useReducer(recReducer, initialState);
 
-  const handleSortByPredictionScore = () => {
-    dispatch({ type: SORT_BY_PREDICTION_SCORE });
-  };
-
-  const handleSortByScoreDiff = () => {
-    dispatch({ type: SORT_BY_SCORE_DIFFERENCE });
-  };
-
-  function handleToggleSort(sortBy: "PredictedScore" | "ScoreDiff") {
-    dispatch({ type: TOGGLE_SORT, payload: sortBy });
-  }
+  const { handleToggleSort, handleFilterByYear, handleToggleWatched } =
+    useHandlers(dispatch, "recs");
 
   const showColumns = [
     "Image",
@@ -65,20 +95,28 @@ export default function RecsBox({
     "Score Difference",
   ];
 
-  const [buttonHovered, setButtonHovered] = useState(false);
+  // const [buttonHovered, setButtonHovered] = useState(false);
 
   return (
     <>
       <Nav />
-      <div className="max-w-front-n-center-600 flex flex-col text-center text-white inset-0 absolute mx-auto max-h-front-n-center">
-        <div className="flex w-full mt-32 relative justify-between">
+      <div className="absolute inset-0 mx-auto flex max-h-front-n-center max-w-front-n-center-600 flex-col text-center text-white">
+        <div className="relative mt-32 flex w-full justify-between">
           <LargeButton
             extraStyles="py-4 relative bg-zinc-600"
-            onClick={() => handleToggleSort("ScoreDiff")}
+            onClick={() => {
+              console.log("Before handle");
+              state.sortedBy === SORT_BY_PREDICTION_SCORE
+                ? handleToggleSort("SORT_BY_SCORE_DIFFERENCE")
+                : handleToggleSort("SORT_BY_PREDICTION_SCORE");
+              console.log("After handle");
+            }}
           >
-            Sort by Score Difference
+            {state.sortedBy === SORT_BY_PREDICTION_SCORE
+              ? "Sort by Score Difference"
+              : "Sort by Predicted Score"}
           </LargeButton>
-          <div className="absolute top-0 right-0 z-50">
+          <div className="absolute right-0 top-0 z-50">
             <TooltipQuestionMark
               text={tooltipsContent["Recommendation Sort"]}
             />
@@ -87,23 +125,30 @@ export default function RecsBox({
           <br />
           <LargeButton
             extraStyles="py-4 bg-zinc-600"
-            onClick={() => handleToggleSort("PredictedScore")}
+            onClick={() => handleFilterByYear(2015, 2016)}
           >
-            Sort by Predicted Score
+            Filter By Year
+          </LargeButton>
+          <FilterDropdown type="Recs" customDispatch={dispatch} />
+          <LargeButton
+            extraStyles="py-4 bg-zinc-600"
+            onClick={handleToggleWatched}
+          >
+            Watched Only
           </LargeButton>
         </div>
         <table>
           <thead>
             <tr>
               {showColumns.map((col) => (
-                <th key={col} className="py-2  bg-zinc-800 px-4 ">
+                <th key={col} className="bg-zinc-800  px-4 py-2 ">
                   {col}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {state.displayedRecs.map((rec) => (
+            {state.displayedRecs.slice(0, 50).map((rec) => (
               <Rec rec={rec} key={rec["ShowName"]} />
             ))}
           </tbody>

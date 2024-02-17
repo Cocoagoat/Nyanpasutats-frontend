@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useHandlers } from "../reducer/useHandlers";
 import { DropdownType } from "@/app/interfaces";
 import { SeasonalDispatchContext } from "../reducer/SeasonalContext";
@@ -6,18 +6,42 @@ import { Action } from "../reducer/actions";
 
 export default function FilterByYear({
   type,
-  graphDispatch,
+  customDispatch,
 }: {
   type: DropdownType;
-  graphDispatch?: React.Dispatch<Action>;
+  customDispatch?: React.Dispatch<Action>;
 }) {
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   //   const [isOpen, setIsOpen] = useState(false);
   const dispatch = React.useContext(SeasonalDispatchContext)!;
   const dispatchToUse =
-    type === "Full" || !graphDispatch ? dispatch : graphDispatch;
-  let { handleFilterByYear, handleResetFilter } = useHandlers(dispatchToUse);
+    type === "Full" || !customDispatch ? dispatch : customDispatch;
+  // let handleFilterByYear = ""
+
+  // const useHandlersType = type === "Recs" ? "recs" : "seasonal";
+  // TypeScript is dumb so above line doesn't work
+  // if (type === "Recs") {
+  //   let { handleFilterByYear } = useHandlers(dispatchToUse, "recs");
+  // } else {
+  //   let { handleFilterByYear } = useHandlers(dispatchToUse, "seasonal");
+  // }
+
+  let handleFilterByYear: (startYear: number, endYear: number) => void;
+  let handleResetFilter: () => void;
+  if (type === "Recs") {
+    ({ handleFilterByYear, handleResetFilter } = useHandlers(
+      dispatchToUse,
+      "recs",
+    ));
+  } else {
+    // Assuming RecHandlers has the same type of handlers
+    ({ handleFilterByYear, handleResetFilter } = useHandlers(
+      dispatchToUse,
+      "seasonal",
+    ));
+  }
+
   return (
     <div className="absolute left-0 z-50 mt-2 rounded-lg bg-zinc-700 p-4 shadow-lg">
       <div className="flex flex-col space-y-4">

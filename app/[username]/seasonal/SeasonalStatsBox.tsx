@@ -84,7 +84,7 @@ export default function SeasonalStatsBox({
                 <Season
                   seasonStats={seasonStats}
                   season={season}
-                  seasonCount={Object.keys(seasonalStats).length}
+                  seasonCount={Object.keys(displayedStats).length}
                   key={season}
                   brightness={brightness}
                 />

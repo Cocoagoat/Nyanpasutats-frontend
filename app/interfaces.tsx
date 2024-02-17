@@ -1,4 +1,5 @@
 import { tooltipsContent } from "@/utils/TooltipsContent";
+import { NumberValueToken } from "html2canvas/dist/types/css/syntax/tokenizer";
 import { Dispatch, SetStateAction } from "react";
 
 export type User = {
@@ -11,7 +12,14 @@ export type RecommendationType = {
   PredictedScore: number;
   UserScore: number;
   MALScore: number;
+  Year: number;
+  Season: SeasonName;
+  Tags: string[];
 };
+
+export type RecommendationSortOptions =
+  | "SORT_BY_SCORE_DIFFERENCE"
+  | "SORT_BY_PREDICTION_SCORE";
 
 export type ShowToDisplay = {
   imageUrl: string;
@@ -132,6 +140,6 @@ export type ChartDataKeys =
 
 export type SeasonName = "Winter" | "Spring" | "Summer" | "Fall";
 
-export type DropdownType = "Full" | "Graph";
+export type DropdownType = "Full" | "Graph" | "Recs";
 
 export type displayedMeanOptions = "AvgScore" | "FavoritesAvgScore" | "Shows";

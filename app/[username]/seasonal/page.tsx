@@ -5,6 +5,7 @@ import { SeasonsData } from "@/app/interfaces";
 import SeasonalStatsBox from "./SeasonalStatsBox";
 import { Nav } from "@/components/general/Nav";
 import ToasterWithX from "@/components/general/ToasterWithX";
+import FetchError from "@/components/general/FetchError";
 
 export default async function page({
   params,
@@ -20,41 +21,50 @@ export default async function page({
       if (seasonalStats.hasOwnProperty(season)) {
         seasonalStats[season].AvgScore = roundToTwo(
           seasonalStats[season].AvgScore,
-          2
+          2,
         );
         seasonalStats[season].FavoritesAvgScore = roundToTwo(
           seasonalStats[season].FavoritesAvgScore,
-          2
+          2,
         );
         seasonalStats[season].Affinity = roundToTwo(
           seasonalStats[season].Affinity,
-          3
+          3,
         );
       }
     }
     return seasonalStats;
   }
 
+  let error = null;
+  let seasonalStats, noSequelsSeasonStats;
   try {
-    let [seasonalStats, noSequelsSeasonStats]: [SeasonsData, SeasonsData] =
-      await getUserData(params.username, "seasonal");
+    [seasonalStats, noSequelsSeasonStats] = await getUserData(
+      params.username,
+      "seasonal",
+    );
+  } catch (err) {
+    error = (err as Error).message;
+  }
 
-    seasonalStats = roundStatsMeanScores(seasonalStats);
-    noSequelsSeasonStats = roundStatsMeanScores(noSequelsSeasonStats);
+  seasonalStats = roundStatsMeanScores(seasonalStats);
+  noSequelsSeasonStats = roundStatsMeanScores(noSequelsSeasonStats);
 
-    return (
-      <>
-        <Nav />
+  return (
+    <>
+      <Nav />
+      {error ? (
+        <FetchError
+          errorMessage={error}
+          username={params.username}
+          pathToRetry="seasonal"
+        />
+      ) : (
         <SeasonalStatsBox
           seasonStats={seasonalStats}
           noSequelsSeasonStats={noSequelsSeasonStats}
         ></SeasonalStatsBox>
-      </>
-    );
-  } catch (error) {
-    const err = error as Error;
-    const errorMessage = err.message;
-    console.log(errorMessage, 5, 6);
-    return <ListNotFound errorMessage={errorMessage} />;
-  }
+      )}
+    </>
+  );
 }

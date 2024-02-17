@@ -11,10 +11,10 @@ import FilterByShowAmount from "./FilterByShowAmount";
 
 export default function FilterDropdown({
   type,
-  graphDispatch,
+  customDispatch,
 }: {
   type: DropdownType;
-  graphDispatch?: React.Dispatch<Action>;
+  customDispatch?: React.Dispatch<any>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [yearRangeIsOpen, setYearRangeIsOpen] = useState(false);
@@ -25,8 +25,11 @@ export default function FilterDropdown({
   const dispatch = React.useContext(SeasonalDispatchContext)!;
 
   const dispatchToUse =
-    type === "Full" || !graphDispatch ? dispatch : graphDispatch;
-  let { handleFilterByYear, handleResetFilter } = useHandlers(dispatchToUse);
+    type === "Full" || !customDispatch ? dispatch : customDispatch;
+  // let { handleFilterByYear, handleResetFilter } = useHandlers(
+  //   dispatchToUse,
+  //   "seasonal",
+  // );
 
   const ref = useCloseOnOutsideClick<HTMLDivElement>(isOpen, setIsOpen);
 
@@ -49,48 +52,19 @@ export default function FilterDropdown({
           <SortFilterOption
             statName="Year Range"
             onClick={() => setYearRangeIsOpen(!yearRangeIsOpen)}
-            // onMouseEnter={() => setYearRangeIsOpen(true)}
           />
-          <SortFilterOption
-            statName="Show Amount"
-            onClick={() => setShowAmountIsOpen(!showAmountIsOpen)}
-          />
-          {yearRangeIsOpen && <FilterByYear type={type} />}
-          {showAmountIsOpen && <FilterByShowAmount type={type} />}
-          {/* <input
-              type="number"
-              placeholder="Start Year"
-              value={startYear}
-              onChange={(e) => setStartYear(e.target.value)}
-              className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
+          {type !== "Recs" && (
+            <SortFilterOption
+              statName="Show Amount"
+              onClick={() => setShowAmountIsOpen(!showAmountIsOpen)}
             />
-            <input
-              type="number"
-              placeholder="End Year"
-              value={endYear}
-              onChange={(e) => setEndYear(e.target.value)}
-              className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
-            />
-            <div className="flex justify-center gap-10">
-              <button
-                onClick={() =>
-                  handleFilterByYear(
-                    Number(startYear),
-                    Number(endYear),
-                    setIsOpen,
-                  )
-                }
-                className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white transition-colors duration-200 hover:bg-sky-550"
-              >
-                Apply
-              </button>
-              <button
-                onClick={handleResetFilter}
-                className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white transition-colors duration-200 hover:bg-sky-550"
-              >
-                Reset
-              </button>
-            </div> */}
+          )}
+          {yearRangeIsOpen && (
+            <FilterByYear type={type} customDispatch={customDispatch} />
+          )}
+          {showAmountIsOpen && type !== "Recs" && (
+            <FilterByShowAmount type={type} />
+          )}
         </div>
         // </div>
       )}

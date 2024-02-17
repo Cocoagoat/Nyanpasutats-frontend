@@ -17,11 +17,11 @@ export default function DisplayOptions({
 }) {
   const dispatch = useContext(SeasonalDispatchContext)!;
   const { noSequels } = useContext(SeasonalContext)!;
-  const { handleToggleSequels } = useHandlers(dispatch);
+  const { handleToggleSequels } = useHandlers(dispatch, "seasonal");
 
   return (
-    <div className="sticky z-30 top-0">
-      <div className="mb-12 w-full z-30 pt-8 flex flex-wrap gap-12 pb-8 border-b-2 border-zinc-600 bg-zinc-800 justify-center">
+    <div className="sticky top-0 z-30">
+      <div className="z-30 mb-12 flex w-full flex-wrap justify-center gap-12 border-b-2 border-zinc-600 bg-zinc-800 pb-8 pt-8">
         <SortingDropdown type="Full" />
         <FilterDropdown type="Full" />
         <SearchSeason />
@@ -30,7 +30,6 @@ export default function DisplayOptions({
           onClick={() => {
             handleToggleSequels(noSequels);
           }}
-          fill={noSequels}
         >
           {noSequels ? "Include Sequels" : "Exclude Sequels"}
         </SettingsButton>

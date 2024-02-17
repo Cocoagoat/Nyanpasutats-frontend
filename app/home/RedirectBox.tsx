@@ -4,6 +4,7 @@ import RedirectBoxText from "./RedirectBoxText";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import toast from "react-hot-toast";
 import test from "@/public/nnb6.png";
+import { navigate } from "./RedirectNavigate";
 
 type RedirectBoxProps = {
   title: string;
@@ -88,16 +89,25 @@ RedirectBoxProps) {
       />
     </button>
   ) : (
-    <Link
-      href={link}
-      style={{ backgroundImage: `url(${test.src})` }}
-      className={`${redirectBoxStyle} rounded-xl bg-gray-950 bg-cover text-zinc-200 shadow-lg shadow-blue-950 hover:shadow-lime-600 `}
-    >
-      <RedirectBoxText
-        title={title}
-        description={description}
-        disabled={disabled}
-      />
-    </Link>
+    <form action={navigate}>
+      <input type="hidden" name="path" value={link} />
+      <button
+        style={{ backgroundImage: `url(${test.src})` }}
+        className={`${redirectBoxStyle} rounded-xl bg-gray-950 bg-cover text-zinc-200
+         shadow-lg shadow-blue-950 hover:shadow-lime-600 `}
+      >
+        {/* <Link
+          href={link}
+          style={{ backgroundImage: `url(${test.src})` }}
+          className={`${redirectBoxStyle} rounded-xl bg-gray-950 bg-cover text-zinc-200 shadow-lg shadow-blue-950 hover:shadow-lime-600 `}
+        > */}
+        <RedirectBoxText
+          title={title}
+          description={description}
+          disabled={disabled}
+        />
+        {/* </Link> */}
+      </button>
+    </form>
   );
 }

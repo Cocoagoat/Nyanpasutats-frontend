@@ -1,16 +1,32 @@
 import { getShowData } from "@/app/home/api";
 import { RecommendationType } from "@/app/interfaces";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const temp_img_url = "https://cdn.myanimelist.net/images/anime/1447/114282.jpg";
 
-export default async function Rec({ rec }: { rec: RecommendationType }) {
+export default function Rec({ rec }: { rec: RecommendationType }) {
+  const [imgUrl, setImgUrl] = useState<string>(temp_img_url);
+  useEffect(() => {
+    // Define the async function inside the effect
+    async function fetchImgUrl() {
+      try {
+        const url = await getShowData(rec["ShowName"], "img_url");
+        setImgUrl(url); // Update state with the URL
+      } catch (error) {
+        // Handle any errors here, such as setting a default image or logging the error
+        console.error(error);
+      }
+    }
+
+    // Call the async function
+    fetchImgUrl();
+  }, [rec]);
   // const img_url = await getShowData(rec["ShowName"], "img_url");
   return (
     <tr>
       <td>
-        <Image src={temp_img_url} alt="Test image" width={75} height={105} />
+        <Image src={imgUrl} alt="Test image" width={75} height={105} />
       </td>
       <td className="w-[350px]">{rec["ShowName"]}</td>
 

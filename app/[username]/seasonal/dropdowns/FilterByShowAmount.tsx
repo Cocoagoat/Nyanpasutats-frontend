@@ -19,7 +19,7 @@ export default function FilterByShowAmount({
   const dispatchToUse =
     type === "Full" || !graphDispatch ? dispatch : graphDispatch;
   let { handleFilterByYear, handleFilterByShowCount, handleResetFilter } =
-    useHandlers(dispatchToUse);
+    useHandlers(dispatchToUse, "seasonal");
   return (
     <div className="absolute left-0 z-50 mt-2 rounded-lg bg-zinc-700 p-4 shadow-lg">
       <div className="flex flex-col space-y-4">

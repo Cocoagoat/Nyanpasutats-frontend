@@ -5,7 +5,7 @@ import { SeasonsData } from "@/app/interfaces";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
 import { getUserData } from "./api";
-import Loading from "../[username]/recs/loading";
+import Loading from "../../components/general/loading";
 import { useRouter } from "next/navigation";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import Image from "next/image";

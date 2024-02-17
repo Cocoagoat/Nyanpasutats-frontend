@@ -23,38 +23,40 @@
 type UserPathType = "recs" | "affinity" | "seasonal" | "affinity";
 type ShowPathType = "img_url" | "img_urls" | "full";
 export async function getUserData(username: string, path: UserPathType) {
-  const res = await fetch(
-    `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}`,
-    { next: { revalidate: 3000 } },
-  );
+  try {
+    const res = await fetch(
+      `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}`,
+      { next: { revalidate: 3000 } },
+    );
 
-  console.log(res);
+    console.log(res);
 
-  // Handling client-side errors
-  if (!res.ok) {
-    const errorMessage = await res.text();
-    // console.log(errorMessage, 8, 9);
-    throw new Error(errorMessage.slice(1, -1));
+    // if (!res.ok) {
+    //   const errorMessage = await res.text();
+    //   throw new Error(errorMessage.slice(1, -1));
+    // }
+
+    const rawData = await res.text();
+    const data = JSON.parse(rawData);
+
+    switch (path) {
+      case "recs":
+        return [data["Recommendations"], data["RecommendationsNoWatched"]];
+      case "affinity":
+        return [data["PositiveAffs"], data["NegativeAffs"]];
+      case "seasonal":
+        return [data["Stats"], data["StatsNoSequels"]];
+    }
+  } catch (error) {
+    let errorMessage = `An unexpected error occurred on our end - ${(error as Error).message}`;
+    if (error instanceof TypeError) {
+      errorMessage =
+        "We couldn't fetch your data. This might be an issue on our end - please try again later.";
+    }
+
+    console.error(errorMessage);
+    throw new Error(errorMessage);
   }
-
-  const rawData = await res.text();
-  // console.log("Raw Data:", rawData);
-  const data = JSON.parse(rawData);
-  // console.log("Parsed Data:", data);
-
-  switch (path) {
-    case "recs":
-      return data["Recommendations"];
-    case "affinity":
-      return [data["PositiveAffs"], data["NegativeAffs"]];
-    case "seasonal":
-      return [data["Stats"], data["StatsNoSequels"]];
-  }
-  // if (path === "recs") {
-  //   return data["Recommendations"];
-  // } else if (path === "seasonal") {
-  //   return [data["Stats"], data["StatsNoSequels"]];
-  // } else if
 }
 
 export async function getShowData(

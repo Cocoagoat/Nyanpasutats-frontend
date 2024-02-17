@@ -36,7 +36,7 @@ function SortingDropdown({
     handleSortByShowCount,
     handleSortByFavMean,
     handleSortByShows,
-  } = useHandlers(dispatchToUse);
+  } = useHandlers(dispatchToUse, "seasonal");
 
   const { sortedBy, sortedReverse } = useContext(SeasonalContext)!;
 
