@@ -4,6 +4,7 @@ import React from "react";
 import { Nav } from "@/components/general/Nav";
 import AffTable from "./AffTable";
 import FetchError from "@/components/general/FetchError";
+import styles from "./Affinity.module.css";
 
 export default async function page({
   params,
@@ -29,7 +30,10 @@ export default async function page({
           pathToRetry="affinity"
         />
       ) : (
-        <div className="flex flex-col items-center justify-center gap-48 border-sky-550 text-center text-lg text-white lg:flex-row">
+        <div
+          className={`absolute inset-0 mx-auto my-auto flex flex-col items-center justify-center
+         gap-48 border-sky-550 text-center text-lg text-white lg:flex-row ${styles.hiddenscrollbar}`}
+        >
           <AffTable aff_data={pos_affs} type="Positive" />
           <AffTable aff_data={neg_affs} type="Negative" />
         </div>

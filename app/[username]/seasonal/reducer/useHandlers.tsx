@@ -9,7 +9,7 @@ type SeasonalHandlers = {
   handleSortByMean: () => void;
   handleSortBySeason: () => void;
   handleSortByFavMean: () => void;
-  handleSortByShows: () => void;
+  // handleSortByShows: () => void;
   handleSortByShowCount: () => void;
   handleChangeDisplayedStat: (stat: ChartDataKeys) => void;
   handleFilterByYear: (
@@ -48,10 +48,10 @@ function createSeasonalHandlers(
       dispatch({ type: "CHANGE_DISPLAYED_MEAN", payload: "FavoritesAvgScore" });
     },
 
-    handleSortByShows: () => {
-      dispatch({ type: "SORT", payload: { by: "Shows" } });
-      dispatch({ type: "CHANGE_DISPLAYED_MEAN", payload: "Shows" });
-    },
+    // handleSortByShows: () => {
+    //   dispatch({ type: "SORT", payload: { by: "Shows" } });
+    //   dispatch({ type: "CHANGE_DISPLAYED_MEAN", payload: "Shows" });
+    // },
 
     handleChangeDisplayedStat: (stat: ChartDataKeys) => {
       dispatch({ type: "CHANGE_DISPLAYED_MEAN", payload: stat });

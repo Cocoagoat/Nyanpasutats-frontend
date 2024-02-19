@@ -31,12 +31,6 @@ export default function SearchSeason() {
               onChange={(e) => setSearchText(e.target.value)}
               className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
             />
-            {/* <button
-              onClick={() => handleFilterByName(searchText)}
-              className="w-1/3 p-1 border border-zinc-600 text-white self-center transition-colors duration-200 hover:bg-sky-550 rounded-md"
-            >
-              Apply
-            </button> */}
             <LargeButton onClick={() => handleFilterByName(searchText)}>
               Apply
             </LargeButton>

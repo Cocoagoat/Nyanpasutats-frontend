@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .hoverFirefly {
+    @apply hover:bg-lime-600; /* Tailwind utility classes for text size and width */
+    /* Add any additional custom CSS if needed */
+  }
+}
+
 /* Your container */
 .container {
   position: relative;
@@ -60,10 +67,10 @@
   background-color: #646469;
 }
 
-html {
-  scrollbar-color: #52525b #27272a; /* thumb and track color */
-  scrollbar-width: auto;
-}
+/* html { */
+/* scrollbar-color: #52525b #27272a; thumb and track color */
+/* scrollbar-width: auto; */
+/* } */
 
 @supports (-moz-appearance: none) {
   div.firefox-border {

@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { useHandlers } from "../reducer/useHandlers";
 import { DropdownType } from "@/app/interfaces";
 import { SeasonalDispatchContext } from "../reducer/SeasonalContext";
@@ -17,15 +17,6 @@ export default function FilterByYear({
   const dispatch = React.useContext(SeasonalDispatchContext)!;
   const dispatchToUse =
     type === "Full" || !customDispatch ? dispatch : customDispatch;
-  // let handleFilterByYear = ""
-
-  // const useHandlersType = type === "Recs" ? "recs" : "seasonal";
-  // TypeScript is dumb so above line doesn't work
-  // if (type === "Recs") {
-  //   let { handleFilterByYear } = useHandlers(dispatchToUse, "recs");
-  // } else {
-  //   let { handleFilterByYear } = useHandlers(dispatchToUse, "seasonal");
-  // }
 
   let handleFilterByYear: (startYear: number, endYear: number) => void;
   let handleResetFilter: () => void;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getUserData } from "@/app/home/api";
 import { RecommendationType } from "@/app/interfaces";
 import RecsBox from "./RecsBox";
@@ -19,6 +19,7 @@ export default async function page({
   params: { username: string };
 }) {
   let error = null;
+
   let recs: RecommendationType[] = [],
     recs_sorted_by_diff: RecommendationType[] = [];
   try {

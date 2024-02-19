@@ -1,0 +1,32 @@
+@tailwind utilities;
+
+@layer utilities {
+  .modifiedButton {
+    @apply from-blue-970 mx-auto w-28 bg-gradient-to-tl   px-2 text-xs hover:bg-current hover:bg-lime-600 lg:w-44 lg:text-sm; /* Tailwind utility classes for text size and width */
+    /* Add any additional custom CSS if needed */
+  }
+
+  .fireflyThemeContainerGreen {
+    @apply bg-gradient-to-tr from-lime-700;
+  }
+
+  .fireflyThemeContainerBlue {
+    @apply from-blue-970 bg-gradient-to-br;
+  }
+}
+
+/* Hides the scrollbar but allows scrolling */
+.hiddenscrollbar::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+/* Works on Firefox */
+.hiddenscrollbar {
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Works on IE and Edge */
+.hiddenscrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}

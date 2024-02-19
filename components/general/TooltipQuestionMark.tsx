@@ -5,9 +5,10 @@ export function TooltipQuestionMark({ text }: { text: string }) {
 
   return (
     <div className={`absolute right-1/5`}>
-      <div className="relative flex items-center justify-center w-full">
+      <div className="relative flex w-full items-center justify-center">
         <div
-          className="bg-zinc-700 rounded-full w-6 h-6 flex items-center justify-center text-xs cursor-pointer"
+          className="flex h-6 w-6 cursor-pointer items-center justify-center
+           rounded-full bg-zinc-700 text-xs hover:bg-lime-600"
           onClick={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
@@ -15,7 +16,7 @@ export function TooltipQuestionMark({ text }: { text: string }) {
         </div>
         {showTooltip && (
           <div
-            className="absolute min-w-[100px] right-0  sm:min-w-[150px] max-w-[300px] mb-2 px-2 py-1 z-50 whitespace-pre-line bg-zinc-700 text-white text-xs rounded-xl"
+            className="absolute right-0 z-50  mb-2 min-w-[100px] max-w-[300px] whitespace-pre-line rounded-xl bg-zinc-700 px-2 py-1 text-xs text-white sm:min-w-[150px]"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
           >

@@ -16,7 +16,9 @@ export default function LargeButton({
       onClick={onClick}
       className={` ${
         fill ? "" : ""
-      }  ${extraStyles} py-1.5 px-4 text-center mx-auto col-start-2 col-span-2 max-w-1/2 border border-zinc-600 text-white self-center transition-colors duration-200 hover:bg-sky-550 rounded-md`}
+      }   col-span-2 col-start-2 mx-auto max-w-1/2 self-center 
+      rounded-md border border-zinc-600 px-4 py-1.5 text-center 
+      text-white transition-colors duration-200 hover:bg-sky-550 ${extraStyles}`}
     >
       {children}
     </button>

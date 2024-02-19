@@ -3,7 +3,6 @@ import {
   SeasonalDispatchContext,
 } from "@/app/[username]/seasonal/reducer/SeasonalContext";
 import { Action } from "@/app/[username]/seasonal/reducer/actions";
-
 import React, { useContext, useState } from "react";
 import { useHandlers } from "../reducer/useHandlers";
 import SettingsButton from "@/components/general/SettingsButton";
@@ -13,14 +12,14 @@ import SortFilterOption from "./SortFilterOption";
 
 function SortingDropdown({
   type,
-  graphDispatch,
-  graphSortedBy,
-  graphSortedReverse,
+  customDispatch,
+  customSortedBy,
+  customSortedReverse,
 }: {
   type: DropdownType;
-  graphDispatch?: React.Dispatch<Action>;
-  graphSortedBy?: string;
-  graphSortedReverse?: boolean;
+  customDispatch?: React.Dispatch<Action>;
+  customSortedBy?: string;
+  customSortedReverse?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -28,21 +27,21 @@ function SortingDropdown({
   const dispatch = useContext(SeasonalDispatchContext)!;
 
   const dispatchToUse =
-    type === "Full" || !graphDispatch ? dispatch : graphDispatch;
+    type === "Full" || !customDispatch ? dispatch : customDispatch;
 
   const {
     handleSortByMean,
     handleSortBySeason,
     handleSortByShowCount,
     handleSortByFavMean,
-    handleSortByShows,
+    handleChangeDisplayedStat,
   } = useHandlers(dispatchToUse, "seasonal");
 
   const { sortedBy, sortedReverse } = useContext(SeasonalContext)!;
 
-  const sortedByToUse = graphSortedBy ? graphSortedBy : sortedBy;
-  const sortedReverseToUse = graphSortedReverse
-    ? graphSortedReverse
+  const sortedByToUse = customSortedBy ? customSortedBy : sortedBy;
+  const sortedReverseToUse = customSortedReverse
+    ? customSortedReverse
     : sortedReverse;
 
   console.log("sortedByToUse", sortedByToUse);
@@ -79,7 +78,12 @@ function SortingDropdown({
           <SortFilterOption
             statName="Shows Watched"
             onClick={
-              type === "Graph" ? handleSortByShows : handleSortByShowCount
+              type === "Graph"
+                ? () => {
+                    handleSortByShowCount();
+                    handleChangeDisplayedStat("Shows");
+                  }
+                : handleSortByShowCount
             }
             sortedBy={sortedByToUse}
             sortedReverse={sortedReverseToUse}

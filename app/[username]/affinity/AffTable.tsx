@@ -4,6 +4,7 @@ import { AffTableType, AffinitiesData } from "@/app/interfaces";
 import AffTableHeader from "./AffTableHeader";
 import TableHead from "@/components/general/TableHead";
 import AffTableBody from "./AffTableBody";
+import styles from "./Affinity.module.css";
 
 export default function AffTable({
   aff_data,
@@ -14,9 +15,12 @@ export default function AffTable({
 }) {
   const columnNames = ["", "Username", "Affinity", "Shared Anime"];
   return (
-    <div className="flex flex-col my-10 gap-10">
+    <div
+      className={`relative mt-20 h-3/4 overflow-y-scroll  lg:mt-0 
+      ${styles.hiddenscrollbar} `}
+    >
       <AffTableHeader type={type} />
-      <table>
+      <table className="mt-10">
         <TableHead columnNames={columnNames} />
         <AffTableBody aff_data={aff_data} />
       </table>

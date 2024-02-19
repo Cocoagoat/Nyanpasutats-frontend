@@ -142,4 +142,6 @@ export type SeasonName = "Winter" | "Spring" | "Summer" | "Fall";
 
 export type DropdownType = "Full" | "Graph" | "Recs";
 
+export type RangeFilterType = "Year" | "MALScore";
+
 export type displayedMeanOptions = "AvgScore" | "FavoritesAvgScore" | "Shows";

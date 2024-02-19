@@ -1,6 +1,7 @@
 import { AffinitiesData } from "@/app/interfaces";
 import React from "react";
 import AffRow from "./AffRow";
+import styles from "./Affinity.module.css";
 
 export default function AffTableBody({
   aff_data,

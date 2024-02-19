@@ -44,19 +44,19 @@ export default function SeasonalGraph({
   return (
     <div className="relative">
       {graphOpen && (
-        <div className="fixed mx-auto my-auto z-50 w-1/2 h-3/4 top-0 left-0 flex flex-col items-center justify-center inset-0 bg-zinc-800 text-white">
+        <div className="fixed inset-0 left-0 top-0 z-50 mx-auto my-auto flex h-3/4 w-1/2 flex-col items-center justify-center bg-zinc-800 text-white">
           <SeasonalBarChart
             data={displayedChartData}
             displayedMean={displayedGraphMean}
           />
-          <div className="flex mx-10 mb-10 justify-center flex-wrap gap-10">
+          <div className="mx-10 mb-10 flex flex-wrap justify-center gap-10">
             <SortingDropdown
               type="Graph"
-              graphDispatch={graphDispatch}
-              graphSortedBy={sortedBy}
-              graphSortedReverse={sortedReverse}
+              customDispatch={graphDispatch}
+              customSortedBy={sortedBy}
+              customSortedReverse={sortedReverse}
             />
-            <FilterDropdown type="Graph" graphDispatch={graphDispatch} />
+            <FilterDropdown type="Graph" customDispatch={graphDispatch} />
             <SettingsButton onClick={() => setGraphOpen(false)}>
               Close
             </SettingsButton>

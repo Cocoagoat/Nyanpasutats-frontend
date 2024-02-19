@@ -10,6 +10,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        "sky-550": "#74ceff",
+        "blue-990": "#08142c",
+        "blue-970": "#0f1f3c",
+        "green-990": "#041414",
+      },
       backgroundImage: {
         // 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         // 'gradient-conic':
@@ -72,6 +78,8 @@ const config: Config = {
   },
   plugins: [
     require("flowbite/plugin"),
+    require("tailwindcss"),
+    require("autoprefixer"),
     plugin(function ({ matchUtilities, theme }: any) {
       matchUtilities(
         {

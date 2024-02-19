@@ -1,7 +1,8 @@
 import { ShowToDisplay, ShowsToDisplay } from "@/app/interfaces";
 import { ModalContext } from "@/contexts/ModalContext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
+import errorImg from "@/public/default.png";
 
 export default function ShowDisplay({
   show,
@@ -18,6 +19,7 @@ export default function ShowDisplay({
 }) {
   const [hovered, setHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const { setFavoritesModalOpen } = useContext(ModalContext);
 
   function toggleFavorite() {
@@ -34,7 +36,7 @@ export default function ShowDisplay({
 
         if (newFavorites[show.name].displayed) {
           const filteredFavorites = Object.entries(newFavorites).filter(
-            ([key]) => key !== show.name
+            ([key]) => key !== show.name,
           );
 
           const updatedFavorites = [
@@ -50,41 +52,64 @@ export default function ShowDisplay({
     }
   }
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoading) {
+        setIsLoading(false);
+        setError(true);
+        show.imageUrl = errorImg.src;
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isLoading, setIsLoading, setError]);
+
+  console.log(show.imageUrl);
+
   return (
-    <div className="flex relative flex-col">
+    <div className="relative flex flex-col">
       <div
-        className={`relative w-[75px] h-[105px] ${
+        className={`relative h-[105px] w-[75px] ${
           controversialImage ? "mx-auto" : ""
         }`}
       >
         {isLoading && (
-          <div className="w-[75px] h-[105px] bg-zinc-700 flex justify-center items-center">
+          <div className="flex h-[105px] w-[75px] items-center justify-center bg-zinc-700">
             Loading...
           </div>
-        )}{" "}
-        <img // Not using Next's Image component because html-to-image doesn't support it
-          src={show.imageUrl}
-          alt="Test image"
-          width={75}
-          height={105}
-          className={`h-full rounded-xl shadow-md shadow-black mx-auto ${
-            hovered ? "opacity-50" : ""
-          }`}
-          onLoad={() => setIsLoading(false)}
-        />
+        )}
+
+        {!error ? (
+          <img // Not using Next's Image component because html-to-image doesn't support it
+            src={show.imageUrl}
+            alt={show.name}
+            width={75}
+            height={105}
+            className={`mx-auto h-full rounded-xl shadow-md shadow-black ${
+              hovered ? "opacity-50" : ""
+            }`}
+            onLoad={() => setIsLoading(false)}
+          />
+        ) : (
+          <div className="flex h-[105px] w-[75px] items-center rounded-xl bg-zinc-800 text-center text-xs shadow-md shadow-black"></div>
+        )}
+
         <div
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           onClick={
             partOfModal ? toggleFavorite : () => setFavoritesModalOpen(true)
           }
-          className=" absolute flex justify-center items-center cursor-pointer  w-full h-full text-center  text-white text-xs font-semibold top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition duration-300 ease-in-out"
+          className=" absolute left-1/2 top-1/2 flex h-full  w-full -translate-x-1/2 -translate-y-1/2  transform cursor-pointer items-center justify-center text-center text-xs font-semibold text-white transition duration-300 ease-in-out"
         >
-          <p className="row-start-2 text-center text-shadow shadow-black z-[60] mb-2">
-            {hovered && show.name}
+          <p className="z-[60] row-start-2 mb-2 text-center shadow-black text-shadow">
+            {(hovered || error) && show.name}
           </p>
         </div>
-        <div className="absolute rounded-b-xl bottom-0 w-full flex justify-center items-center bg-black bg-opacity-50 px-1">
+
+        <div className="absolute bottom-0 flex w-full items-center justify-center rounded-b-xl bg-black bg-opacity-50 px-1">
           <span
             className="font-semibold text-white"
             style={{ verticalAlign: "middle" }}
@@ -93,7 +118,7 @@ export default function ShowDisplay({
           </span>
           <MdOutlineStar
             style={{ verticalAlign: "middle" }}
-            className="text-yellow-300 text-lg"
+            className="text-lg text-yellow-300"
           />
         </div>
       </div>

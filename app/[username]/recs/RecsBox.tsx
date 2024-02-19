@@ -1,26 +1,12 @@
 "use client";
 import { RecommendationType } from "@/app/interfaces";
-import Rec from "./Rec";
-import { useMemo, useReducer, useState } from "react";
-
-import {
-  recReducer,
-  SORT_BY_PREDICTION_SCORE,
-  TOGGLE_SORT,
-  TOGGLE_WATCHED,
-} from "./RecReducer";
-import LargeButton from "@/components/general/LargeButton";
-import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
-import { tooltipsContent } from "@/utils/TooltipsContent";
+import { useEffect, useReducer, useState } from "react";
+import { recReducer, SORT_BY_PREDICTION_SCORE } from "./RecReducer";
 import { Nav } from "@/components/general/Nav";
-import { useHandlers } from "../seasonal/reducer/useHandlers";
-import FilterDropdown from "../seasonal/dropdowns/FilterDropdown";
-
-// function sortRecsByDiff(recs: RecommendationType[]) {
-//   return [...recs].sort(
-//     (a, b) => b.PredictedScore - b.MALScore - (a.PredictedScore - a.MALScore),
-//   );
-// }
+import DisplayOptions from "./DisplayOptions";
+import RecsTable from "./RecsTable";
+import { getShowData } from "@/app/home/api";
+import styles from "./RecsBox.module.css";
 
 export default function RecsBox({
   recs,
@@ -29,131 +15,57 @@ export default function RecsBox({
   recs: RecommendationType[];
   recs_sorted_by_diff: RecommendationType[];
 }) {
-  // Remove this later when fixed in back-end
-  // console.log(recs_sorted_by_score.slice(0, 4));
-  // console.log(recs_sorted_by_score.length);
-  // const RECS_TO_SHOW = 50;
-  // recs = recs.slice(0, RECS_TO_SHOW);
-  // recs_no_watched = recs_no_watched.slice(0, RECS_TO_SHOW);
-
-  // const recs_sorted_by_diff = recs_sorted_by_score
-  //   .slice(0, RECS_TO_SHOW)
-  //   .sort(
-  //     (a, b) => b.PredictedScore - b.MALScore - (a.PredictedScore - a.MALScore),
-  //   );
-  // console.log(recs[0]["ShowName"]);
-  // console.log(recs_no_watched[0]["ShowName"]);
-
-  // const recs_sorted_by_diff = useMemo(() => {
-  //   return sortRecsByDiff(recs);
-  // }, [recs]);
-
-  // const recs_no_watched_sorted_by_diff = useMemo(() => {
-  //   return sortRecsByDiff(recs_no_watched);
-  // }, [recs_no_watched]);
-
-  // console.log("-------------------");
-  // console.log(recs[0]["ShowName"]);
-  // console.log(recs_no_watched[0]["ShowName"]);
-
-  // console.log(recs.slice(0, 10));
-  // console.log(recs_no_watched.slice(0, 10));
-  // console.log(recs_sorted_by_diff.slice(0, 10));
-  // console.log(recs_no_watched_sorted_by_diff.slice(0, 10));
-  // console.log(recs_sorted_by_diff.slice(0, 4));
   const initialState = {
-    // Saving all 4 recs arrays to state for toggling between them to avoid extra computation
-    // in case users go ham on the sorting buttons
     recs: recs,
-    // recsNoWatched: recs_no_watched,
     recsSortedByDiff: recs_sorted_by_diff,
-    // recsNoWatchedSortedByDiff: recs_no_watched_sorted_by_diff,
     displayedRecs: recs,
     startYear: 1960,
     endYear: new Date().getFullYear(),
     tag: "",
     minMALScore: 6.5,
     maxMALScore: 10,
-    // sortByPredictionScore: true,
-    // sortByScoreDifference: false,
     sortedBy: SORT_BY_PREDICTION_SCORE,
     noWatchedOnly: false,
   };
 
-  // console.log(initialState);
   const [state, dispatch] = useReducer(recReducer, initialState);
+  const [imgUrls, setImgUrls] = useState<string[]>([]);
 
-  const { handleToggleSort, handleFilterByYear, handleToggleWatched } =
-    useHandlers(dispatch, "recs");
+  useEffect(() => {
+    // Define the async function inside the effect
+    async function fetchImgUrl() {
+      try {
+        const show_names = state.displayedRecs
+          .slice(0, 50)
+          .map((rec) => rec["ShowName"]);
+        const urls = await getShowData(show_names, "img_urls");
+        setImgUrls(urls); // Update state with the URL
+      } catch (error) {
+        // Handle any errors here, such as setting a default image or logging the error
+        console.error(error);
+      }
+    }
 
-  const showColumns = [
-    "Image",
-    "Show Name",
-    "Predicted Score",
-    "User Score",
-    "MAL Score",
-    "Score Difference",
-  ];
-
-  // const [buttonHovered, setButtonHovered] = useState(false);
+    // Call the async function
+    fetchImgUrl();
+  }, [state.displayedRecs]);
 
   return (
     <>
       <Nav />
-      <div className="absolute inset-0 mx-auto flex max-h-front-n-center max-w-front-n-center-600 flex-col text-center text-white">
-        <div className="relative mt-32 flex w-full justify-between">
-          <LargeButton
-            extraStyles="py-4 relative bg-zinc-600"
-            onClick={() => {
-              console.log("Before handle");
-              state.sortedBy === SORT_BY_PREDICTION_SCORE
-                ? handleToggleSort("SORT_BY_SCORE_DIFFERENCE")
-                : handleToggleSort("SORT_BY_PREDICTION_SCORE");
-              console.log("After handle");
-            }}
-          >
-            {state.sortedBy === SORT_BY_PREDICTION_SCORE
-              ? "Sort by Score Difference"
-              : "Sort by Predicted Score"}
-          </LargeButton>
-          <div className="absolute right-0 top-0 z-50">
-            <TooltipQuestionMark
-              text={tooltipsContent["Recommendation Sort"]}
-            />
-          </div>
-
-          <br />
-          <LargeButton
-            extraStyles="py-4 bg-zinc-600"
-            onClick={() => handleFilterByYear(2015, 2016)}
-          >
-            Filter By Year
-          </LargeButton>
-          <FilterDropdown type="Recs" customDispatch={dispatch} />
-          <LargeButton
-            extraStyles="py-4 bg-zinc-600"
-            onClick={handleToggleWatched}
-          >
-            Watched Only
-          </LargeButton>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              {showColumns.map((col) => (
-                <th key={col} className="bg-zinc-800  px-4 py-2 ">
-                  {col}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {state.displayedRecs.slice(0, 50).map((rec) => (
-              <Rec rec={rec} key={rec["ShowName"]} />
-            ))}
-          </tbody>
-        </table>
+      <div
+        className={`absolute inset-0 mx-auto my-auto mt-32 flex max-h-front-n-center max-w-front-n-center-600
+       flex-col overflow-y-scroll text-white ${styles.hiddenscrollbar}`}
+      >
+        <DisplayOptions
+          sortedBy={state.sortedBy}
+          noWatchedOnly={state.noWatchedOnly}
+          dispatch={dispatch}
+        />
+        <RecsTable displayedRecs={state.displayedRecs} imageUrls={imgUrls} />
       </div>
+
+      {/* </div> */}
     </>
   );
 }

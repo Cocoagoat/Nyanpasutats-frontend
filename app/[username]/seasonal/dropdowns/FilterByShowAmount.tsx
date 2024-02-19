@@ -6,20 +6,21 @@ import { Action } from "../reducer/actions";
 
 export default function FilterByShowAmount({
   type,
-  graphDispatch,
+  customDispatch: customDispatch,
 }: {
   type: DropdownType;
-  graphDispatch?: React.Dispatch<Action>;
+  customDispatch?: React.Dispatch<Action>;
 }) {
   const [minShows, setMinShows] = useState("");
   const [maxShows, setMaxShows] = useState("");
-  //   const [endYear, setEndYear] = useState("");
-  //   const [isOpen, setIsOpen] = useState(false);
+
   const dispatch = React.useContext(SeasonalDispatchContext)!;
   const dispatchToUse =
-    type === "Full" || !graphDispatch ? dispatch : graphDispatch;
-  let { handleFilterByYear, handleFilterByShowCount, handleResetFilter } =
-    useHandlers(dispatchToUse, "seasonal");
+    type === "Full" || !customDispatch ? dispatch : customDispatch;
+  let { handleFilterByShowCount, handleResetFilter } = useHandlers(
+    dispatchToUse,
+    "seasonal",
+  );
   return (
     <div className="absolute left-0 z-50 mt-2 rounded-lg bg-zinc-700 p-4 shadow-lg">
       <div className="flex flex-col space-y-4">

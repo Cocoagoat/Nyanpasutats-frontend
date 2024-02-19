@@ -7,7 +7,7 @@ const gap = "px-8 py-4";
 export function Nav() {
   const params = useParams();
   return (
-    <nav className="z-50 w-full bg-zinc-600 text-lg text-white">
+    <nav className="from-blue-970 z-50 w-full  bg-gradient-to-tl text-lg text-white">
       <ul
         className="flex w-full"
         style={{ justifyContent: "end" }} // justify-end is dumb in tailwind

@@ -38,7 +38,7 @@ export default function RootLayout({
         className={`{${
           true &&
           "bg-gradient-to-b from-zinc-700 via-blue-400 via-80% to-zinc-700 to-100% bg-repeat-round"
-        } relative inset-0 h-full bg-zinc-700 2xl:bg-contain  ${inter.className}`}
+        } relative inset-0 h-[100vh]  bg-zinc-700 2xl:bg-contain  ${inter.className}`}
         // style={{
         //   background:
         //     "repeating-linear-gradient(90deg, #3f3f46, #5495ff, #3f3f46 200px)",

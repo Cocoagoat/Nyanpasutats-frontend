@@ -30,7 +30,7 @@ export default function Home() {
   ];
 
   const backgroundsText = [
-    "Automatically generate summaries for every season",
+    "Automatically get summaries for every season",
     "Customize the cards to your liking",
     "Find your soulmates and archenemies",
     "Get AI* anime recommendations",

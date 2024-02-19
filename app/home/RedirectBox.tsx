@@ -26,8 +26,9 @@ export default function RedirectBox({
 }: //onRedirectBoxClick,
 RedirectBoxProps) {
   const redirectBoxStyle = `flex flex-col justify-between rounded-lg px-6 pt-6 pb-6 
-     mt-6 w-64 lg:max-w-[16rem] duration-500 bg-gray-500 text-center 
-    hover:shadow-2xl relative z-40 h-[250px] group grow`;
+     mt-6 w-64 lg:max-w-[16rem] duration-500  text-center 
+    hover:shadow-2xl hover:shadow-lime-600 bg-cover 
+    shadow-lg relative text-zinc-200 shadow-blue-950 z-40 h-[250px] group grow`;
   //Clamp the w-64?
 
   const ref = useRef<HTMLButtonElement>(null);
@@ -76,9 +77,7 @@ RedirectBoxProps) {
   return disabled ? (
     <button
       ref={ref}
-      className={`${redirectBoxStyle} border-slate-500 bg-gray-950 bg-cover text-center
-       text-gray-400 shadow-2xl shadow-blue-950 transition-shadow  hover:shadow-lime-500 
-      `}
+      className={`${redirectBoxStyle}`}
       style={{ backgroundImage: `url(${test.src})` }}
       onClick={handleRedirectBoxClicked}
     >
@@ -89,25 +88,25 @@ RedirectBoxProps) {
       />
     </button>
   ) : (
-    <form action={navigate}>
-      <input type="hidden" name="path" value={link} />
-      <button
-        style={{ backgroundImage: `url(${test.src})` }}
-        className={`${redirectBoxStyle} rounded-xl bg-gray-950 bg-cover text-zinc-200
-         shadow-lg shadow-blue-950 hover:shadow-lime-600 `}
-      >
-        {/* <Link
-          href={link}
-          style={{ backgroundImage: `url(${test.src})` }}
-          className={`${redirectBoxStyle} rounded-xl bg-gray-950 bg-cover text-zinc-200 shadow-lg shadow-blue-950 hover:shadow-lime-600 `}
-        > */}
-        <RedirectBoxText
-          title={title}
-          description={description}
-          disabled={disabled}
-        />
-        {/* </Link> */}
-      </button>
-    </form>
+    // <form action={navigate}>
+    //   <input type="hidden" name="path" value={link} />
+    //   <button
+    //     style={{ backgroundImage: `url(${test.src})` }}
+    //     className={`${redirectBoxStyle} rounded-xl bg-gray-950 bg-cover text-zinc-200
+    //      shadow-lg shadow-blue-950 hover:shadow-lime-600 `}
+    //   >
+    <Link
+      href={link}
+      style={{ backgroundImage: `url(${test.src})` }}
+      className={`${redirectBoxStyle}`}
+    >
+      <RedirectBoxText
+        title={title}
+        description={description}
+        disabled={disabled}
+      />
+    </Link>
+
+    // </form>
   );
 }

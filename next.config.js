@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cssModules: true,
+  reactStrictMode: false,
   async redirects() {
     return [
       {
