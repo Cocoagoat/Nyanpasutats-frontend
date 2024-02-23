@@ -30,6 +30,7 @@ export default function RecsBox({
 
   const [state, dispatch] = useReducer(recReducer, initialState);
   const [imgUrls, setImgUrls] = useState<string[]>([]);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     // Define the async function inside the effect
@@ -42,7 +43,7 @@ export default function RecsBox({
         setImgUrls(urls); // Update state with the URL
       } catch (error) {
         // Handle any errors here, such as setting a default image or logging the error
-        console.error(error);
+        setImgError(true);
       }
     }
 
@@ -62,10 +63,12 @@ export default function RecsBox({
           noWatchedOnly={state.noWatchedOnly}
           dispatch={dispatch}
         />
-        <RecsTable displayedRecs={state.displayedRecs} imageUrls={imgUrls} />
+        <RecsTable
+          displayedRecs={state.displayedRecs}
+          imageUrls={imgUrls}
+          imageError={imgError}
+        />
       </div>
-
-      {/* </div> */}
     </>
   );
 }

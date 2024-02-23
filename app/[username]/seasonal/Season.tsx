@@ -68,7 +68,7 @@ export default function Season({
       const validTypes = ["image/jpg", "image/png", "image/jpeg"];
       if (!validTypes.includes(file.type)) {
         alert(
-          "Unsupported file type. Please upload an image (JPG, PNG, JPEG)."
+          "Unsupported file type. Please upload an image (JPG, PNG, JPEG).",
         );
         return;
       }
@@ -108,11 +108,11 @@ export default function Season({
         <div className="relative">
           <SeasonExpanded brightness={brightness} />
           <button
-            className="bg-zinc-700 text-zinc-500 text-2xl top-1/4 absolute right-4 z-40 flex justify-center bg-opacity-0 items-center"
+            className="absolute right-4 top-1/4 z-40 flex items-center justify-center bg-zinc-700 bg-opacity-0 text-2xl text-zinc-500"
             onClick={() => setUploadModelOpen(true)}
           >
             <RiUpload2Fill
-              className="text-center"
+              className="text-center text-lime-600"
               onMouseEnter={() => setUploadHovered(true)}
               onMouseLeave={() => setUploadHovered(false)}
             />
@@ -130,19 +130,19 @@ export default function Season({
             />
           )}
           <button
-            className="bg-zinc-700 text-zinc-500 text-2xl top-1/2 absolute right-4 z-40 flex justify-center bg-opacity-0 items-center"
+            className="absolute right-4 top-1/2 z-40 flex items-center justify-center bg-zinc-700 bg-opacity-0 text-2xl text-zinc-500"
             onClick={() => {
               setTimeout(() => {}, 2000);
               downloadCardAsImage(
                 season,
                 `${params.username} ${season}${
                   noSequels ? " (No Sequels)" : ""
-                }`
+                }`,
               );
             }}
           >
             <RiDownload2Fill
-              className="text-center"
+              className="text-center text-lime-600"
               onMouseEnter={() => setDownloadHovered(true)}
               onMouseLeave={() => setDownloadHovered(false)}
             />

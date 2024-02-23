@@ -35,7 +35,7 @@ export function seasonalStatsReducer(state: State, action: Action): State {
         action.payload.endYear = new Date().getFullYear();
       return {
         ...state,
-        displayedStats: Object.entries(state.seasonalStats)
+        displayedStats: Object.entries(state.displayedStats)
           .filter(
             ([season, _]) =>
               parseInt(season.split(" ")[1]) >= action.payload.startYear &&
@@ -49,7 +49,7 @@ export function seasonalStatsReducer(state: State, action: Action): State {
     case "FILTER_BY_SEASON_NAME":
       return {
         ...state,
-        displayedStats: Object.entries(state.seasonalStats)
+        displayedStats: Object.entries(state.displayedStats)
           .filter(([season, _]) => season.includes(action.payload.text))
           .reduce((acc: SeasonsData, [season, seasonStats]) => {
             acc[season] = seasonStats;
@@ -64,7 +64,7 @@ export function seasonalStatsReducer(state: State, action: Action): State {
         action.payload.maxShows = 100;
       return {
         ...state,
-        displayedStats: Object.entries(state.seasonalStats)
+        displayedStats: Object.entries(state.displayedStats)
           .filter(
             ([_, seasonStats]) =>
               seasonStats["Shows"] >= action.payload.minShows &&

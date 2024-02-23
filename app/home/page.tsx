@@ -15,6 +15,8 @@ import springBackground from "@/public/SpringBackground.png";
 import fallBackground from "@/public/FallBackground.png";
 import img1 from "@/public/BaronBrixius Summer 2023.png";
 import img2 from "@/public/BaronBrixius Winter 2020.png";
+import img3 from "@/public/Affinity.png";
+import img4 from "@/public/Recs.png";
 import ImageCarousel from "@/components/general/ImageCarousel";
 import ToasterWithX from "@/components/general/ToasterWithX";
 import toast from "react-hot-toast";
@@ -22,12 +24,7 @@ import useToast from "@/hooks/useToast";
 import test from "@/public/test.png";
 
 export default function Home() {
-  const backgrounds = [
-    img1.src,
-    img2.src,
-    summerBackground.src,
-    fallBackground.src,
-  ];
+  const backgrounds = [img1.src, img2.src, img3.src, img4.src];
 
   const backgroundsText = [
     "Automatically get summaries for every season",
@@ -128,7 +125,7 @@ export default function Home() {
             >
               Nyanpasutats
             </p>
-            <h3 className="text-wrap mt-10 text-clampmd font-bold leading-snug text-zinc-400 shadow-black text-shadow">
+            <h3 className="text-wrap mx-10 mt-10 text-clampmd font-bold leading-snug text-zinc-400 shadow-black text-shadow lg:mx-0">
               Various anime-related statistics you never knew you needed...and
               probably still don't actually need.
             </h3>
@@ -148,8 +145,8 @@ export default function Home() {
             // onChange={handleEnterUsername}
             className={`${
               redirectBoxClicked && `border-2 border-r-0 border-red-500`
-            } w-64 max-w-md rounded-l-lg border-2 border-lime-600 bg-gray-900 p-2.5 text-clampsm
-             text-white opacity-75 outline-none focus:border-lime-600 focus:ring-0 focus:ring-lime-600`}
+            } opacity-175 w-64 max-w-md rounded-l-lg border-2 border-lime-600 bg-blue-990 p-2.5
+             text-clampsm text-white outline-none focus:border-lime-600 focus:ring-1 focus:ring-lime-600`}
             required
           ></input>
 

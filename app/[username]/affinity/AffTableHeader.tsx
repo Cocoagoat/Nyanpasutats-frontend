@@ -6,9 +6,9 @@ export default function AffTableHeader({ type }: { type: AffTableType }) {
     <h1
       className={`sticky top-0 z-30 text-3xl ${
         type === "Positive"
-          ? "text-3xl font-semibold text-sky-550 "
+          ? "text-3xl font-semibold text-lime-600 "
           : "text-xl text-red-500"
-      }   h-[4rem] bg-zinc-800 p-4`}
+      }   h-[4rem] bg-blue-990 p-4`}
     >
       {type === "Positive" ? (
         "MY BESTO FRIENDOS"

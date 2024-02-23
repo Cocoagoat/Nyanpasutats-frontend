@@ -13,7 +13,9 @@ export default function AffRow({
   aff: AffinityData;
 }) {
   return (
-    <tr className={` ${index % 2 !== 0 ? "bg-zinc-600" : "bg-zinc-800"}`}>
+    <tr
+      className={` ${index % 2 !== 0 ? " from-blue-970 bg-gradient-to-br" : " bg-opacity-10 bg-gradient-to-tr from-lime-800"}`}
+    >
       <td className="p-4">{index}</td>
       <td>
         <AffUserLink affinity={aff["Affinity"]} username={username} />

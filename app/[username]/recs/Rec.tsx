@@ -9,47 +9,37 @@ export default function Rec({
   rec,
   index,
   imageUrl,
+  error,
 }: {
   rec: RecommendationType;
   index: number;
   imageUrl: string;
+  error: boolean;
 }) {
-  // const [imgUrl, setImgUrl] = useState<string>(temp_img_url);
-  // useEffect(() => {
-  //   // Define the async function inside the effect
-  //   async function fetchImgUrl() {
-  //     try {
-  //       const url = await getShowData(rec["ShowName"], "img_url");
-  //       setImgUrl(url); // Update state with the URL
-  //     } catch (error) {
-  //       // Handle any errors here, such as setting a default image or logging the error
-  //       console.error(error);
-  //     }
-  //   }
-
-  //   // Call the async function
-  //   fetchImgUrl();
-  // }, [rec]);
-  // const img_url = await getShowData(rec["ShowName"], "img_url");
+  console.log(imageUrl);
   return (
     <tr
-      className={` ${index % 2 == 0 ? " from-blue-970 bg-gradient-to-br" : " bg-opacity-10 bg-gradient-to-tr from-lime-800"}`}
+      className={` ${index % 2 == 0 ? " bg-gradient-to-br from-blue-970" : " bg-opacity-10 bg-gradient-to-tr from-lime-800"} h-[105px]`}
     >
-      <td>
-        <Image
-          className="mx-auto rounded-3xl py-2"
-          src={imageUrl}
-          alt="Test image"
-          width={75}
-          height={105}
-        />
-      </td>
-      <td className="w-[350px]">{rec["ShowName"]}</td>
+      {!error && (
+        <td>
+          <Image
+            className="mx-auto rounded-3xl py-2"
+            src={imageUrl}
+            alt="Test image"
+            width={75}
+            height={105}
+          />
+        </td>
+      )}
+      <td className="w-[350px] text-center">{rec["ShowName"]}</td>
 
-      <td>{rec.PredictedScore}</td>
-      <td>{rec.UserScore}</td>
-      <td>{rec.MALScore}</td>
-      <td>{parseFloat((rec.PredictedScore - rec.MALScore).toFixed(2))}</td>
+      <td className="text-center">{rec.PredictedScore}</td>
+      <td className="text-center">{rec.UserScore}</td>
+      <td className="text-center">{rec.MALScore}</td>
+      <td className="text-center">
+        {parseFloat((rec.PredictedScore - rec.MALScore).toFixed(2))}
+      </td>
     </tr>
   );
 }

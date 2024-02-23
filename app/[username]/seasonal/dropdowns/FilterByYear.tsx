@@ -1,67 +1,115 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHandlers } from "../reducer/useHandlers";
-import { DropdownType } from "@/app/interfaces";
+import { Paths, RangeFilterType } from "@/app/interfaces";
 import { SeasonalDispatchContext } from "../reducer/SeasonalContext";
 import { Action } from "../reducer/actions";
 
 export default function FilterByYear({
   type,
-  customDispatch,
+  path,
+  dispatch,
 }: {
-  type: DropdownType;
-  customDispatch?: React.Dispatch<Action>;
+  type: RangeFilterType;
+  path: Paths;
+  dispatch?: React.Dispatch<Action>;
 }) {
-  const [startYear, setStartYear] = useState("");
-  const [endYear, setEndYear] = useState("");
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
   //   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = React.useContext(SeasonalDispatchContext)!;
-  const dispatchToUse =
-    type === "Full" || !customDispatch ? dispatch : customDispatch;
+  if (!dispatch) {
+    dispatch = React.useContext(SeasonalDispatchContext)!;
+  }
 
-  let handleFilterByYear: (startYear: number, endYear: number) => void;
+  let handleRangeFilter: (min: number, max: number) => void;
   let handleResetFilter: () => void;
-  if (type === "Recs") {
-    ({ handleFilterByYear, handleResetFilter } = useHandlers(
-      dispatchToUse,
-      "recs",
-    ));
-  } else {
-    // Assuming RecHandlers has the same type of handlers
-    ({ handleFilterByYear, handleResetFilter } = useHandlers(
-      dispatchToUse,
-      "seasonal",
-    ));
+  let placeholderText = "";
+  const handlers = useHandlers(dispatch, path)!;
+
+  switch (type) {
+    case "Year":
+      if ("handleFilterByYear" in handlers) {
+        ({
+          handleFilterByYear: handleRangeFilter,
+          handleResetFilter: handleResetFilter,
+        } = handlers);
+      } else throw Error("Filter function not found for type Year");
+      placeholderText = "Year";
+      break;
+
+    case "MALScore":
+      if ("handleFilterByMALScore" in handlers) {
+        ({
+          handleFilterByMALScore: handleRangeFilter,
+          handleResetFilter: handleResetFilter,
+        } = handlers);
+      } else throw Error("Filter function not found for type MALScore");
+      placeholderText = "MAL Score";
+      break;
+
+    case "ShowCount":
+      if ("handleFilterByShowCount" in handlers) {
+        ({
+          handleFilterByShowCount: handleRangeFilter,
+          handleResetFilter: handleResetFilter,
+        } = handlers);
+      } else throw Error("Filter function not found for type ShowCount");
+      placeholderText = "Shows";
+      break;
+
+    default:
+      throw Error("Invalid range filter type");
   }
 
   return (
-    <div className="absolute left-0 z-50 mt-2 rounded-lg bg-zinc-700 p-4 shadow-lg">
+    <div
+      className="bg-blue-970  absolute left-0 z-50
+     mt-2 rounded-lg p-4 "
+    >
       <div className="flex flex-col space-y-4">
         <input
           type="number"
-          placeholder="Start Year"
-          value={startYear}
-          onChange={(e) => setStartYear(e.target.value)}
-          className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
+          placeholder={`Min ${placeholderText}`}
+          value={min}
+          onChange={(e) => setMin(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              console.log(5);
+              console.log(min, max);
+              handleRangeFilter(Number(min), Number(max));
+            }
+          }}
+          className=" border-none bg-zinc-700
+           text-white outline-none focus:outline-none focus:ring-2
+            focus:ring-lime-600"
         />
         <input
           type="number"
-          placeholder="End Year"
-          value={endYear}
-          onChange={(e) => setEndYear(e.target.value)}
-          className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
+          placeholder={`Max ${placeholderText}`}
+          value={max}
+          onChange={(e) => setMax(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              console.log(6);
+              handleRangeFilter(Number(min), Number(max));
+            }
+          }}
+          className="border-none bg-zinc-700
+           text-white focus:ring-2 focus:ring-lime-600"
         />
         <div className="flex justify-center gap-10">
           <button
-            onClick={() =>
-              handleFilterByYear(Number(startYear), Number(endYear))
-            }
-            className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white transition-colors duration-200 hover:bg-sky-550"
+            onClick={() => handleRangeFilter(Number(min), Number(max))}
+            className=" w-1/3 self-center rounded-md border
+             border-zinc-600 p-1 text-white transition-colors 
+             duration-200 hover:bg-lime-600"
           >
             Apply
           </button>
           <button
             onClick={handleResetFilter}
-            className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white transition-colors duration-200 hover:bg-sky-550"
+            className=" w-1/3 self-center rounded-md border
+             border-zinc-600 p-1 text-white transition-colors duration-200
+              hover:bg-lime-600"
           >
             Reset
           </button>

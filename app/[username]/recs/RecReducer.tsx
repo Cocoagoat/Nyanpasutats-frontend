@@ -110,11 +110,20 @@ export const recReducer = (
         endYear: action.payload.endYear,
       };
 
+    case FILTER_BY_MAL_SCORE:
+      return {
+        ...state,
+        minMALScore: action.payload.min,
+        maxMALScore: action.payload.max,
+      };
+
     case RESET_FILTER:
       return {
         ...state,
         startYear: 1960,
         endYear: new Date().getFullYear(),
+        minMALScore: 6.5,
+        maxMALScore: 10,
       };
 
     case GENERATE_DISPLAYED_RECS:
@@ -124,6 +133,11 @@ export const recReducer = (
           : state.recsSortedByDiff;
       displayRecs = displayRecs.filter(
         (rec) => rec.Year >= state.startYear && rec.Year <= state.endYear,
+      );
+      displayRecs = displayRecs.filter(
+        (rec) =>
+          rec.MALScore >= state.minMALScore &&
+          rec.MALScore <= state.maxMALScore,
       );
       displayRecs = state.noWatchedOnly
         ? FilterOutWatchedRecs(displayRecs)

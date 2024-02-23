@@ -62,10 +62,10 @@ export default function SeasonalStatsBox({
       <SeasonalDispatchContext.Provider value={dispatch}>
         {!graphOpen ? (
           <div
-            className={`max-w-front-n-center-60 bg-zinc-800 
+            className={`max-w-front-n-center-60 bg-blue-990 
            fullhd:max-w-front-n-center  ${styles.firefoxborder} absolute inset-0 mx-auto my-auto
             max-h-front-n-center overflow-y-scroll rounded-3xl border-y-[14px] 
-            border-l-[14px] border-r-[2px] border-zinc-600 pb-6`}
+            border-l-[14px] border-r-[2px] border-gray-600 pb-6`}
           >
             <>
               <DisplayOptions setGraphOpen={setGraphOpen} />
@@ -84,7 +84,11 @@ export default function SeasonalStatsBox({
                 <Season
                   seasonStats={seasonStats}
                   season={season}
-                  seasonCount={Object.keys(displayedStats).length}
+                  seasonCount={
+                    noSequels
+                      ? Object.keys(noSequelsSeasonalStats).length
+                      : Object.keys(seasonalStats).length
+                  }
                   key={season}
                   brightness={brightness}
                 />

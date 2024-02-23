@@ -18,6 +18,7 @@ export default function FilterDropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [yearRangeIsOpen, setYearRangeIsOpen] = useState(false);
   const [showAmountIsOpen, setShowAmountIsOpen] = useState(false);
+  const [MALScoreIsOpen, setMALScoreIsOpen] = useState(false);
 
   const ref = useCloseOnOutsideClick<HTMLDivElement>(isOpen, setIsOpen);
   console.log(extraStyles);
@@ -32,8 +33,8 @@ export default function FilterDropdown({
 
       {isOpen && (
         <div
-          className={`absolute left-0 w-24 rounded-md 
-            py-2 shadow-md md:w-44 ${extraStyles}`}
+          className={` ${type === "Graph" ? "-top-20" : ""} bg-blue-970 absolute left-0 w-24 
+            rounded-b-md py-2 shadow-md md:w-44 ${extraStyles}`}
           onMouseLeave={() => {
             setYearRangeIsOpen(false);
             setShowAmountIsOpen(false);
@@ -41,19 +42,48 @@ export default function FilterDropdown({
         >
           <SortFilterOption
             statName="Year Range"
-            onClick={() => setYearRangeIsOpen(!yearRangeIsOpen)}
+            onClick={() => {
+              setYearRangeIsOpen(!yearRangeIsOpen);
+              setShowAmountIsOpen(false);
+              setMALScoreIsOpen(false);
+            }}
           />
           {type !== "Recs" && (
             <SortFilterOption
               statName="Show Amount"
-              onClick={() => setShowAmountIsOpen(!showAmountIsOpen)}
+              onClick={() => {
+                setShowAmountIsOpen(!showAmountIsOpen);
+                setYearRangeIsOpen(false);
+              }}
             />
           )}
+          {type === "Recs" && (
+            <SortFilterOption
+              statName="MAL Score"
+              onClick={() => setMALScoreIsOpen(!MALScoreIsOpen)}
+            />
+          )}
+
           {yearRangeIsOpen && (
-            <FilterByYear type={type} customDispatch={customDispatch} />
+            <FilterByYear
+              type="Year"
+              path={type === "Recs" ? "recs" : "seasonal"}
+              dispatch={customDispatch}
+            />
           )}
           {type !== "Recs" && showAmountIsOpen && (
-            <FilterByShowAmount type={type} />
+            <FilterByYear
+              type="ShowCount"
+              path="seasonal"
+              dispatch={customDispatch}
+            />
+          )}
+          {type === "Recs" && MALScoreIsOpen && (
+            <FilterByYear
+              type="MALScore"
+              path="recs"
+              dispatch={customDispatch}
+            />
           )}
         </div>
       )}

@@ -26,17 +26,17 @@ export default function VerticalSlider({
   const [textBoxOpen, setTextBoxOpen] = React.useState(false);
 
   return (
-    <Box sx={{ height: 300 }} className="absolute flex z-50 flex-col ml-4">
+    <Box sx={{ height: 300 }} className="absolute z-50 ml-4 flex flex-col">
       <Slider
         sx={{
           "& .MuiSlider-thumb": {
-            color: "#74ceff", // Thumb color
+            color: "#65A30D",
           },
           "& .MuiSlider-track": {
-            color: "#74ceff", // Track color
+            color: "#65A30D",
           },
           "& .MuiSlider-rail": {
-            color: "#74ceff", // Rail color
+            color: "#65A30D",
           },
           "& .MuiSlider-valueLabel": {
             left: "calc(-50% + 6px)",
@@ -58,22 +58,13 @@ export default function VerticalSlider({
       <RiSunFill
         onMouseEnter={() => setTextBoxOpen(true)}
         onMouseLeave={() => setTextBoxOpen(false)}
-        className="mt-3 ml-[5px] text-center text-xl text-white"
+        className="ml-[5px] mt-3 text-center text-xl text-white"
       ></RiSunFill>
       <HoverPopup
         hovered={textBoxOpen}
         setHovered={setTextBoxOpen}
         text="Adjust the brightness of the expanded cards"
       />
-      {/* {textBoxOpen && (
-        <div
-          className=" bg-zinc-600 text-white text-center text-xs p-2 rounded-3xl absolute bottom-0 -right-6"
-          onMouseEnter={() => setTextBoxOpen(true)}
-          onMouseLeave={() => setTextBoxOpen(false)}
-        >
-          Adjust the brightness of the expanded cards
-        </div>
-      )} */}
     </Box>
   );
 }

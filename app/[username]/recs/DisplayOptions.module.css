@@ -2,7 +2,9 @@
 
 @layer utilities {
   .modifiedButton {
-    @apply to-blue-970 mx-auto w-28 bg-gradient-to-br from-lime-900  px-2 text-xs hover:bg-current hover:bg-lime-600 lg:w-44 lg:text-sm; /* Tailwind utility classes for text size and width */
+    @apply bg-blue-970 mx-auto w-28
+       px-2 text-xs 
+       lg:w-44 lg:text-sm; /* Tailwind utility classes for text size and width */
     /* Add any additional custom CSS if needed */
   }
 

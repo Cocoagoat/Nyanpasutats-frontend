@@ -11,10 +11,8 @@ export default function AffUserLink({
   return (
     <a
       className={`${
-        affinity > 0
-          ? "text-sky-550 visited:text-violet-400"
-          : "text-red-500 visited:text-violet-400"
-      } visited:text-violet-400  font-semibold`}
+        affinity > 0 ? "text-lime-400 " : "text-red-500 "
+      } font-semibold  `}
       href={userProfileLink}
       target="_blank"
       rel="noopener noreferrer"

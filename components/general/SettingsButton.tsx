@@ -16,8 +16,9 @@ export default function SettingsButton({
       onClick={onClick}
       className={`${
         border ? "border border-sky-550 " : ""
-      } box-border h-12 w-24 rounded-md bg-blue-990
-       text-xs text-white transition-colors duration-200 hover:bg-sky-550 sm:w-36 sm:text-sm ${extraStyles}`}
+      }  bg-blue-970 h-12 w-24 rounded-md text-xs
+       text-white transition-colors duration-200 hover:bg-lime-600
+        sm:w-36 sm:text-sm ${extraStyles}`}
     >
       {children}
     </button>

@@ -22,16 +22,23 @@ export default function SearchSeason() {
     <div ref={ref} className="relative">
       <SettingsButton onClick={() => setIsOpen(!isOpen)}>Search</SettingsButton>
       {isOpen && (
-        <div className="absolute left-0 z-50 mt-2 rounded-lg bg-zinc-700 p-4 shadow-lg">
+        <div className="bg-blue-970 absolute left-0 z-50 mt-2 rounded-lg p-4 shadow-lg">
           <div className="flex flex-col space-y-4">
             <input
               type="text"
               placeholder="Search"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
+              className=" border-none  bg-zinc-700 text-white focus:ring-2 focus:ring-lime-600"
             />
-            <LargeButton onClick={() => handleFilterByName(searchText)}>
+            <LargeButton
+              onClick={() => handleFilterByName(searchText)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleFilterByName(searchText.toLowerCase());
+                }
+              }}
+            >
               Apply
             </LargeButton>
             <LargeButton onClick={handleResetFilter}>Reset</LargeButton>

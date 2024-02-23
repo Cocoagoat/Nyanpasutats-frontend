@@ -3,8 +3,8 @@ import React from "react";
 import { AffTableType, AffinitiesData } from "@/app/interfaces";
 import AffTableHeader from "./AffTableHeader";
 import TableHead from "@/components/general/TableHead";
-import AffTableBody from "./AffTableBody";
 import styles from "./Affinity.module.css";
+import AffRow from "./AffRow";
 
 export default function AffTable({
   aff_data,
@@ -22,7 +22,16 @@ export default function AffTable({
       <AffTableHeader type={type} />
       <table className="mt-10">
         <TableHead columnNames={columnNames} />
-        <AffTableBody aff_data={aff_data} />
+        <tbody>
+          {Object.entries(aff_data).map(([username, aff], index) => (
+            <AffRow
+              username={username}
+              index={index + 1}
+              aff={aff}
+              key={index}
+            />
+          ))}
+        </tbody>
       </table>
     </div>
   );

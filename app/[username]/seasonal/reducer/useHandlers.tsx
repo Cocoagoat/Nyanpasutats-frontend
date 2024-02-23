@@ -1,4 +1,8 @@
-import { ChartDataKeys, RecommendationSortOptions } from "@/app/interfaces";
+import {
+  ChartDataKeys,
+  Paths,
+  RecommendationSortOptions,
+} from "@/app/interfaces";
 import {
   GENERATE_DISPLAYED_RECS,
   TOGGLE_SORT,
@@ -112,6 +116,8 @@ function createSeasonalHandlers(
   };
 }
 
+//------------------------------------------------//
+
 type RecHandlers = {
   handleToggleSort: (sortBy: RecommendationSortOptions) => void;
   handleToggleWatched: () => void;
@@ -121,6 +127,7 @@ type RecHandlers = {
     setDropdownState?: React.Dispatch<React.SetStateAction<boolean>>,
   ) => void;
   handleResetFilter: () => void;
+  handleFilterByMALScore: (min: number, max: number) => void;
 };
 
 function createRecHandlers(dispatch: React.Dispatch<any>): RecHandlers {
@@ -153,10 +160,18 @@ function createRecHandlers(dispatch: React.Dispatch<any>): RecHandlers {
       dispatch({ type: "RESET_FILTER" });
       dispatch({ type: GENERATE_DISPLAYED_RECS });
     },
+
+    handleFilterByMALScore: (min: number, max: number) => {
+      dispatch({
+        type: "FILTER_BY_MAL_SCORE",
+        payload: { min: min, max: max },
+      });
+      dispatch({ type: GENERATE_DISPLAYED_RECS });
+    },
   };
 }
 
-// overloading because typescript asdkjfhasdjkf its 3am help
+//overloading because typescript asdkjfhasdjkf its 3am help
 export function useHandlers(
   dispatch: React.Dispatch<any>,
   path: "seasonal",
@@ -165,16 +180,22 @@ export function useHandlers(
   dispatch: React.Dispatch<any>,
   path: "recs",
 ): RecHandlers;
+export function useHandlers(
+  dispatch: React.Dispatch<any>,
+  path: Paths,
+): SeasonalHandlers | RecHandlers;
 
 export function useHandlers(
   dispatch: React.Dispatch<any>,
-  path: "seasonal" | "recs",
+  path: Paths,
 ): SeasonalHandlers | RecHandlers {
   switch (path) {
     case "seasonal":
       return createSeasonalHandlers(dispatch);
     case "recs":
       return createRecHandlers(dispatch);
+    case "affinity":
+      throw new Error("Affinity handlers not implemented");
   }
 }
 

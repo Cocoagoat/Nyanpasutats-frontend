@@ -1,6 +1,7 @@
 import React from "react";
 import Rec from "./Rec";
 import { RecommendationType } from "@/app/interfaces";
+import TableHead from "@/components/general/TableHead";
 
 const showColumns = [
   "Image",
@@ -14,22 +15,18 @@ const showColumns = [
 export default function RecsTable({
   displayedRecs,
   imageUrls,
+  imageError,
 }: {
   displayedRecs: RecommendationType[];
   imageUrls: string[];
+  imageError: boolean;
 }) {
   return (
-    // <div className="overflow-y-scroll">
     <table>
-      <thead>
-        <tr className="bg-gradient-to-tr from-lime-800">
-          {showColumns.map((col) => (
-            <th key={col} className="px-4 py-2 ">
-              {col}
-            </th>
-          ))}
-        </tr>
-      </thead>
+      <TableHead
+        columnNames={!imageError ? showColumns : showColumns.slice(1)}
+        extraStyles="bg-gradient-to-tr from-lime-800"
+      />
       <tbody>
         {displayedRecs.slice(0, 50).map((rec, index) => (
           <Rec
@@ -37,10 +34,10 @@ export default function RecsTable({
             index={index}
             imageUrl={imageUrls[index]}
             key={rec["ShowName"]}
+            error={imageUrls[index] === undefined}
           />
         ))}
       </tbody>
     </table>
-    // </div>
   );
 }

@@ -17,6 +17,12 @@ export default function FilterByShowAmount({
   const dispatch = React.useContext(SeasonalDispatchContext)!;
   const dispatchToUse =
     type === "Full" || !customDispatch ? dispatch : customDispatch;
+
+  // const handlers = useHandlers(dispatchToUse, "seasonal");
+  // if ("handleFilterByShowCount" in handlers) {
+  //   let { handleFilterByShowCount, handleResetFilter } = handlers;
+  // } else throw Error("Invalid range filter type");
+
   let { handleFilterByShowCount, handleResetFilter } = useHandlers(
     dispatchToUse,
     "seasonal",
@@ -36,6 +42,9 @@ export default function FilterByShowAmount({
           placeholder="Maximum Show Amount"
           value={maxShows}
           onChange={(e) => setMaxShows(e.target.value)}
+          onKeyDown={() => {
+            handleFilterByShowCount(Number(minShows), Number(maxShows));
+          }}
           className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
         />
         <div className="flex justify-center gap-10">

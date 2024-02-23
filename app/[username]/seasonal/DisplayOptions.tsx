@@ -21,7 +21,10 @@ export default function DisplayOptions({
 
   return (
     <div className="sticky top-0 z-30">
-      <div className="z-30 mb-12 flex w-full flex-wrap justify-center gap-12 border-b-2 border-zinc-600 bg-zinc-800 pb-8 pt-8">
+      <div
+        className="z-30 mb-12 flex w-full flex-wrap justify-center gap-12
+       border-b-2 border-zinc-600 bg-blue-990 pb-8 pt-8"
+      >
         <SortingDropdown type="Full" />
         <FilterDropdown type="Full" />
         <SearchSeason />

@@ -61,6 +61,10 @@ export default function ShowDisplay({
       }
     }, 5000);
 
+    if (show.imageUrl === errorImg.src) {
+      setError(true);
+    }
+
     return () => {
       clearTimeout(timer);
     };
@@ -75,13 +79,16 @@ export default function ShowDisplay({
           controversialImage ? "mx-auto" : ""
         }`}
       >
-        {isLoading && (
-          <div className="flex h-[105px] w-[75px] items-center justify-center bg-zinc-700">
+        {/* {isLoading && (
+          <div
+            className="flex h-[105px] w-[75px] items-center justify-center
+           bg-zinc-700"
+          >
             Loading...
-          </div>
-        )}
+          </div> */}
+        {/* )} */}
 
-        {!error ? (
+        {!error && !isLoading ? (
           <img // Not using Next's Image component because html-to-image doesn't support it
             src={show.imageUrl}
             alt={show.name}
@@ -93,7 +100,10 @@ export default function ShowDisplay({
             onLoad={() => setIsLoading(false)}
           />
         ) : (
-          <div className="flex h-[105px] w-[75px] items-center rounded-xl bg-zinc-800 text-center text-xs shadow-md shadow-black"></div>
+          <div
+            className="flex h-[105px] w-[75px] items-center rounded-xl
+           bg-zinc-800 text-center text-xs shadow-md shadow-black"
+          ></div>
         )}
 
         <div
@@ -102,7 +112,10 @@ export default function ShowDisplay({
           onClick={
             partOfModal ? toggleFavorite : () => setFavoritesModalOpen(true)
           }
-          className=" absolute left-1/2 top-1/2 flex h-full  w-full -translate-x-1/2 -translate-y-1/2  transform cursor-pointer items-center justify-center text-center text-xs font-semibold text-white transition duration-300 ease-in-out"
+          className=" absolute left-1/2 top-1/2 flex h-full  w-full
+           -translate-x-1/2 -translate-y-1/2  transform cursor-pointer
+            items-center justify-center text-center text-xs font-semibold
+             text-white transition duration-300 ease-in-out"
         >
           <p className="z-[60] row-start-2 mb-2 text-center shadow-black text-shadow">
             {(hovered || error) && show.name}
