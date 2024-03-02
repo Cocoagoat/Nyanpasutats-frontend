@@ -1,4 +1,4 @@
-import { getUserData } from "@/app/home/api";
+import { startTask } from "@/app/home/api";
 import { AffTableType, AffinitiesData } from "@/app/interfaces";
 import React from "react";
 import { Nav } from "@/components/general/Nav";
@@ -15,7 +15,7 @@ export default async function page({
   let pos_affs: AffinitiesData = {},
     neg_affs: AffinitiesData = {};
   try {
-    [pos_affs, neg_affs] = await getUserData(params.username, "affinity");
+    [pos_affs, neg_affs] = await startTask(params.username, "affinity");
   } catch (err) {
     error = (err as Error).message;
   }

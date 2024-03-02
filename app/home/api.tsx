@@ -1,62 +1,92 @@
-// async function getAffinities(username: string) {
-//   const res = await fetch(
-//     `http://localhost:8000/affinities/?username=${encodeURIComponent(
-//       username
-//     )}`,
-//     { next: { revalidate: 3000 } }
-//   );
-//   if (!res.ok) {
-//     const errorMessage = await res.text();
-//     console.log(errorMessage, 8, 9);
-//     if (res.status == 400) {
-//       throw new Error(errorMessage);
-//     }
-//   }
+import { ShowPathType, TaskReturnType, UserPathType } from "../interfaces";
 
-//   const rawData = await res.text();
-//   console.log("Raw Data:", rawData);
-//   const data = JSON.parse(rawData);
-//   console.log("Parsed Data:", data);
-//   return data["Affinities"];
-// }
+function handleError(error: Error) {
+  let errorMessage = `An unexpected error occurred on our end - ${error.message}`;
+  if (error instanceof TypeError) {
+    errorMessage =
+      "We couldn't fetch your data. This might be an issue on our end - please try again later.";
+  }
 
-type UserPathType = "recs" | "affinity" | "seasonal" | "affinity";
-type ShowPathType = "img_url" | "img_urls" | "full";
-export async function getUserData(username: string, path: UserPathType) {
+  throw new Error(errorMessage);
+}
+
+export async function getUserData(taskId: string) {
+  const url = `http://localhost:8000/tasks/?task_id=${taskId}`;
   try {
-    const res = await fetch(
-      `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}`,
-      { next: { revalidate: 3000 } },
-    );
-
-    console.log(res);
-
-    // if (!res.ok) {
-    //   const errorMessage = await res.text();
-    //   throw new Error(errorMessage.slice(1, -1));
-    // }
+    // console.log("Before fetch");
+    const res = await fetch(url, { next: { revalidate: 300 } });
+    // console.log("Task_id response is: ", res);
+    const rawData = await res.text();
+    const data = JSON.parse(rawData);
+    return data;
+  } catch (error: any) {
+    handleError(error);
+  }
+}
+export async function startTask(
+  username: string,
+  path: UserPathType,
+): Promise<TaskReturnType> {
+  const url = `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}`;
+  try {
+    console.log("Before fetch");
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    console.log("Task_id response is: ", res);
 
     const rawData = await res.text();
     const data = JSON.parse(rawData);
 
-    switch (path) {
-      case "recs":
-        return [data["Recommendations"], data["RecommendationsNoWatched"]];
-      case "affinity":
-        return [data["PositiveAffs"], data["NegativeAffs"]];
-      case "seasonal":
-        return [data["Stats"], data["StatsNoSequels"]];
-    }
-  } catch (error) {
-    let errorMessage = `An unexpected error occurred on our end - ${(error as Error).message}`;
-    if (error instanceof TypeError) {
-      errorMessage =
-        "We couldn't fetch your data. This might be an issue on our end - please try again later.";
-    }
+    return { taskId: data["taskId"], queuePosition: data["queuePosition"] };
 
-    console.error(errorMessage);
-    throw new Error(errorMessage);
+    // switch (path) {
+    //   case "recs":
+    //     return [data["Recommendations"], data["RecommendationsNoWatched"]];
+    //   case "affinity":
+    //     return [data["PositiveAffs"], data["NegativeAffs"]];
+    //   case "seasonal":
+    //     return [data["Stats"], data["StatsNoSequels"]];
+    // }
+  } catch (error: any) {
+    handleError(error);
   }
+  return { taskId: "", queuePosition: 0 }; // This line is unreachable, but TypeScript requires it
+}
+
+export async function retrieveTaskData(taskId: string) {
+  let taskStatus = "pending";
+  let data = [];
+  let error = "";
+  while (taskStatus === "pending") {
+    try {
+      const taskData = await getUserData(taskId);
+      taskStatus = taskData["status"];
+      if (taskStatus === "pending") {
+        console.log("Task is pending");
+      } else {
+        data = taskData["data"];
+        break;
+      }
+    } catch (err) {
+      error = (err as Error).message;
+      throw new Error(error);
+      // set timeout here
+    } finally {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+  return data;
+}
+
+export async function retrieveQueuePosition() {
+  let queuePosition = null;
+  const url = `http://localhost:8000/queue_pos`;
+  const res = await fetch(url, { next: { revalidate: 300 } });
+
+  const rawData = await res.text();
+  const data = JSON.parse(rawData);
+  console.log("Queue_pos response is: ", data);
+
+  return { queuePosition: data["queuePosition"] };
 }
 
 export async function getShowData(

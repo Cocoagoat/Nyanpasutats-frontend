@@ -1,4 +1,4 @@
-import { getUserData } from "@/app/home/api";
+import { startTask } from "@/app/home/api";
 import React from "react";
 import ListNotFound from "../recs/ListNotFound";
 import { SeasonsData } from "@/app/interfaces";
@@ -39,7 +39,7 @@ export default async function page({
   let error = null;
   let seasonalStats, noSequelsSeasonStats;
   try {
-    [seasonalStats, noSequelsSeasonStats] = await getUserData(
+    [seasonalStats, noSequelsSeasonStats] = await startTask(
       params.username,
       "seasonal",
     );

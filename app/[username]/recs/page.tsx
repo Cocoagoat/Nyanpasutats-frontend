@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { getUserData } from "@/app/home/api";
+import { getUserData, retrieveTaskData, startTask } from "@/app/home/api";
 import { RecommendationType } from "@/app/interfaces";
 import RecsBox from "./RecsBox";
 import ListNotFound from "./ListNotFound";
 import { Nav } from "@/components/general/Nav";
 import FetchError from "@/components/general/FetchError";
+import UserQueueDisplay from "@/components/general/UserQueueDisplay";
+import { revalidatePath } from "next/cache";
+import QueueDisplayTest from "./QueueDisplayTest";
 
 function roundPredictedScores(recs: RecommendationType[]) {
   return recs.map((dict) => ({
@@ -18,39 +21,67 @@ export default async function page({
 }: {
   params: { username: string };
 }) {
-  let error = null;
+  // let error = null;
+  // let taskStatus = "pending";
+  // let data = [];
+  // const taskResponse = await startTask(params.username, "recs");
+  // console.log("Task response in page : ", taskResponse);
+  let { taskId, queuePosition } = await startTask(params.username, "recs");
+  console.log("Task response in page : ", taskId, queuePosition);
 
-  let recs: RecommendationType[] = [],
-    recs_sorted_by_diff: RecommendationType[] = [];
-  try {
-    [recs, recs_sorted_by_diff] = await getUserData(params.username, "recs");
-    recs = roundPredictedScores(recs);
-    recs_sorted_by_diff = roundPredictedScores(recs_sorted_by_diff);
-  } catch (err) {
-    error = (err as Error).message;
-  }
+  // data = await retrieveTaskData(taskId);
 
-  // console.log(recs[0]["ShowName"]);
-  // console.log(recs_no_watched[0]["ShowName"]);
-  console.log(recs.slice(0, 10));
-  // console.log(recs_no_watched_sorted_by_diff.slice(0, 10));
+  // while (taskStatus === "pending") {
+  //   try {
+  //     const taskData = await getUserData(taskId);
+  //     taskStatus = taskData["status"];
+  //     if (taskStatus === "pending") {
+  //       console.log("Task is pending");
+  //     } else {
+  //       data = taskData["data"];
+  //       break;
+  //     }
+  //   } catch (err) {
+  //     error = (err as Error).message;
+  //     // set timeout here
+  //   } finally {
+  //     await new Promise((resolve) => setTimeout(resolve, 1000));
+  //   }
+  // }
+
+  // let recs: RecommendationType[] = data["Recommendations"],
+  //   recs_sorted_by_diff: RecommendationType[] =
+  //     data["RecommendationsSortedByDiff"];
+
   return (
     <>
-      {error ? (
-        <FetchError
-          errorMessage={error}
-          username={params.username}
-          pathToRetry="recs"
-        />
-      ) : (
-        <>
-          {/* <Test /> */}
-          <RecsBox
-            recs={recs}
-            recs_sorted_by_diff={recs_sorted_by_diff}
-          ></RecsBox>
-        </>
-      )}
+      {/* <div className="bg-blue-900 text-5xl text-lime-600">
+        TESTING COMPONENTS SOMETHING ASHDFSDKF
+      </div> */}
+      <QueueDisplayTest
+        taskId={taskId}
+        queuePosition={queuePosition}
+        username={params.username}
+      />
     </>
+    // <>
+    //   {error ? (
+    //     <FetchError
+    //       errorMessage={error}
+    //       username={params.username}
+    //       pathToRetry="recs"
+    //     />
+    //   ) : taskStatus === "pending" ? (
+    //     <UserQueueDisplay queuePosition={queuePosition} />
+    //   ) : (
+    //     <>
+    //       {/* <Test /> */}
+    //       <RecsBox
+    //         recs={recs}
+    //         recs_sorted_by_diff={recs_sorted_by_diff}
+    //       ></RecsBox>
+    //     </>
+    //   )}
+    // </>
   );
 }

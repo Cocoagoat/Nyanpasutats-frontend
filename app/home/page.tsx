@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { SeasonsData } from "@/app/interfaces";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
-import { getUserData } from "./api";
+import { retrieveTaskData, startTask } from "./api";
 import Loading from "../../components/general/loading";
 import { useRouter } from "next/navigation";
 import useOutsideClick from "@/hooks/useOutsideClick";
@@ -82,6 +82,8 @@ export default function Home() {
   // }
 
   async function handleConfirmUsername(e: React.MouseEvent<HTMLButtonElement>) {
+    let data = [];
+    let error = "";
     if (userInputField === "") {
       setError("Please enter a username.");
       return;
@@ -89,23 +91,19 @@ export default function Home() {
 
     try {
       setLoading(true);
-      let recs: SeasonsData[] = await getUserData(userInputField, "seasonal");
-      // recs = recs.map((dict) => ({
-      //   ...dict,
-      //   PredictedScore: parseFloat(dict.PredictedScore.toFixed(2)),
-      // }));
-      // console.log(recs);
+      let { taskId, queuePosition } = await startTask(
+        userInputField,
+        "seasonal",
+      );
+      console.log("Task response in main page : ", taskId, queuePosition);
+
+      data = await retrieveTaskData(taskId);
       setUserName(userInputField);
-      // setRecs(recs);
-      sessionStorage.setItem("username", userInputField);
     } catch (error) {
-      // console.log(error);
       const err = error as Error;
       let errorMessage = err.message;
       if (errorMessage === "Failed to fetch")
         errorMessage = "Unable to reach the server. Please try again later.";
-      // Client-side errors will propagate from getData, server-side errors will be handled here
-      // console.log(errorMessage, 5, 6);
       setError(errorMessage);
     } finally {
       setLoading(false);

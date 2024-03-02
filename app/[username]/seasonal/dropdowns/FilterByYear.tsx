@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHandlers } from "../reducer/useHandlers";
-import { Paths, RangeFilterType } from "@/app/interfaces";
+import { UserPathType, RangeFilterType } from "@/app/interfaces";
 import { SeasonalDispatchContext } from "../reducer/SeasonalContext";
 import { Action } from "../reducer/actions";
 
@@ -10,7 +10,7 @@ export default function FilterByYear({
   dispatch,
 }: {
   type: RangeFilterType;
-  path: Paths;
+  path: UserPathType;
   dispatch?: React.Dispatch<Action>;
 }) {
   const [min, setMin] = useState("");
@@ -62,8 +62,8 @@ export default function FilterByYear({
 
   return (
     <div
-      className="bg-blue-970  absolute left-0 z-50
-     mt-2 rounded-lg p-4 "
+      className="absolute  left-0 z-50 mt-2
+     rounded-lg bg-blue-970 p-4 "
     >
       <div className="flex flex-col space-y-4">
         <input

@@ -1,6 +1,6 @@
 import {
   ChartDataKeys,
-  Paths,
+  UserPathType,
   RecommendationSortOptions,
 } from "@/app/interfaces";
 import {
@@ -182,12 +182,12 @@ export function useHandlers(
 ): RecHandlers;
 export function useHandlers(
   dispatch: React.Dispatch<any>,
-  path: Paths,
+  path: UserPathType,
 ): SeasonalHandlers | RecHandlers;
 
 export function useHandlers(
   dispatch: React.Dispatch<any>,
-  path: Paths,
+  path: UserPathType,
 ): SeasonalHandlers | RecHandlers {
   switch (path) {
     case "seasonal":

@@ -7,6 +7,11 @@ export type User = {
   setUsername: Dispatch<SetStateAction<string>>;
 };
 
+export type TaskReturnType = {
+  taskId: string;
+  queuePosition: number;
+};
+
 export type RecommendationType = {
   ShowName: string;
   PredictedScore: number;
@@ -144,6 +149,10 @@ export type DropdownType = "Full" | "Graph" | "Recs";
 
 export type RangeFilterType = "Year" | "MALScore" | "ShowCount";
 
-export type Paths = "affinity" | "seasonal" | "recs";
+export type UserPathType = "affinity" | "seasonal" | "recs";
+
+// export type UserPathType = "recs" | "affinity" | "seasonal"
+
+export type ShowPathType = "img_url" | "img_urls" | "full";
 
 export type displayedMeanOptions = "AvgScore" | "FavoritesAvgScore" | "Shows";
