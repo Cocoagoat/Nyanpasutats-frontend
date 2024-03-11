@@ -18,6 +18,7 @@ export default function FavoriteShows({
   leftovers?: boolean;
   contShowRemoved?: boolean;
 }) {
+  console.log("favorites : ", favorites);
   const displayText = partOfModal
     ? leftovers
       ? "Add to Favorites"
@@ -26,8 +27,8 @@ export default function FavoriteShows({
   return (
     <div
       className={`row-start-3 ${
-        contShowRemoved ? "col-start-1 col-span-3" : "col-start-2 col-span-2"
-      } relative group`}
+        contShowRemoved ? "col-span-3 col-start-1" : "col-span-2 col-start-2"
+      } group relative`}
     >
       <div className="flex flex-wrap justify-center gap-4 ">
         {Object.entries(favorites).map((show, index) => (
@@ -41,7 +42,7 @@ export default function FavoriteShows({
         ))}
       </div>
       <p
-        className={`text-center text-shadow text-lg shadow-black p-1 ${lato.className}`}
+        className={`p-1 text-center text-lg shadow-black text-shadow ${lato.className}`}
       >
         {displayText}
       </p>

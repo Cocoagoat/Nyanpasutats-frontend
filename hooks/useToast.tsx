@@ -13,12 +13,16 @@ function useToast() {
     });
   }
 
-  function notifySuccess(message: string, position?: ToastPosition) {
+  function notifySuccess(
+    message: string,
+    position?: ToastPosition,
+    customDuration?: number,
+  ) {
     toast.success(message, {
-      duration: 5000,
+      duration: customDuration ? customDuration : 5000,
       position: position ? position : "top-center",
       style: {
-        backgroundColor: "#22ff55",
+        backgroundColor: "#65a30d",
         color: "white",
         fontSize: "1.2rem",
       },

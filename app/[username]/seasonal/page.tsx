@@ -1,4 +1,8 @@
-import { startTask } from "@/app/home/api";
+import {
+  assertUsernameInCache,
+  retrieveTaskData,
+  startTask,
+} from "@/app/home/api";
 import React from "react";
 import ListNotFound from "../recs/ListNotFound";
 import { SeasonsData } from "@/app/interfaces";
@@ -37,15 +41,36 @@ export default async function page({
   }
 
   let error = null;
-  let seasonalStats, noSequelsSeasonStats;
-  try {
-    [seasonalStats, noSequelsSeasonStats] = await startTask(
-      params.username,
-      "seasonal",
+  let data = [];
+
+  let userFound = await assertUsernameInCache(params.username);
+  if (!userFound) {
+    return (
+      <FetchError
+        errorMessage={
+          "Unauthorized user - please submit your username through the home page."
+        }
+        username={params.username}
+        pathToRetry="seasonal"
+      />
     );
+  }
+
+  try {
+    const taskId = await startTask(params.username, "seasonal");
+
+    console.log("Task response in page : ", taskId);
+    if (taskId === undefined) {
+      throw new Error("Task ID is undefined");
+    }
+
+    data = await retrieveTaskData(taskId);
   } catch (err) {
     error = (err as Error).message;
+    console.log("Error is now : ", error);
   }
+  let seasonalStats: SeasonsData = data["Stats"],
+    noSequelsSeasonStats: SeasonsData = data["StatsNoSequels"];
 
   seasonalStats = roundStatsMeanScores(seasonalStats);
   noSequelsSeasonStats = roundStatsMeanScores(noSequelsSeasonStats);

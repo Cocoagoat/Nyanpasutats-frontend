@@ -17,9 +17,9 @@ export default function FetchError({
         {errorMessage}
       </h2>
       <Link
-        href={`/${username}`}
+        href={"/home"}
         // onClick={tryAgain}
-        className="bg-blue-990 rounded-3xl p-4 text-white shadow-lg shadow-lime-600"
+        className="rounded-3xl bg-blue-990 p-4 text-white shadow-lg shadow-lime-600"
       >
         Go back
       </Link>

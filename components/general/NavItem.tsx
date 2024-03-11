@@ -18,9 +18,10 @@ export default function NavItem({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Link className="px-8" href={link}>
+      <Link className="px-8 py-4" href={link}>
         {text}
       </Link>
     </li>
   );
 }
+//py-4 in the Link component is a hack to make the clickable area bigger

@@ -21,7 +21,8 @@ export default function ShowDisplay({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { setFavoritesModalOpen } = useContext(ModalContext);
-
+  console.log("Show display: ", show);
+  console.log("Show display image_url: ", show.imageUrl);
   function toggleFavorite() {
     if (setFavorites) {
       setFavorites((prev) => {
@@ -52,9 +53,13 @@ export default function ShowDisplay({
     }
   }
 
+  console.log("Show display 2 : ", show);
+  console.log("Show display 2 image_url: ", show.imageUrl);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isLoading) {
+        console.log("Image loading timeout");
         setIsLoading(false);
         setError(true);
         show.imageUrl = errorImg.src;
@@ -62,6 +67,7 @@ export default function ShowDisplay({
     }, 5000);
 
     if (show.imageUrl === errorImg.src) {
+      console.log("Error image loaded");
       setError(true);
     }
 
@@ -79,16 +85,7 @@ export default function ShowDisplay({
           controversialImage ? "mx-auto" : ""
         }`}
       >
-        {/* {isLoading && (
-          <div
-            className="flex h-[105px] w-[75px] items-center justify-center
-           bg-zinc-700"
-          >
-            Loading...
-          </div> */}
-        {/* )} */}
-
-        {!error && !isLoading ? (
+        {!error ? (
           <img // Not using Next's Image component because html-to-image doesn't support it
             src={show.imageUrl}
             alt={show.name}

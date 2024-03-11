@@ -9,7 +9,6 @@ export type User = {
 
 export type TaskReturnType = {
   taskId: string;
-  queuePosition: number;
 };
 
 export type RecommendationType = {

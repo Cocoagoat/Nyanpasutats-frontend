@@ -1,14 +1,20 @@
 import React from "react";
 
-export function TooltipQuestionMark({ text }: { text: string }) {
+export function TooltipQuestionMark({
+  text,
+  extraStyles,
+}: {
+  text: string;
+  extraStyles?: string;
+}) {
   const [showTooltip, setShowTooltip] = React.useState(false);
 
   return (
     <div className={`absolute right-1/5`}>
       <div className="relative flex w-full items-center justify-center">
         <div
-          className="bg-blue-970 flex h-6 w-6 cursor-pointer items-center
-           justify-center rounded-full text-xs hover:bg-lime-600"
+          className={`flex h-6 w-6 cursor-pointer items-center justify-center
+           rounded-full bg-blue-970 text-xs hover:bg-lime-600 ${extraStyles}`}
           onClick={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >

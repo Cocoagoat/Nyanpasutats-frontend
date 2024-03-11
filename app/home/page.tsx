@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { SeasonsData } from "@/app/interfaces";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
-import { retrieveTaskData, startTask } from "./api";
+import { retrieveQueuePosition, retrieveTaskData, startTask } from "./api";
 import Loading from "../../components/general/loading";
 import { useRouter } from "next/navigation";
 import useOutsideClick from "@/hooks/useOutsideClick";
@@ -22,6 +22,10 @@ import ToasterWithX from "@/components/general/ToasterWithX";
 import toast from "react-hot-toast";
 import useToast from "@/hooks/useToast";
 import test from "@/public/test.png";
+import UsernameInput from "./UsernameInput";
+import ResetUsername from "../[username]/ResetUsername";
+import startGlobalInterval from "./ResetIntervalRegulator.js";
+import UserQueueDisplay from "@/components/general/UserQueueDisplay";
 
 export default function Home() {
   const backgrounds = [img1.src, img2.src, img3.src, img4.src];
@@ -36,13 +40,19 @@ export default function Home() {
   const [userName, setUserName] = useState("");
   const [userInputField, setUserInputField] = useState("");
   const [error, setError] = useState("");
+
   // const [recs, setRecs] = useState<RecommendationType[]>([]);
   // const [listFetched, setListFetched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [redirectBoxClicked, setRedirectBoxClicked] = useState(false);
-  const router = useRouter();
+  const [queuePosition, setQueuePosition] = useState(0);
 
-  const boxesDisabled = [true, true, true, false];
+  const boxesDisabled = [
+    !Boolean(userName),
+    !Boolean(userName),
+    !Boolean(userName),
+    false,
+  ];
   const homeRedirectBoxContent = redirectBoxContent.map((item, index) => ({
     ...item,
     disabled: boxesDisabled[index],
@@ -56,18 +66,37 @@ export default function Home() {
   const { notifyError, notifySuccess } = useToast();
   useOutsideClick(ref, onOutsideClick);
 
-  useEffect(() => {
-    if (userName) {
-      router.push(`/${userName}`);
-    }
-  }, [userName]);
+  // useEffect(() => {
+  //   if (userName) {
+  //     router.push(`/${userName}`);
+  //   }
+  // }, [userName]);
 
   useEffect(() => {
-    const username = sessionStorage.getItem("username");
+    const username = localStorage.getItem("username");
     if (username !== null) {
       setUserName(username);
     }
   }, []);
+
+  useEffect(() => {
+    // Check if loading just finished and it's not an initial render
+    if (!loading && queuePosition !== 0) {
+      if (queuePosition < 5) {
+        notifySuccess(
+          "Successfully fetched your stats. You may now proceed to any of the sections below.",
+        );
+      } else {
+        notifySuccess(
+          `Successfully fetched your list. Due to heavy demand,
+            only the seasonal stats have been fetched and are immediately available.
+            You may proceed to the other sections as well, but the data may take a while to load.`,
+          undefined,
+          30000,
+        );
+      }
+    }
+  }, [loading, queuePosition]); // Depend on loading and queuePosition
 
   useEffect(() => {
     if (error) {
@@ -75,43 +104,123 @@ export default function Home() {
     }
   }, [error]);
 
-  // async function handleClickRedirectBox(
+  // Improve this to use a custom hook
+  // useEffect(() => {
+  //   const interval = setInterval(
+  //     () => {
+  //       if (localStorage.getItem("resetCount") !== null) {
+  //         let count = parseInt(localStorage.getItem("resetCount") as string);
+  //         if (count > 0) {
+  //           count--;
+  //           localStorage.setItem("resetCount", count.toString());
+  //         }
+  //       }
+  //     },
+  //     0.5 * 60 * 1000,
+  //   ); // 5 minutes in milliseconds
+
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    startGlobalInterval();
+  }, []);
+
+  // Your component logic
+
   //   e: React.MouseEvent<HTMLButtonElement>
   // ) {
   //   setRedirectBoxClicked(true);
   // }
 
+  async function handleResetUsername(e: React.MouseEvent<HTMLButtonElement>) {
+    setUserName("");
+    localStorage.removeItem("username");
+    if (localStorage.getItem("resetCount") === null) {
+      localStorage.setItem("resetCount", "1");
+    } else {
+      let count = parseInt(localStorage.getItem("resetCount") as string);
+      count++;
+      localStorage.setItem("resetCount", count.toString());
+    }
+    // localStorage.removeItem("username");
+  }
+
   async function handleConfirmUsername(e: React.MouseEvent<HTMLButtonElement>) {
-    let data = [];
-    let error = "";
     if (userInputField === "") {
       setError("Please enter a username.");
       return;
     }
+    console.log(
+      "Session storage reset count: ",
+      localStorage.getItem("resetCount"),
+    );
+
+    if (
+      localStorage.getItem("resetCount") !== null &&
+      parseInt(localStorage.getItem("resetCount") as string) > 50
+    ) {
+      setError(
+        "You've been doing that too much lately. Please try again later.",
+      );
+      return;
+    }
 
     try {
+      let data = await retrieveQueuePosition();
+      setQueuePosition(data.queuePosition);
       setLoading(true);
-      let { taskId, queuePosition } = await startTask(
-        userInputField,
-        "seasonal",
-      );
-      console.log("Task response in main page : ", taskId, queuePosition);
 
+      // let queueData = await retrieveQueuePosition();
+      // queuePosition = queueData.queuePosition;
+      let taskId = await startTask(userInputField, "seasonal");
       data = await retrieveTaskData(taskId);
+      console.log("Queue position is", data);
+      if (data.queuePosition < 50) {
+        console.log("Successfully retrieved seasonal data");
+        taskId = await startTask(userInputField, "recs");
+        data = await retrieveTaskData(taskId);
+
+        console.log("Successfully retrieved recs data");
+        taskId = await startTask(userInputField, "affinity");
+        data = await retrieveTaskData(taskId);
+      }
+
+      localStorage.setItem("username", userInputField);
       setUserName(userInputField);
+      setLoading(false);
+
+      // if (queuePosition < 5) {
+      //   console.log("notify 1");
+      //   notifySuccess(
+      //     "Successfully fetched your stats. You may now proceed to any of the sections below.",
+      //   );
+      // } else {
+      //   console.log("notify 2");
+      //   notifySuccess(
+      //     `Successfully fetched your list. Due to heavy demand,
+      //    only the seasonal stats have been fetched and are immediately available.
+      //   You may proceed to the other sections as well, but the data may take a while to load.`,
+      //     undefined,
+      //     30000,
+      //   );
+      // }
     } catch (error) {
       const err = error as Error;
       let errorMessage = err.message;
       if (errorMessage === "Failed to fetch")
         errorMessage = "Unable to reach the server. Please try again later.";
       setError(errorMessage);
+      setLoading(false);
     } finally {
       setLoading(false);
     }
   }
   // add a sub-heading to describe site like wotaku\
   // Get anime recommendations and stats you may or may not care about.
-  return (
+  return !loading ? (
     <>
       <div className=" mx-auto mt-24 flex min-h-[80%] flex-col justify-between gap-8 xl:max-w-front-n-center-80 fullhd:max-w-front-n-center-60 ">
         <div className="flex flex-col items-center justify-between gap-20 pt-0 xl:flex-row xl:items-start">
@@ -134,7 +243,23 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-10 flex justify-center transition-all duration-500">
+        {userName ? (
+          <ResetUsername
+            userInputField={userInputField}
+            setUserInputField={setUserInputField}
+            handleResetUsername={handleResetUsername}
+            userName={userName}
+          />
+        ) : (
+          <UsernameInput
+            userInputField={userInputField}
+            setUserInputField={setUserInputField}
+            handleConfirmUsername={handleConfirmUsername}
+            redirectBoxClicked={redirectBoxClicked}
+          />
+        )}
+
+        {/* <div className="mt-10 flex justify-center transition-all duration-500">
           <input
             type="text"
             value={userInputField}
@@ -158,13 +283,13 @@ export default function Home() {
           >
             Get List
           </button>
-        </div>
+        </div> */}
 
         <div ref={ref} className="text-center">
           {/* {redirectBoxClicked && (
             <p className="text-red-600">Please get your list first.</p>
           )} */}
-          {loading && <Loading />}
+          {loading && <UserQueueDisplay queuePosition={queuePosition} />}
           {/* {error && <p className="text-red-600">{error}</p>} */}
           {userName && (
             <p className="text-green-400">Successfully fetched your list!</p>
@@ -192,17 +317,19 @@ export default function Home() {
         <ToasterWithX />
       </div>
     </>
+  ) : (
+    <UserQueueDisplay queuePosition={queuePosition} />
   );
 }
 
 // export default function RecsPage() {
 //   const [userName, setUserName] = useState(
-//     sessionStorage.getItem("username") || ""
+//     localStorage.getItem("username") || ""
 //   );
 
 // function handleEnterUsername(e: React.ChangeEvent<HTMLInputElement>) {
 //   setUserName(e.target.value);
-//   sessionStorage.setItem("username", e.target.value);
+//   localStorage.setItem("username", e.target.value);
 // }
 
 // return (

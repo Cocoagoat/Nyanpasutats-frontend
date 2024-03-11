@@ -14,6 +14,7 @@ import SeasonalGraph from "./SeasonalGraph";
 import VerticalSlider from "@/components/general/VerticalSlider";
 import styles from "./SeasonalStatsBox.module.css";
 import ToasterWithX from "@/components/general/ToasterWithX";
+import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
 
 export default function SeasonalStatsBox({
   seasonStats,
@@ -47,6 +48,7 @@ export default function SeasonalStatsBox({
   const [graphOpen, setGraphOpen] = useState(false);
   const [brightness, setBrightness] = useState(100);
 
+  console.log("Length is");
   return (
     <SeasonalContext.Provider
       value={{
@@ -80,19 +82,33 @@ export default function SeasonalStatsBox({
                 }}
                 step={5}
               />
-              {Object.entries(displayedStats).map(([season, seasonStats]) => (
-                <Season
-                  seasonStats={seasonStats}
-                  season={season}
-                  seasonCount={
-                    noSequels
-                      ? Object.keys(noSequelsSeasonalStats).length
-                      : Object.keys(seasonalStats).length
-                  }
-                  key={season}
-                  brightness={brightness}
-                />
-              ))}
+              {Object.keys(displayedStats).length ? (
+                Object.entries(displayedStats).map(([season, seasonStats]) => (
+                  <Season
+                    seasonStats={seasonStats}
+                    season={season}
+                    seasonCount={
+                      noSequels
+                        ? Object.keys(noSequelsSeasonalStats).length
+                        : Object.keys(seasonalStats).length
+                    }
+                    key={season}
+                    brightness={brightness}
+                  />
+                ))
+              ) : (
+                <>
+                  <TooltipQuestionMark
+                    text="For a season to be displayed here, you must watch and score at least 5 shows in it."
+                    extraStyles="bg-zinc-700 text-lime-600"
+                  />
+                  <div className=" mx-24 text-center text-5xl font-bold text-lime-600">
+                    <p className="mt-10">
+                      It seems like you haven't scored much anime yet...
+                    </p>
+                  </div>
+                </>
+              )}
             </>
           </div>
         ) : (

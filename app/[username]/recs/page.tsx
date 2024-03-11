@@ -21,67 +21,46 @@ export default async function page({
 }: {
   params: { username: string };
 }) {
-  // let error = null;
-  // let taskStatus = "pending";
-  // let data = [];
-  // const taskResponse = await startTask(params.username, "recs");
-  // console.log("Task response in page : ", taskResponse);
-  let { taskId, queuePosition } = await startTask(params.username, "recs");
-  console.log("Task response in page : ", taskId, queuePosition);
-
-  // data = await retrieveTaskData(taskId);
-
-  // while (taskStatus === "pending") {
-  //   try {
-  //     const taskData = await getUserData(taskId);
-  //     taskStatus = taskData["status"];
-  //     if (taskStatus === "pending") {
-  //       console.log("Task is pending");
-  //     } else {
-  //       data = taskData["data"];
-  //       break;
-  //     }
-  //   } catch (err) {
-  //     error = (err as Error).message;
-  //     // set timeout here
-  //   } finally {
-  //     await new Promise((resolve) => setTimeout(resolve, 1000));
-  //   }
-  // }
-
-  // let recs: RecommendationType[] = data["Recommendations"],
-  //   recs_sorted_by_diff: RecommendationType[] =
-  //     data["RecommendationsSortedByDiff"];
+  let error = null;
+  let data = [];
+  try {
+    let { taskId, queuePosition } = await startTask(params.username, "recs");
+    console.log("Task response in page : ", taskId, queuePosition);
+    data = await retrieveTaskData(taskId);
+  } catch (err) {
+    error = (err as Error).message;
+  }
+  let recs: RecommendationType[] = data["Recommendations"],
+    recs_sorted_by_diff: RecommendationType[] =
+      data["RecommendationsSortedByDiff"];
 
   return (
-    <>
-      {/* <div className="bg-blue-900 text-5xl text-lime-600">
-        TESTING COMPONENTS SOMETHING ASHDFSDKF
-      </div> */}
-      <QueueDisplayTest
-        taskId={taskId}
-        queuePosition={queuePosition}
-        username={params.username}
-      />
-    </>
     // <>
-    //   {error ? (
-    //     <FetchError
-    //       errorMessage={error}
-    //       username={params.username}
-    //       pathToRetry="recs"
-    //     />
-    //   ) : taskStatus === "pending" ? (
-    //     <UserQueueDisplay queuePosition={queuePosition} />
-    //   ) : (
-    //     <>
-    //       {/* <Test /> */}
-    //       <RecsBox
-    //         recs={recs}
-    //         recs_sorted_by_diff={recs_sorted_by_diff}
-    //       ></RecsBox>
-    //     </>
-    //   )}
+    //   {/* <div className="bg-blue-900 text-5xl text-lime-600">
+    //     TESTING COMPONENTS SOMETHING ASHDFSDKF
+    //   </div> */}
+    //   <QueueDisplayTest
+    //     taskId={taskId}
+    //     queuePosition={queuePosition}
+    //     username={params.username}
+    //   />
     // </>
+    <>
+      {error ? (
+        <FetchError
+          errorMessage={error}
+          username={params.username}
+          pathToRetry="recs"
+        />
+      ) : (
+        <>
+          {/* <Test /> */}
+          <RecsBox
+            recs={recs}
+            recs_sorted_by_diff={recs_sorted_by_diff}
+          ></RecsBox>
+        </>
+      )}
+    </>
   );
 }

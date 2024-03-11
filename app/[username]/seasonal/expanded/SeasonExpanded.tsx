@@ -90,6 +90,7 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
     getImageUrl();
   }, []);
 
+  console.log("displayedFavorites : ", displayedFavorites);
   return (
     <ModalContext.Provider
       value={{ favoritesModalOpen, setFavoritesModalOpen }}

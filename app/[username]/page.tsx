@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import RedirectBox from "@/app/home/RedirectBox";
 import { redirectBoxContent } from "@/app/home/RedirectBoxContent";
 import { useRouter } from "next/navigation";
+import ResetUsername from "./ResetUsername";
 
 export default function Home() {
   const [userName, setUserName] = useState(
-    sessionStorage.getItem("username") || ""
+    sessionStorage.getItem("username") || "",
   );
   const [userInputField, setUserInputField] = useState("");
   // const [error, setError] = useState(false);
@@ -22,19 +23,21 @@ export default function Home() {
     }
   }, [userName]);
 
-  async function handleResetUsername(e: React.MouseEvent<HTMLButtonElement>) {
-    setUserName("");
-    sessionStorage.removeItem("username");
-  }
-
   return (
     <>
-      <div className="flex flex-col gap-10 justify-between mt-20 min-h-[80%] ">
-        <h1 className="text-5xl bg-gradient-to-bl text-center from-sky-400 via-blue-300 to-sky-400 bg-clip-text text-transparent font-bold">
+      <div className="mt-20 flex min-h-[80%] flex-col justify-between gap-10 ">
+        <h1 className="bg-gradient-to-bl from-sky-400 via-blue-300 to-sky-400 bg-clip-text text-center text-5xl font-bold text-transparent">
           Welcome to Animisc
         </h1>
 
-        <div className="flex justify-items-center justify-center">
+        <ResetUsername
+          userInputField={userInputField}
+          setUserInputField={setUserInputField}
+          userName={userName}
+          handleResetUsername={() => {}}
+        />
+
+        {/* <div className="flex justify-center justify-items-center">
           <input
             type="text"
             value={userInputField}
@@ -42,21 +45,21 @@ export default function Home() {
             disabled
             onChange={(e) => setUserInputField(e.target.value)}
             // onChange={handleEnterUsername}
-            className="rounded-l-lg p-2.5 outline-none max-w-md text-clampsm"
+            className="max-w-md rounded-l-lg p-2.5 text-clampsm outline-none"
             required
           ></input>
 
           <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold rounded-r-lg px-5 py-2.5 text-center"
+            className="rounded-r-lg bg-red-500 px-5 py-2.5 text-center font-bold text-white hover:bg-red-700"
             onClick={handleResetUsername}
           >
             Reset Username
           </button>
-        </div>
+        </div> */}
 
         <div //className="flex justify-center flex-wrap mt-[14rem]"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 
-         lg:min-h-[250px] mx-auto max-w-3xl lg:max-w-7xl gap-10 justify-items-center lg:mb-28"
+          className="mx-auto grid max-w-3xl grid-cols-1 
+         justify-items-center gap-10 sm:grid-cols-2 lg:mb-28 lg:min-h-[250px] lg:max-w-7xl lg:grid-cols-4"
         >
           {redirectBoxContent.map((content, index) => (
             <RedirectBox
