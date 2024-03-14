@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { ShowPathType, TaskReturnType, UserPathType } from "../interfaces";
+import { cache } from "react";
 
 function handleError(error: Error) {
   let errorMessage = `An unexpected error occurred on our end - ${error.message}`;
@@ -33,12 +34,13 @@ export async function startTask(
   try {
     console.log("Before fetch");
     // revalidatePath(url);
-    const res = await fetch(url, { next: { revalidate: 3600 } });
+    const res = await fetch(url, { cache: "no-store" });
     // console.log("Task_id response is: ", res);
 
     const rawData = await res.text();
     const data = JSON.parse(rawData);
 
+    console.log("data is : ", data);
     console.log("Task ID is : ", data["taskId"]);
     return data["taskId"];
 

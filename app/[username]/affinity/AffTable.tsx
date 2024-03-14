@@ -16,11 +16,11 @@ export default function AffTable({
   const columnNames = ["", "Username", "Affinity", "Shared Anime"];
   return (
     <div
-      className={`relative mt-20 h-3/4 overflow-y-scroll  lg:mt-0 
+      className={`relative mb-20 mt-20 h-3/4 overflow-y-scroll  lg:mt-0 
       ${styles.hiddenscrollbar} `}
     >
       <AffTableHeader type={type} />
-      <table className="mt-10">
+      <table className="lg:mt-10">
         <TableHead columnNames={columnNames} />
         <tbody>
           {Object.entries(aff_data).map(([username, aff], index) => (

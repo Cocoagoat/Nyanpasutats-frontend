@@ -80,9 +80,9 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Check if loading just finished and it's not an initial render
-    if (!loading && queuePosition !== 0) {
-      if (queuePosition < 5) {
+    // Fix this
+    if (!loading && !error && queuePosition !== 0) {
+      if (queuePosition < 50) {
         notifySuccess(
           "Successfully fetched your stats. You may now proceed to any of the sections below.",
         );
@@ -172,20 +172,21 @@ export default function Home() {
       let data = await retrieveQueuePosition();
       setQueuePosition(data.queuePosition);
       setLoading(true);
+      console.log("Queue position is", data.queuePosition);
 
       // let queueData = await retrieveQueuePosition();
       // queuePosition = queueData.queuePosition;
       let taskId = await startTask(userInputField, "seasonal");
-      data = await retrieveTaskData(taskId);
-      console.log("Queue position is", data);
+      let seasonalData = await retrieveTaskData(taskId);
+      console.log("Successfully retrieved seasonal data");
       if (data.queuePosition < 50) {
-        console.log("Successfully retrieved seasonal data");
         taskId = await startTask(userInputField, "recs");
-        data = await retrieveTaskData(taskId);
-
+        let recsData = await retrieveTaskData(taskId);
         console.log("Successfully retrieved recs data");
+
         taskId = await startTask(userInputField, "affinity");
-        data = await retrieveTaskData(taskId);
+        let affinityData = await retrieveTaskData(taskId);
+        console.log("Successfully retrieved affinity data");
       }
 
       localStorage.setItem("username", userInputField);

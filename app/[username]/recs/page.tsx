@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getUserData, retrieveTaskData, startTask } from "@/app/home/api";
+import {
+  assertUsernameInCache,
+  getUserData,
+  retrieveTaskData,
+  startTask,
+} from "@/app/home/api";
 import { RecommendationType } from "@/app/interfaces";
 import RecsBox from "./RecsBox";
 import ListNotFound from "./ListNotFound";
@@ -23,28 +28,37 @@ export default async function page({
 }) {
   let error = null;
   let data = [];
+  let userFound = await assertUsernameInCache(params.username);
+  if (!userFound) {
+    return (
+      <FetchError
+        errorMessage={
+          "Unauthorized user - please submit your username through the home page."
+        }
+        username={params.username}
+        pathToRetry="seasonal"
+      />
+    );
+  }
+
   try {
-    let { taskId, queuePosition } = await startTask(params.username, "recs");
-    console.log("Task response in page : ", taskId, queuePosition);
+    const taskId = await startTask(params.username, "recs");
+    console.log("Task response in page : ", taskId);
+    if (taskId === undefined) {
+      throw new Error("Task ID is undefined");
+    }
     data = await retrieveTaskData(taskId);
   } catch (err) {
+    // Delete this later since Server Components can't throw errors
     error = (err as Error).message;
   }
   let recs: RecommendationType[] = data["Recommendations"],
     recs_sorted_by_diff: RecommendationType[] =
       data["RecommendationsSortedByDiff"];
 
+  recs = roundPredictedScores(recs);
+  recs_sorted_by_diff = roundPredictedScores(recs_sorted_by_diff);
   return (
-    // <>
-    //   {/* <div className="bg-blue-900 text-5xl text-lime-600">
-    //     TESTING COMPONENTS SOMETHING ASHDFSDKF
-    //   </div> */}
-    //   <QueueDisplayTest
-    //     taskId={taskId}
-    //     queuePosition={queuePosition}
-    //     username={params.username}
-    //   />
-    // </>
     <>
       {error ? (
         <FetchError

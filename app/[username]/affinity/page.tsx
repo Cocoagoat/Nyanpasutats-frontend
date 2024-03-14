@@ -1,4 +1,8 @@
-import { retrieveTaskData, startTask } from "@/app/home/api";
+import {
+  assertUsernameInCache,
+  retrieveTaskData,
+  startTask,
+} from "@/app/home/api";
 import { AffTableType, AffinitiesData } from "@/app/interfaces";
 import React from "react";
 import { Nav } from "@/components/general/Nav";
@@ -13,9 +17,26 @@ export default async function page({
 }) {
   let error = null;
   let data = [];
+
+  let userFound = await assertUsernameInCache(params.username);
+  if (!userFound) {
+    return (
+      <FetchError
+        errorMessage={
+          "Unauthorized user - please submit your username through the home page."
+        }
+        username={params.username}
+        pathToRetry="seasonal"
+      />
+    );
+  }
+
   try {
-    let { taskId, queuePosition } = await startTask(params.username, "recs");
-    console.log("Task response in page : ", taskId, queuePosition);
+    const taskId = await startTask(params.username, "affinity");
+    console.log("Task response in page : ", taskId);
+    if (taskId === undefined) {
+      throw new Error("Task ID is undefined");
+    }
     data = await retrieveTaskData(taskId);
   } catch (err) {
     error = (err as Error).message;
