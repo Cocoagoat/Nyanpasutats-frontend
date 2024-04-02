@@ -37,7 +37,6 @@ export default function FavoriteShows({
             key={`${show[0]} ${index}`}
             setFavorites={setFavorites}
             partOfModal={partOfModal}
-            leftovers={leftovers}
           />
         ))}
       </div>

@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import React from "react";
 
@@ -11,6 +10,7 @@ export default function FetchError({
   username: string;
   pathToRetry: string;
 }) {
+  console.log("Inside fetch error");
   return (
     <div className=" mx-auto mt-52 flex max-w-front-n-center-65 flex-col items-center justify-start gap-20">
       <h2 className=" text-center text-5xl font-semibold text-lime-600">

@@ -1,14 +1,12 @@
-import {
-  assertUsernameInCache,
-  retrieveTaskData,
-  startTask,
-} from "@/app/home/api";
+import { assertUsernameInCache, startTask } from "@/app/home/api";
 import { AffTableType, AffinitiesData } from "@/app/interfaces";
+import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
 import React from "react";
 import { Nav } from "@/components/general/Nav";
 import AffTable from "./AffTable";
 import FetchError from "@/components/general/FetchError";
 import styles from "./Affinity.module.css";
+import { getSiteCookie } from "@/utils/general";
 
 export default async function page({
   params,
@@ -17,7 +15,7 @@ export default async function page({
 }) {
   let error = null;
   let data = [];
-
+  const siteCookie = getSiteCookie();
   let userFound = await assertUsernameInCache(params.username);
   if (!userFound) {
     return (
@@ -32,12 +30,12 @@ export default async function page({
   }
 
   try {
-    const taskId = await startTask(params.username, "affinity");
+    const taskId = await startTask(params.username, "affinity", siteCookie);
     console.log("Task response in page : ", taskId);
     if (taskId === undefined) {
       throw new Error("Task ID is undefined");
     }
-    data = await retrieveTaskData(taskId);
+    data = await retrieveTaskData(taskId, "affinity");
   } catch (err) {
     error = (err as Error).message;
   }

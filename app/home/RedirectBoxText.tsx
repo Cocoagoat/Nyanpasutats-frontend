@@ -2,10 +2,12 @@ import React from "react";
 
 export default function RedirectBoxText({
   title,
+  MAL,
   description,
   disabled,
 }: {
   title: string;
+  MAL: boolean;
   description: string;
   disabled: boolean;
 }) {

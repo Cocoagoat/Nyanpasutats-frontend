@@ -18,8 +18,14 @@ export default function NavItem({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Link className="px-8 py-4" href={link}>
+      <Link
+        className="px-8 py-4"
+        href={link}
+        target={link.startsWith("https") ? "_blank" : ""}
+        rel="noopener noreferrer"
+      >
         {text}
+        
       </Link>
     </li>
   );

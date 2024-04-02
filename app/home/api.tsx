@@ -1,8 +1,13 @@
 import { revalidatePath } from "next/cache";
-import { ShowPathType, TaskReturnType, UserPathType } from "../interfaces";
+import {
+  ShowPathType,
+  SiteType,
+  TaskReturnType,
+  UserPathType,
+} from "../interfaces";
 import { cache } from "react";
 
-function handleError(error: Error) {
+export function handleError(error: Error) {
   let errorMessage = `An unexpected error occurred on our end - ${error.message}`;
   if (error instanceof TypeError) {
     errorMessage =
@@ -20,6 +25,7 @@ export async function getUserData(taskId: string) {
     // console.log("Task_id response is: ", res);
     const rawData = await res.text();
     const data = JSON.parse(rawData);
+
     return data;
   } catch (error: any) {
     console.log("Caught error in getUserData", error);
@@ -29,8 +35,9 @@ export async function getUserData(taskId: string) {
 export async function startTask(
   username: string,
   path: UserPathType,
+  site: SiteType,
 ): Promise<string> {
-  const url = `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}`;
+  const url = `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
   try {
     console.log("Before fetch");
     // revalidatePath(url);
@@ -71,7 +78,7 @@ export async function retrieveTaskData(taskId: string) {
       throw new Error(taskData.data);
     }
     data = taskData["data"];
-    console.log("Test", taskData);
+    // console.log("Test", taskData);
 
     return data;
   } catch (err) {
@@ -160,6 +167,21 @@ export async function assertUsernameInCache(username: string) {
   return data["UserFound"];
 }
 
+export async function updateImageUrl(showName: string) {
+  const url = `http://localhost:8000/update_img_url/`;
+  const res = await fetch(url, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ show_name: showName }),
+  });
+  const rawData = await res.text();
+  const data = JSON.parse(rawData);
+  console.log("Response is: ", data);
+}
+
 export async function getShowData(
   showNames: string | string[],
   path: ShowPathType,
@@ -174,7 +196,7 @@ export async function getShowData(
           ? encodeURIComponent(JSON.stringify(showNames))
           : encodeURIComponent(showNames)
       }`,
-      { method: "GET" }, // Replaced { next: { revalidate: 300 } } with { method: 'GET' } for clarity and correctness
+      { next: { revalidate: 3600 } },
     );
 
     // Handling client-side errors

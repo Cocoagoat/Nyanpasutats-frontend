@@ -16,8 +16,8 @@ export function Nav() {
         <NavItem link={`/${params.username}/affinity`} text="Affinity" />
         <NavItem link={`/${params.username}/recs`} text="Recommendations" />
         <NavItem link={`/${params.username}/seasonal`} text="Seasonal" />
-        <NavItem link="/history" text="History" />
         <NavItem link="/faq" text="FAQ" />
+        <NavItem link="https://nyanpass.com" text="Nyanpasu?" />
       </ul>
     </nav>
   );

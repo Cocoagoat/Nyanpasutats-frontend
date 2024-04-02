@@ -5,9 +5,11 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 import toast from "react-hot-toast";
 import test from "@/public/nnb6.png";
 import { navigate } from "./RedirectNavigate";
+import { SiteType } from "../interfaces";
 
 type RedirectBoxProps = {
   title: string;
+  MAL: boolean;
   description: string;
   link: string;
   disabled: boolean;
@@ -18,6 +20,7 @@ type RedirectBoxProps = {
 
 export default function RedirectBox({
   title,
+  MAL,
   description,
   link,
   disabled,
@@ -30,6 +33,13 @@ RedirectBoxProps) {
     hover:shadow-2xl hover:shadow-lime-600 bg-cover 
     shadow-lg relative text-zinc-200 shadow-blue-950 z-40 h-[250px] group grow`;
   //Clamp the w-64?
+
+  function getErrorMessage() {
+    if (!MAL) {
+      return "Affinity Finder is only available for MyAnimeList. Read the FAQ for more details.";
+    }
+    return "Please get your list first.";
+  }
 
   const ref = useRef<HTMLButtonElement>(null);
 
@@ -62,9 +72,9 @@ RedirectBoxProps) {
 
   function handleRedirectBoxClicked() {
     if (setRedirectBoxClicked) setRedirectBoxClicked(true);
-    toast("Please get your list first.", {
+    toast(getErrorMessage(), {
       duration: 5000,
-      position: "bottom-center",
+      position: "top-center",
       style: {
         backgroundColor: "#ff0055",
         color: "white",
@@ -77,12 +87,13 @@ RedirectBoxProps) {
   return disabled ? (
     <button
       ref={ref}
-      className={`${redirectBoxStyle}`}
+      className={`${redirectBoxStyle} ${!MAL && "grayscale"}`}
       style={{ backgroundImage: `url(${test.src})` }}
       onClick={handleRedirectBoxClicked}
     >
       <RedirectBoxText
         title={title}
+        MAL={MAL}
         description={description}
         disabled={disabled}
       />
@@ -98,10 +109,11 @@ RedirectBoxProps) {
     <Link
       href={link}
       style={{ backgroundImage: `url(${test.src})` }}
-      className={`${redirectBoxStyle}`}
+      className={`${redirectBoxStyle} `}
     >
       <RedirectBoxText
         title={title}
+        MAL={MAL}
         description={description}
         disabled={disabled}
       />

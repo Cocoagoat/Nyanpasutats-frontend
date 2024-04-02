@@ -8,8 +8,14 @@ import {
 import { displayedMeanOptions } from "@/app/interfaces";
 
 export default function SeasonCollapsed() {
-  const { season, seasonStats, backgroundImage, backgroundColor, setExpanded } =
-    useSingleSeasonContext();
+  const {
+    season,
+    seasonStats,
+    backgroundImage,
+    backgroundColor,
+    setExpanded,
+    nightImage,
+  } = useSingleSeasonContext();
 
   const dispatch = useContext(SeasonalDispatchContext);
 
@@ -21,7 +27,7 @@ export default function SeasonCollapsed() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-3xl mx-16 shadow-lg text-sky-100 mb-5"
+      className="relative mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
@@ -30,12 +36,13 @@ export default function SeasonCollapsed() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(${backgroundColor}, 1) 10%, transparent 50%)`,
+          backgroundImage: `linear-gradient(to right, rgba(${backgroundColor}, 1)
+           ${nightImage ? "0%" : "10%"}, transparent ${nightImage ? "0%" : "50%"})`,
           zIndex: 10,
         }}
       ></div>
       <div className="relative z-20">
-        <div className="flex justify-between items-center p-4">
+        <div className="flex items-center justify-between p-4">
           <div>
             <h2
               className={`text-2xl text-shadow-sm ${
@@ -50,16 +57,16 @@ export default function SeasonCollapsed() {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           >
-            <p className="text-md font-semibold p-1 bg-black bg-opacity-40">
+            <p className="text-md bg-black bg-opacity-40 p-1 font-semibold">
               Shows Watched: {seasonStats["Shows"]}
             </p>
-            <p className="text-md  bg-black bg-opacity-40 font-semibold p-1">
+            <p className="text-md  bg-black bg-opacity-40 p-1 font-semibold">
               {`Mean Score ${displayedMean == "AvgScore" ? "" : "(Top 10)"}`}:{" "}
               {seasonStats[displayedMean]}
             </p>
             {hovered && (
               <button
-                className="rounded-xl absolute justify-self-center bg-zinc-700 border text-xs border-zinc-600 px-1.5 py-0.5"
+                className="absolute justify-self-center rounded-xl border border-zinc-600 bg-zinc-700 px-1.5 py-0.5 text-xs"
                 onClick={() => {
                   const newDisplayedMean =
                     displayedMean === "AvgScore"
@@ -78,7 +85,7 @@ export default function SeasonCollapsed() {
         </div>
         <div
           onClick={() => setExpanded(true)}
-          className="bg-black bg-opacity-50 text-center py-2 cursor-pointer"
+          className="cursor-pointer bg-black bg-opacity-50 py-2 text-center"
         >
           Expand
           <RiArrowDownDoubleFill className="inline-block" />

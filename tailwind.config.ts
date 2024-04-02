@@ -12,6 +12,7 @@ const config: Config = {
     extend: {
       colors: {
         "sky-550": "#74ceff",
+        "lime-550": "#74b811",
         "blue-990": "#08142c",
         "blue-970": "#0f1f3c",
         "green-990": "#041414",

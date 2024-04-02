@@ -1,6 +1,9 @@
 import { tooltipsContent } from "@/utils/TooltipsContent";
 import { NumberValueToken } from "html2canvas/dist/types/css/syntax/tokenizer";
 import { Dispatch, SetStateAction } from "react";
+import AnilistLogo from "@/public/AniList_logo.png";
+import MALLogo from "@/public/MALLogo.png";
+import { StaticImageData } from "next/image";
 
 export type User = {
   username: string;
@@ -40,7 +43,7 @@ export type SeasonDataKeys =
   | "AvgScore"
   | "ShowList"
   | "FavoritesAvgScore"
-  | "MostControversialShow"
+  | "MostUnusualShow"
   | "OverallRank"
   | "FavoritesRank"
   | "YearlyRank"
@@ -63,7 +66,7 @@ export const statKeysToNames = {
   AvgScore: "Mean Score",
   ShowList: "Show List",
   FavoritesAvgScore: "Mean Score (Top 10)",
-  MostControversialShow: "Most Unusual Show",
+  MostUnusualShow: "Most Unusual Show",
   OverallRank: "Overall Rank",
   FavoritesRank: "Overall Rank (Top 10)",
   YearlyRank: "Yearly Rank",
@@ -80,7 +83,7 @@ export const statNamesToKeys = {
   "Mean Score": "AvgScore",
   "Show List": "ShowList",
   "Mean Score (Top 10)": "FavoritesAvgScore",
-  "Most Unusual Show": "MostControversialShow",
+  "Most Unusual Show": "MostUnusualShow",
   "Overall Rank": "OverallRank",
   "Overall Rank (Top 10)": "FavoritesRank",
   "Yearly Rank": "YearlyRank",
@@ -107,7 +110,7 @@ export type SeasonData = {
   AvgScore: number;
   ShowList: { [key: string]: number };
   FavoritesAvgScore: number;
-  MostControversialShow: string;
+  MostUnusualShow: string;
   OverallRank: number;
   FavoritesRank: number;
   YearlyRank: number;
@@ -149,6 +152,19 @@ export type DropdownType = "Full" | "Graph" | "Recs";
 export type RangeFilterType = "Year" | "MALScore" | "ShowCount";
 
 export type UserPathType = "affinity" | "seasonal" | "recs";
+
+export const siteOptions = ["MAL", "Anilist"] as const;
+
+export const siteLogos = [MALLogo, AnilistLogo] as const;
+
+export const siteLogosMap = {
+  MAL: MALLogo,
+  Anilist: AnilistLogo,
+};
+
+// Define the type based on the array
+
+export type SiteType = (typeof siteOptions)[number];
 
 // export type UserPathType = "recs" | "affinity" | "seasonal"
 

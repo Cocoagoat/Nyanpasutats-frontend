@@ -6,7 +6,7 @@ import { SeasonData } from "@/app/interfaces";
 export const SeasonalContext = createContext<State | null>(null);
 
 export const SeasonalDispatchContext = createContext<Dispatch<Action>>(
-  () => {}
+  () => {},
 );
 
 export const SingleSeasonContext =
@@ -28,4 +28,5 @@ export type singleSeasonContextType = {
   seasonCount: number;
   setExpanded: Dispatch<React.SetStateAction<boolean>>;
   imageChanged: boolean;
+  nightImage: boolean;
 };

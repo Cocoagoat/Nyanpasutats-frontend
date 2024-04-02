@@ -6,22 +6,27 @@ import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
 import { tooltipsContent } from "@/utils/TooltipsContent";
 import FilterDropdown from "../seasonal/dropdowns/FilterDropdown";
 import { useHandlers } from "../seasonal/reducer/useHandlers";
+import { MdArrowUpward } from "react-icons/md";
 
 export default function DisplayOptions({
   sortedBy,
   noWatchedOnly,
   dispatch,
+  welcomeOpen,
+  setWelcomeOpen,
 }: {
   sortedBy: string;
   noWatchedOnly: boolean;
   dispatch: React.Dispatch<any>;
+  welcomeOpen?: boolean;
+  setWelcomeOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { handleToggleSort, handleToggleWatched } = useHandlers(
     dispatch,
     "recs",
   );
   return (
-    <div className=" mb-4 flex w-full justify-between">
+    <div className=" relative mb-4 flex w-full justify-between">
       <SettingsButton
         extraStyles={`${styles.modifiedButton}`}
         onClick={() => {
@@ -37,7 +42,16 @@ export default function DisplayOptions({
           : "Sort by Predicted Score"}
       </SettingsButton>
       <div className="absolute right-0 top-0 z-50">
-        <TooltipQuestionMark text={tooltipsContent["Recommendation Sort"]} />
+        {!welcomeOpen && (
+          <MdArrowUpward
+            className="h-6 w-6 cursor-pointer rounded-full bg-blue-970 p-1 text-xs hover:bg-lime-600"
+            onClick={() => {
+              if (setWelcomeOpen) {
+                setWelcomeOpen(true);
+              }
+            }}
+          />
+        )}
       </div>
 
       <FilterDropdown

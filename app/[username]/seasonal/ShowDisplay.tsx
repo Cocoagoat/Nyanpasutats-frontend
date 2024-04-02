@@ -3,19 +3,18 @@ import { ModalContext } from "@/contexts/ModalContext";
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
 import errorImg from "@/public/default.png";
+import { updateImageUrl } from "@/app/home/api";
 
 export default function ShowDisplay({
   show,
   controversialImage,
   setFavorites,
   partOfModal,
-  leftovers,
 }: {
   show: ShowToDisplay;
   controversialImage?: boolean;
   setFavorites?: React.Dispatch<React.SetStateAction<ShowsToDisplay>>;
   partOfModal?: boolean;
-  leftovers?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,31 +51,42 @@ export default function ShowDisplay({
       });
     }
   }
-
-  console.log("Show display 2 : ", show);
-  console.log("Show display 2 image_url: ", show.imageUrl);
-
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isLoading) {
-        console.log("Image loading timeout");
-        setIsLoading(false);
-        setError(true);
-        show.imageUrl = errorImg.src;
-      }
-    }, 5000);
-
-    if (show.imageUrl === errorImg.src) {
-      console.log("Error image loaded");
+    if (!show.imageUrl) {
       setError(true);
+    } else {
+      setError(false);
     }
+  }, [show.imageUrl]);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isLoading, setIsLoading, setError]);
+  function handleImageError() {
+    setError(true);
+    updateImageUrl(show.name);
+  }
 
-  console.log(show.imageUrl);
+  // useEffect(() => {
+  //   console.log("Testing", show.imageUrl);
+
+  //   // const timer = setTimeout(() => {
+  //   //   if (isLoading) {
+  //   //     console.log("Image loading timeout");
+  //   //     setIsLoading(false);
+  //   //     setError(true);
+  //   //     show.imageUrl = errorImg.src;
+  //   //   }
+  //   // }, 5000);
+
+  //   if (show.imageUrl === errorImg.src) {
+  //     console.log("Error image loaded");
+  //     setError(true);
+  //   }
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [isLoading, setIsLoading, setError]);
+
+  // console.log(show.imageUrl);
 
   return (
     <div className="relative flex flex-col">
@@ -94,6 +104,7 @@ export default function ShowDisplay({
             className={`mx-auto h-full rounded-xl shadow-md shadow-black ${
               hovered ? "opacity-50" : ""
             }`}
+            onError={handleImageError}
             onLoad={() => setIsLoading(false)}
           />
         ) : (

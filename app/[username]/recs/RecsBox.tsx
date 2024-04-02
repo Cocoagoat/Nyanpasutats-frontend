@@ -7,13 +7,21 @@ import DisplayOptions from "./DisplayOptions";
 import RecsTable from "./RecsTable";
 import { getShowData } from "@/app/home/api";
 import styles from "./RecsBox.module.css";
+import TagRanking from "./TagRanking";
+import { TbX } from "react-icons/tb";
+import RecsWelcome from "./RecsWelcome";
+import updateCookie from "@/app/actions/updateCookie";
 
 export default function RecsBox({
   recs,
   recs_sorted_by_diff,
+  favTags,
+  leastFavTags,
 }: {
   recs: RecommendationType[];
   recs_sorted_by_diff: RecommendationType[];
+  favTags: string[];
+  leastFavTags: string[];
 }) {
   const initialState = {
     recs: recs,
@@ -31,6 +39,7 @@ export default function RecsBox({
   const [state, dispatch] = useReducer(recReducer, initialState);
   const [imgUrls, setImgUrls] = useState<string[]>([]);
   const [imgError, setImgError] = useState(false);
+  const [welcomeOpen, setWelcomeOpen] = useState(true);
 
   useEffect(() => {
     // Define the async function inside the effect
@@ -51,23 +60,45 @@ export default function RecsBox({
     fetchImgUrl();
   }, [state.displayedRecs]);
 
+  useEffect(() => {
+    updateCookie("recs", "true");
+  }, []);
+
   return (
     <>
       <Nav />
-      <div
-        className={`absolute inset-0 mx-auto my-auto mt-32 flex max-h-front-n-center max-w-front-n-center-600
-       flex-col overflow-y-scroll text-white ${styles.hiddenscrollbar}`}
-      >
-        <DisplayOptions
-          sortedBy={state.sortedBy}
-          noWatchedOnly={state.noWatchedOnly}
-          dispatch={dispatch}
-        />
-        <RecsTable
-          displayedRecs={state.displayedRecs}
-          imageUrls={imgUrls}
-          imageError={imgError}
-        />
+      <div className="flex flex-col xl:flex-row">
+        <p className="flex-grow-1 mx-auto basis-1/6"></p>
+        <div
+          className={`flex-grow-1 relative mx-auto my-auto mt-32 flex max-h-[75vh] max-w-front-n-center-600 basis-2/3 flex-col overflow-y-scroll
+        text-white xl:mt-16 ${styles.hiddenscrollbar}`}
+        >
+          {welcomeOpen && (
+            <div className="mb-20 rounded-xl bg-blue-990 p-3  ">
+              <RecsWelcome />
+              <TbX
+                className="absolute right-0 top-0 h-6 w-6 cursor-pointer"
+                onClick={() => setWelcomeOpen(false)}
+              />
+            </div>
+          )}
+          <DisplayOptions
+            sortedBy={state.sortedBy}
+            noWatchedOnly={state.noWatchedOnly}
+            dispatch={dispatch}
+            welcomeOpen={welcomeOpen}
+            setWelcomeOpen={setWelcomeOpen}
+          />
+          <RecsTable
+            displayedRecs={state.displayedRecs}
+            imageUrls={imgUrls}
+            imageError={imgError}
+          />
+        </div>
+        <div className="flex-grow-1 mx-auto mt-32 flex basis-1/6  flex-col justify-between  gap-24  text-white  xl:mt-16 xl:gap-60">
+          <TagRanking tags={favTags} />
+          <TagRanking tags={leastFavTags} least_fav={true} />
+        </div>
       </div>
     </>
   );

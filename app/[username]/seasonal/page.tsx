@@ -1,15 +1,15 @@
-import {
-  assertUsernameInCache,
-  retrieveTaskData,
-  startTask,
-} from "@/app/home/api";
+import { assertUsernameInCache, startTask } from "@/app/home/api";
+import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
 import React from "react";
 import ListNotFound from "../recs/ListNotFound";
-import { SeasonsData } from "@/app/interfaces";
+import { SeasonsData, SiteType } from "@/app/interfaces";
 import SeasonalStatsBox from "./SeasonalStatsBox";
 import { Nav } from "@/components/general/Nav";
 import ToasterWithX from "@/components/general/ToasterWithX";
 import FetchError from "@/components/general/FetchError";
+import { cookies } from "next/headers";
+import { getSiteCookie } from "@/utils/general";
+import { Suspense } from "react";
 
 export default async function page({
   params,
@@ -42,22 +42,49 @@ export default async function page({
 
   let error = null;
   let data = [];
+  console.log("Before cookie");
+  // const usernameCookie = cookies().get("username");
+  const siteCookie = getSiteCookie();
+  const testCookie = cookies().get("seasonal");
+  console.log(testCookie);
 
-  let userFound = await assertUsernameInCache(params.username);
+  console.log("After cookie");
+  // const siteCookie = "MAL";
+  // try {
+  //   const siteCookie = cookies().get("currentSite")?.["value"] as SiteType;
+  // } catch (err) {
+  //   throw new Error(
+  //     "Cookie error - please make sure you have cookies enabled.",
+  //   );
+  // }
+
+  // console.log("5555", usernameCookie);
+  // console.log("7777", siteCookie);
+  let userFound = false;
+  try {
+    userFound = await assertUsernameInCache(params.username);
+  } catch (err) {
+    console.log("Error is now : ", err);
+  }
+
   if (!userFound) {
+    console.log("Returning fetch error");
     return (
-      <FetchError
-        errorMessage={
-          "Unauthorized user - please submit your username through the home page."
-        }
-        username={params.username}
-        pathToRetry="seasonal"
-      />
+      <Suspense fallback={<p className="text-lime-550 text-5xl">Testing</p>}>
+        <FetchError
+          errorMessage={
+            "Unauthorized user - please submit your username through the home page."
+          }
+          username={params.username}
+          pathToRetry="seasonal"
+        />
+      </Suspense>
     );
   }
 
   try {
-    const taskId = await startTask(params.username, "seasonal");
+    console.log("Got into the try block");
+    const taskId = await startTask(params.username, "seasonal", siteCookie);
 
     console.log("Task response in page : ", taskId);
     if (taskId === undefined) {
@@ -85,10 +112,12 @@ export default async function page({
           pathToRetry="seasonal"
         />
       ) : (
-        <SeasonalStatsBox
-          seasonStats={seasonalStats}
-          noSequelsSeasonStats={noSequelsSeasonStats}
-        ></SeasonalStatsBox>
+        <Suspense fallback={<p className="text-lime-550 text-5xl">Testing</p>}>
+          <SeasonalStatsBox
+            seasonStats={seasonalStats}
+            noSequelsSeasonStats={noSequelsSeasonStats}
+          ></SeasonalStatsBox>
+        </Suspense>
       )}
     </>
   );

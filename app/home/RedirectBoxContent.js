@@ -2,7 +2,7 @@ export const redirectBoxContent = [
   {
     title: "Affinity Finder",
     description:
-      "Find the person with the highest (and lowest) affinity to you on MAL.*From a limited subset of recently active users",
+      "Find the person with the highest (and lowest) affinity to you on MyAnimeList.*From a limited subset of recently active users. Only works on MAL.",
     link: "/affinity",
   },
   {
@@ -18,9 +18,9 @@ export const redirectBoxContent = [
     link: "/seasonal",
   },
   {
-    title: "History of Ratings",
-    description:
-      "See how your favorite anime was rated throughout time - has it been consistent or did it fall of a cliff since it stopped airing?",
-    link: "/history",
+    title: "FAQ",
+    description: `
+       Gathering stats takes a few minutes, so you're welcome to read this while you wait if you're interested.`,
+    link: "/faq",
   },
 ];

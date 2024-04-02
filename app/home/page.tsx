@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { SeasonsData } from "@/app/interfaces";
+import { SeasonsData, SiteType } from "@/app/interfaces";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
-import { retrieveQueuePosition, retrieveTaskData, startTask } from "./api";
+import { startTask } from "../actions/startTask";
+import { retrieveQueuePosition } from "./api";
+import { retrieveTaskData } from "../actions/retrieveTaskData";
 import Loading from "../../components/general/loading";
 import { useRouter } from "next/navigation";
 import useOutsideClick from "@/hooks/useOutsideClick";
@@ -13,7 +15,7 @@ import winterBackground from "@/public/WinterBackground.png";
 import summerBackground from "@/public/SummerBackground.png";
 import springBackground from "@/public/SpringBackground.png";
 import fallBackground from "@/public/FallBackground.png";
-import img1 from "@/public/BaronBrixius Summer 2023.png";
+import img1 from "@/public/BaronBrixius Winter 2021.png";
 import img2 from "@/public/BaronBrixius Winter 2020.png";
 import img3 from "@/public/Affinity.png";
 import img4 from "@/public/Recs.png";
@@ -23,9 +25,10 @@ import toast from "react-hot-toast";
 import useToast from "@/hooks/useToast";
 import test from "@/public/test.png";
 import UsernameInput from "./UsernameInput";
-import ResetUsername from "../[username]/ResetUsername";
+import ResetUsername from "./ResetUsername";
 import startGlobalInterval from "./ResetIntervalRegulator.js";
 import UserQueueDisplay from "@/components/general/UserQueueDisplay";
+import resetAllServerCookies from "../actions/resetAllServerCookies";
 
 export default function Home() {
   const backgrounds = [img1.src, img2.src, img3.src, img4.src];
@@ -46,9 +49,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [redirectBoxClicked, setRedirectBoxClicked] = useState(false);
   const [queuePosition, setQueuePosition] = useState(0);
+  const [currentSite, setCurrentSite] = useState<SiteType>("MAL");
 
   const boxesDisabled = [
-    !Boolean(userName),
+    !Boolean(userName) || currentSite !== "MAL",
     !Boolean(userName),
     !Boolean(userName),
     false,
@@ -76,6 +80,13 @@ export default function Home() {
     const username = localStorage.getItem("username");
     if (username !== null) {
       setUserName(username);
+    }
+  }, []);
+
+  useEffect(() => {
+    const currentSite = localStorage.getItem("currentSite") as SiteType;
+    if (currentSite !== null) {
+      setCurrentSite(currentSite);
     }
   }, []);
 
@@ -137,7 +148,10 @@ export default function Home() {
 
   async function handleResetUsername(e: React.MouseEvent<HTMLButtonElement>) {
     setUserName("");
+    // setCurrentSite("MAL");
     localStorage.removeItem("username");
+    resetAllServerCookies();
+
     if (localStorage.getItem("resetCount") === null) {
       localStorage.setItem("resetCount", "1");
     } else {
@@ -153,10 +167,6 @@ export default function Home() {
       setError("Please enter a username.");
       return;
     }
-    console.log(
-      "Session storage reset count: ",
-      localStorage.getItem("resetCount"),
-    );
 
     if (
       localStorage.getItem("resetCount") !== null &&
@@ -174,23 +184,25 @@ export default function Home() {
       setLoading(true);
       console.log("Queue position is", data.queuePosition);
 
-      // let queueData = await retrieveQueuePosition();
-      // queuePosition = queueData.queuePosition;
-      let taskId = await startTask(userInputField, "seasonal");
-      let seasonalData = await retrieveTaskData(taskId);
+      let taskId = await startTask(userInputField, "seasonal", currentSite);
+      let seasonalData = await retrieveTaskData(taskId, "seasonal");
       console.log("Successfully retrieved seasonal data");
       if (data.queuePosition < 50) {
-        taskId = await startTask(userInputField, "recs");
-        let recsData = await retrieveTaskData(taskId);
+        taskId = await startTask(userInputField, "recs", currentSite);
+        let recsData = await retrieveTaskData(taskId, "recs");
         console.log("Successfully retrieved recs data");
 
-        taskId = await startTask(userInputField, "affinity");
-        let affinityData = await retrieveTaskData(taskId);
-        console.log("Successfully retrieved affinity data");
+        if (currentSite === "MAL") {
+          taskId = await startTask(userInputField, "affinity", currentSite);
+          let affinityData = await retrieveTaskData(taskId, "affinity");
+          console.log("Successfully retrieved affinity data");
+        }
       }
 
       localStorage.setItem("username", userInputField);
       setUserName(userInputField);
+      localStorage.setItem("currentSite", currentSite);
+
       setLoading(false);
 
       // if (queuePosition < 5) {
@@ -257,6 +269,8 @@ export default function Home() {
             setUserInputField={setUserInputField}
             handleConfirmUsername={handleConfirmUsername}
             redirectBoxClicked={redirectBoxClicked}
+            currentSite={currentSite}
+            setCurrentSite={setCurrentSite}
           />
         )}
 
@@ -305,6 +319,7 @@ export default function Home() {
             <RedirectBox
               key={index}
               title={content.title}
+              MAL={!userName || !currentSite || currentSite === "MAL"}
               description={content.description}
               link={`${
                 index === redirectBoxContent.length - 1 ? "" : `/${userName}`

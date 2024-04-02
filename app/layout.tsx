@@ -14,10 +14,10 @@ import test from "@/public/nnb5.png";
 const inter = Inter({ subsets: ["latin"] });
 const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
 const merriweather_sans = Merriweather_Sans({
-  weight: "400",
+  weight: "600",
   subsets: ["latin"],
 });
-const roboto = Roboto({ weight: "400", subsets: ["latin"] });
+const roboto = Roboto({ weight: "500", subsets: ["latin"] });
 const lato = Lato({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -36,9 +36,8 @@ export default function RootLayout({
       <body
         style={{ backgroundImage: `url(${test.src})` }}
         className={`{${
-          true &&
-          "bg-gradient-to-b from-zinc-700 via-blue-400 via-80% to-zinc-700 to-100% bg-repeat-round"
-        } relative inset-0 h-[100vh]  bg-zinc-700 2xl:bg-contain  ${inter.className}`}
+          true && "  bg-repeat-round"
+        } relative inset-0 h-[100vh]  overflow-hidden bg-blue-990 2xl:bg-contain  ${inter.className}`}
         // style={{
         //   background:
         //     "repeating-linear-gradient(90deg, #3f3f46, #5495ff, #3f3f46 200px)",

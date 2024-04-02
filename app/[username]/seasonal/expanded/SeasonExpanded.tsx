@@ -49,7 +49,7 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
       let contr_img_url = "";
       try {
         contr_img_url = await getShowData(
-          seasonStats["MostControversialShow"],
+          seasonStats["MostUnusualShow"],
           "img_url",
         );
       } catch (error) {
@@ -58,9 +58,9 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
       }
       setControversialShow({
         imageUrl: contr_img_url,
-        score: seasonStats["ShowList"][seasonStats["MostControversialShow"]],
+        score: seasonStats["ShowList"][seasonStats["MostUnusualShow"]],
         displayed: false,
-        name: seasonStats["MostControversialShow"],
+        name: seasonStats["MostUnusualShow"],
       });
 
       let fav_img_urls = [] as string[];
@@ -95,7 +95,7 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
     <ModalContext.Provider
       value={{ favoritesModalOpen, setFavoritesModalOpen }}
     >
-      <div className="relative mx-16 mb-8 bg-zinc-800">
+      <div className="relative mx-16 mb-8 rounded-3xl">
         <div
           className={`relative overflow-hidden rounded-3xl text-white shadow-lg`}
           style={{

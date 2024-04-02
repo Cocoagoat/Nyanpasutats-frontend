@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  assertUsernameInCache,
-  getUserData,
-  retrieveTaskData,
-  startTask,
-} from "@/app/home/api";
-import { RecommendationType } from "@/app/interfaces";
+import { assertUsernameInCache, getUserData, startTask } from "@/app/home/api";
+
+import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
+import { RecommendationType, SiteType } from "@/app/interfaces";
 import RecsBox from "./RecsBox";
 import ListNotFound from "./ListNotFound";
 import { Nav } from "@/components/general/Nav";
 import FetchError from "@/components/general/FetchError";
 import UserQueueDisplay from "@/components/general/UserQueueDisplay";
 import { revalidatePath } from "next/cache";
-import QueueDisplayTest from "./QueueDisplayTest";
+import { cookies } from "next/headers";
+import { getSiteCookie } from "@/utils/general";
 
 function roundPredictedScores(recs: RecommendationType[]) {
   return recs.map((dict) => ({
@@ -28,6 +26,12 @@ export default async function page({
 }) {
   let error = null;
   let data = [];
+
+  // const usernameCookie = cookies().get("username");
+  const siteCookie = getSiteCookie();
+  const testCookie = cookies().get("recs");
+  console.log(testCookie);
+
   let userFound = await assertUsernameInCache(params.username);
   if (!userFound) {
     return (
@@ -42,7 +46,7 @@ export default async function page({
   }
 
   try {
-    const taskId = await startTask(params.username, "recs");
+    const taskId = await startTask(params.username, "recs", siteCookie);
     console.log("Task response in page : ", taskId);
     if (taskId === undefined) {
       throw new Error("Task ID is undefined");
@@ -55,6 +59,11 @@ export default async function page({
   let recs: RecommendationType[] = data["Recommendations"],
     recs_sorted_by_diff: RecommendationType[] =
       data["RecommendationsSortedByDiff"];
+
+  let favTags = data["FavTags"],
+    leastFavTags = data["LeastFavTags"];
+
+  // console.log(favTags, leastFavTags);
 
   recs = roundPredictedScores(recs);
   recs_sorted_by_diff = roundPredictedScores(recs_sorted_by_diff);
@@ -72,6 +81,8 @@ export default async function page({
           <RecsBox
             recs={recs}
             recs_sorted_by_diff={recs_sorted_by_diff}
+            favTags={favTags}
+            leastFavTags={leastFavTags}
           ></RecsBox>
         </>
       )}
