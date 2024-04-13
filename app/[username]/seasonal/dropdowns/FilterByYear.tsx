@@ -62,7 +62,7 @@ export default function FilterByYear({
 
   return (
     <div
-      className="absolute  left-0 z-50 mt-2
+      className="absolute -top-20 left-0 z-50 mt-2
      rounded-lg bg-blue-970 p-4 "
     >
       <div className="flex flex-col space-y-4">

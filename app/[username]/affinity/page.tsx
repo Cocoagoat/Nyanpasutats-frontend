@@ -16,7 +16,14 @@ export default async function page({
   let error = null;
   let data = [];
   const siteCookie = getSiteCookie();
-  let userFound = await assertUsernameInCache(params.username);
+
+  let userFound = false;
+  try {
+    userFound = await assertUsernameInCache(params.username);
+  } catch (err) {
+    console.log("Error is now : ", err);
+  }
+
   if (!userFound) {
     return (
       <FetchError
@@ -35,7 +42,7 @@ export default async function page({
     if (taskId === undefined) {
       throw new Error("Task ID is undefined");
     }
-    data = await retrieveTaskData(taskId, "affinity");
+    data = await retrieveTaskData(taskId);
   } catch (err) {
     error = (err as Error).message;
   }

@@ -33,8 +33,8 @@ export default function FilterDropdown({
 
       {isOpen && (
         <div
-          className={` ${type === "Graph" ? "-top-20" : ""} bg-blue-970 absolute left-0 w-24 
-            rounded-b-md py-2 shadow-md md:w-44 ${extraStyles}`}
+          className={` ${type === "Graph" ? "-top-20" : ""} absolute left-0 w-24 rounded-b-md 
+            bg-blue-970 py-2 shadow-md md:w-44 ${extraStyles}`}
           onMouseLeave={() => {
             setYearRangeIsOpen(false);
             setShowAmountIsOpen(false);

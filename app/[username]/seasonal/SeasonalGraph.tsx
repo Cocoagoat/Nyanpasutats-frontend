@@ -6,6 +6,8 @@ import { displayedMeanOptions } from "@/app/interfaces";
 import SettingsButton from "@/components/general/SettingsButton";
 import SortingDropdown from "./dropdowns/SortingDropdown";
 import FilterDropdown from "./dropdowns/FilterDropdown";
+import { RiCloseFill } from "react-icons/ri";
+import { MdClose } from "react-icons/md";
 
 export default function SeasonalGraph({
   stats,
@@ -44,7 +46,18 @@ export default function SeasonalGraph({
   return (
     <div className="relative">
       {graphOpen && (
-        <div className="fixed inset-0 left-0 top-0 z-50 mx-auto my-auto flex h-3/4 w-1/2 flex-col items-center justify-center bg-zinc-800 text-white">
+        <div
+          className="fixed inset-0 left-0 top-0 z-[500] mx-auto my-auto flex h-full w-full flex-col
+         items-center justify-center bg-zinc-800 text-white"
+        >
+          <div className="grid w-full grid-cols-6">
+            <button
+              className="col col-start-5 mr-20 w-fit p-1 text-3xl text-lime-600 hover:bg-zinc-700"
+              onClick={() => setGraphOpen(false)}
+            >
+              <MdClose />
+            </button>
+          </div>
           <SeasonalBarChart
             data={displayedChartData}
             displayedMean={displayedGraphMean}
@@ -57,9 +70,9 @@ export default function SeasonalGraph({
               customSortedReverse={sortedReverse}
             />
             <FilterDropdown type="Graph" customDispatch={graphDispatch} />
-            <SettingsButton onClick={() => setGraphOpen(false)}>
+            {/* <SettingsButton onClick={() => setGraphOpen(false)}>
               Close
-            </SettingsButton>
+            </SettingsButton> */}
           </div>
         </div>
       )}

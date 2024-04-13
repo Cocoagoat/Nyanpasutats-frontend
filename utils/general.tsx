@@ -10,6 +10,7 @@ function confirmCookie(siteCookie: SiteType) {
 }
 
 export function getSiteCookie() {
+  console.log("Entered getSiteCookie");
   let siteCookie = "MAL" as SiteType;
   try {
     siteCookie = cookies().get("currentSite")?.["value"] as SiteType;
@@ -18,6 +19,7 @@ export function getSiteCookie() {
       "Cookie error - please make sure you have cookies enabled.",
     );
   }
+  console.log("Before confirmCookie");
   confirmCookie(siteCookie);
-  return siteCookie
+  return siteCookie;
 }

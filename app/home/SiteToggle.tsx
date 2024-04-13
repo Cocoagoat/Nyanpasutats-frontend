@@ -6,6 +6,7 @@ import MALLogo from "@/public/MALLogo.png";
 import SiteToggleDropdown from "./SiteToggleDropdown";
 import { siteOptions, siteLogos, siteLogosMap } from "../interfaces";
 import LogoButton from "./LogoButton";
+import { useCloseOnOutsideClick } from "@/hooks/useCloseOnOutsideClick";
 
 export default function SiteToggle({
   currentSite,
@@ -14,14 +15,16 @@ export default function SiteToggle({
   currentSite: SiteType;
   setCurrentSite: React.Dispatch<React.SetStateAction<SiteType>>;
 }) {
-  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
+  const ref = useCloseOnOutsideClick<HTMLDivElement>(clicked, setClicked);
   //onclick setsite to mal and setclicked to true which will open all buttons?
   //   const [siteLogo, setSiteLogo] = useState(site === "MAL" ? MALLogo : AnilistLogo);
   return (
     <div
       className="relative"
-      onClick={() => setHovered(!hovered)}
+      onClick={() => setClicked(!clicked)}
+      ref={ref}
       //   onMouseEnter={() => setHovered(true)}
       //   onMouseLeave={() => setHovered(false)}
     >
@@ -32,7 +35,7 @@ export default function SiteToggle({
         logo={siteLogosMap[currentSite]}
         setSite={setCurrentSite}
         hidden={false}
-        rounded={!hovered}
+        rounded={!clicked}
       />
 
       {siteOptions.map((site, index) => {
@@ -46,7 +49,7 @@ export default function SiteToggle({
             currentSite={currentSite}
             logo={logo}
             setSite={setCurrentSite}
-            hidden={!hovered}
+            hidden={!clicked}
             rounded={
               index === siteOptions.length - 1 ||
               (index === siteOptions.length - 2 &&

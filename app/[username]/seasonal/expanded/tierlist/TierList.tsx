@@ -14,7 +14,8 @@ import TierListHeader from "./TierListHeader";
 import TierListButton from "./TierListButton";
 import { downloadCardAsImage } from "@/utils/downloadCardAsImage";
 import { RiDownload2Fill } from "react-icons/ri";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdTextSnippet } from "react-icons/md";
+import { PiTextTBold } from "react-icons/pi";
 const latoBold = Lato({ weight: "900", subsets: ["latin"] });
 
 // export type ShowToDisplay = {
@@ -54,9 +55,10 @@ export default function TierList({
   // Group shows by score into tiers
   const { season, seasonStats } = useContext(SingleSeasonContext)!;
   const { noSequels } = useContext(SeasonalContext)!;
+  const [showText, setShowText] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
   const params = useParams<{ username: string }>();
-  const tiers: Record<number, string[]> = {};
+  const tiers: Record<number, [string, string][]> = {};
   for (let i = 1; i <= 10; i++) {
     tiers[i] = [];
   }
@@ -74,7 +76,10 @@ export default function TierList({
 
   Object.entries(showList).forEach(([name, score], index) => {
     const tier = score;
-    tiers[tier] = [...(tiers[tier] || []), imageUrls[index]];
+    tiers[tier] = [
+      ...(tiers[tier] || []),
+      [showNames[index], imageUrls[index]],
+    ];
   });
 
   function handleCloseTierList() {
@@ -98,6 +103,9 @@ export default function TierList({
      -translate-y-1/2 flex-col bg-zinc-800 xl:w-1/2"
     >
       <div className="right-0 top-0 text-right ">
+        <TierListButton onClick={() => setShowText(!showText)}>
+          <PiTextTBold />
+        </TierListButton>
         <TierListButton
           onClick={() => {
             setTimeout(() => {
@@ -123,6 +131,7 @@ export default function TierList({
               color={tierColors[index + 1]}
               score={score}
               images={images}
+              showText={showText}
             />
           </div>
         ))}

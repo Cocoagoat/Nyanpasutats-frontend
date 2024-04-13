@@ -20,8 +20,7 @@ export default function ShowDisplay({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { setFavoritesModalOpen } = useContext(ModalContext);
-  console.log("Show display: ", show);
-  console.log("Show display image_url: ", show.imageUrl);
+
   function toggleFavorite() {
     if (setFavorites) {
       setFavorites((prev) => {
@@ -125,7 +124,7 @@ export default function ShowDisplay({
             items-center justify-center text-center text-xs font-semibold
              text-white transition duration-300 ease-in-out"
         >
-          <p className="z-[60] row-start-2 mb-2 text-center shadow-black text-shadow">
+          <p className="z-[60] mb-2 text-center shadow-black text-shadow">
             {(hovered || error) && show.name}
           </p>
         </div>

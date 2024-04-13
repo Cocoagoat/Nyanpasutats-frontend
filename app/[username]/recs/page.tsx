@@ -33,6 +33,7 @@ export default async function page({
   console.log(testCookie);
 
   let userFound = await assertUsernameInCache(params.username);
+
   if (!userFound) {
     return (
       <FetchError

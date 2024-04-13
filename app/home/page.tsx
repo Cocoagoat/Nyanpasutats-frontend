@@ -17,8 +17,9 @@ import springBackground from "@/public/SpringBackground.png";
 import fallBackground from "@/public/FallBackground.png";
 import img1 from "@/public/BaronBrixius Winter 2021.png";
 import img2 from "@/public/BaronBrixius Winter 2020.png";
-import img3 from "@/public/Affinity.png";
-import img4 from "@/public/Recs.png";
+import img3 from "@/public/BaronBrixius Winter 2021 Tier List.png";
+import img4 from "@/public/Affinity.png";
+import img5 from "@/public/Recs.png";
 import ImageCarousel from "@/components/general/ImageCarousel";
 import ToasterWithX from "@/components/general/ToasterWithX";
 import toast from "react-hot-toast";
@@ -31,11 +32,12 @@ import UserQueueDisplay from "@/components/general/UserQueueDisplay";
 import resetAllServerCookies from "../actions/resetAllServerCookies";
 
 export default function Home() {
-  const backgrounds = [img1.src, img2.src, img3.src, img4.src];
+  const backgrounds = [img1.src, img2.src, img3.src, img4.src, img5.src];
 
   const backgroundsText = [
     "Automatically get summaries for every season",
     "Customize the cards to your liking",
+    "Automatically get tier lists for every season",
     "Find your soulmates and archenemies",
     "Get AI* anime recommendations",
   ];

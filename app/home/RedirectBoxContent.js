@@ -8,7 +8,7 @@ export const redirectBoxContent = [
   {
     title: "Anime Recommendations",
     description:
-      "Have your shit taste analyzed by a neural network, which will then recommend shows that closely fit it.",
+      "Have your taste analyzed by a neural network, which will then try to predict which shows you'll give the highest scores to.",
     link: "/recs",
   },
   {

@@ -54,7 +54,7 @@ function SortingDropdown({
       <SettingsButton onClick={toggleDropdown}>Sorting Options</SettingsButton>
       {isOpen && (
         <div
-          className="bg-blue-970 absolute left-0 w-24 rounded-b-lg 
+          className="absolute -bottom-full left-0 w-24 rounded-b-lg bg-blue-970 
             shadow-md md:w-44"
         >
           <SortFilterOption
