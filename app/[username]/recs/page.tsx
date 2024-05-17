@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { assertUsernameInCache, getUserData, startTask } from "@/app/home/api";
-
+import React from "react";
+import { assertUsernameInCache, startTask } from "@/app/home/api";
 import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
-import { RecommendationType, SiteType } from "@/app/interfaces";
+import { RecommendationType } from "@/app/interfaces";
 import RecsBox from "./RecsBox";
-import ListNotFound from "./ListNotFound";
-import { Nav } from "@/components/general/Nav";
-import FetchError from "@/components/general/FetchError";
-import UserQueueDisplay from "@/components/general/UserQueueDisplay";
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import GenericError from "@/components/general/GenericError";
 import { getSiteCookie } from "@/utils/general";
 
 function roundPredictedScores(recs: RecommendationType[]) {
@@ -27,21 +21,16 @@ export default async function page({
   let error = null;
   let data = [];
 
-  // const usernameCookie = cookies().get("username");
   const siteCookie = getSiteCookie();
-  const testCookie = cookies().get("recs");
-  console.log(testCookie);
 
   let userFound = await assertUsernameInCache(params.username);
 
   if (!userFound) {
     return (
-      <FetchError
+      <GenericError
         errorMessage={
           "Unauthorized user - please submit your username through the home page."
         }
-        username={params.username}
-        pathToRetry="seasonal"
       />
     );
   }
@@ -64,18 +53,12 @@ export default async function page({
   let favTags = data["FavTags"],
     leastFavTags = data["LeastFavTags"];
 
-  // console.log(favTags, leastFavTags);
-
   recs = roundPredictedScores(recs);
   recs_sorted_by_diff = roundPredictedScores(recs_sorted_by_diff);
   return (
     <>
       {error ? (
-        <FetchError
-          errorMessage={error}
-          username={params.username}
-          pathToRetry="recs"
-        />
+        <GenericError errorMessage={error} />
       ) : (
         <>
           {/* <Test /> */}

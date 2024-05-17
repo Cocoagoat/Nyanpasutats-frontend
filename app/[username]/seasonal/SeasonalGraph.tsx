@@ -3,10 +3,8 @@ import React, { useReducer } from "react";
 import SeasonalBarChart from "./SeasonalBarChart";
 import { chartReducer } from "./reducer/ChartReducer";
 import { displayedMeanOptions } from "@/app/interfaces";
-import SettingsButton from "@/components/general/SettingsButton";
 import SortingDropdown from "./dropdowns/SortingDropdown";
 import FilterDropdown from "./dropdowns/FilterDropdown";
-import { RiCloseFill } from "react-icons/ri";
 import { MdClose } from "react-icons/md";
 
 export default function SeasonalGraph({
@@ -70,9 +68,6 @@ export default function SeasonalGraph({
               customSortedReverse={sortedReverse}
             />
             <FilterDropdown type="Graph" customDispatch={graphDispatch} />
-            {/* <SettingsButton onClick={() => setGraphOpen(false)}>
-              Close
-            </SettingsButton> */}
           </div>
         </div>
       )}

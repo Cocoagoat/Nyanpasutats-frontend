@@ -3,8 +3,7 @@ import ShowDisplay from "../ShowDisplay";
 import { TbEyeCancel } from "react-icons/tb";
 import { Lato } from "next/font/google";
 import { ShowToDisplay } from "@/app/interfaces";
-import toast, { ToastBar, Toaster } from "react-hot-toast";
-import ToasterWithX from "@/components/general/ToasterWithX";
+import toast from "react-hot-toast";
 
 const lato = Lato({ weight: "700", subsets: ["latin"] });
 export default function ControversialShow({

@@ -52,9 +52,10 @@ For example, if you have a high affinity to the "Band", "Cute Girls Doing Cute T
 
   "Why does the recommendations section only have shows with a 6.5+ MAL score?": `Two reasons : </br> </br>
 
-  1) Resources. The neural networks outputs a prediction for every single show that meets conditions set in the code (
-    a few other things aside from MAL score like length to avoid single-episode OVAs, etc). Including every low-rated show
-     would waste a lot of resources, while also not contributing much to the quality of the recommendations.
+  1) Resources. The neural network outputs a prediction for every single show that meets conditions set in
+   the code. These conditions exclude shows that >99% of people would see as clutter, and low-rated shows
+   are the biggest category of those. 1 in a 1000 people might have enjoyed those, but including them would
+   double the amount of calculations needed to be done, and the recommendations would be worse for it.
     
   </br> </br>
   2) The calculation of your affinity to a specific tag
@@ -66,12 +67,12 @@ For example, if you have a high affinity to the "Band", "Cute Girls Doing Cute T
           </br> </br>
           However, if I were to include shows with very low scores, this meaning would likely be diluted, because you
           giving a romance show rated a 6 on MAL a 3/10 does not necessarily mean you dislike romance shows - said show 
-          was likely just very bad, and it should not lower your affinity to the Romance tag. 
+          was likely just very bad, and it should not lower your affinity to the Romance tag.
 
           </br> </br>
           The 6.5+ cutoff is arbitrary, but it's a good balance between including as many shows as possible and 
           avoiding this phenomenon. The accuracy of the recommendations was actually slightly better with a 7+ cutoff,
-          but I decided against it because 6.5-7 is the territory of quite a few shows that are considered hidden gems
+          but I decided against it because 6.5-7 is the territory of quite a few shows that are considered hidden gems.
     `,
 
   " My recommendations aren't accurate at all. I'm even seeing things I gave a low score to as my top recommendations.": `Well, that's pretty much on the limitations of my system.

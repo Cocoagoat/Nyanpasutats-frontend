@@ -1,4 +1,3 @@
-import { retrieveQueuePosition } from "@/app/home/api";
 import React from "react";
 
 export default function UserQueueDisplay({

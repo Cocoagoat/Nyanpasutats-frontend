@@ -5,16 +5,10 @@ import {
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
   ResponsiveContainer,
   LabelList,
-  CartesianGrid,
 } from "recharts";
 import { displayedMeanOptions } from "@/app/interfaces";
-import TierListButton from "./expanded/tierlist/TierListButton";
-import { downloadCardAsImage } from "@/utils/downloadCardAsImage";
-import { RiDownload2Fill } from "react-icons/ri";
 
 function getFill(season: string): string {
   const baseSeason = season.split(" ")[0];
@@ -28,7 +22,7 @@ function getFill(season: string): string {
     case "Fall":
       return "gradientFall";
     default:
-      return "gradientDefault"; // Fallback gradient
+      return "gradientDefault";
   }
 }
 
@@ -84,17 +78,6 @@ export default function SeasonalBarChart({
   });
   return (
     <>
-      {/* <div className="absolute right-1/4 top-0 z-[500]">
-        <TierListButton
-          onClick={() => {
-            setTimeout(() => {
-              downloadCardAsImage("seasonal-bar-chart", `Test`);
-            }, 1000); // This will delay the function call by 3000 milliseconds (3 seconds)
-          }}
-        >
-          <RiDownload2Fill />
-        </TierListButton>
-      </div> */}
       <div
         id="seasonal-bar-chart"
         className=" mx-auto mb-10 mt-3 flex h-full w-full  justify-center overflow-y-scroll text-xs text-black"
@@ -109,7 +92,6 @@ export default function SeasonalBarChart({
             data={new_data}
             margin={{ top: 5, right: 1 / 2, left: 1 / 2, bottom: 5 }}
           >
-            {/* <CartesianGrid strokeDasharray="3 3" /> */}
             <XAxis
               type="number"
               domain={[
@@ -121,36 +103,22 @@ export default function SeasonalBarChart({
               ]}
             />
             <YAxis dataKey="Season" type="category" tick={false} />
-            {/* <Tooltip /> */}
-            {/* <Legend /> */}
 
             <defs>
               <linearGradient id="gradientWinter" x1="0" y1="0" x2="0" y2="1">
-                {/* <stop offset="5%" stopColor="#7dd3fc" stopOpacity={0.1} /> */}
-                {/* <stop offset="50%" stopColor="#41bcff" stopOpacity={1} /> */}
                 <stop offset="25%" stopColor="#41bcff" stopOpacity={0.3} />
-                {/* <stop offset="60%" stopColor="#41bcff" stopOpacity={0.7} /> */}
                 <stop offset="90%" stopColor="#41bcff" stopOpacity={1} />
               </linearGradient>
               <linearGradient id="gradientSpring" x1="0" y1="0" x2="0" y2="1">
-                {/* <stop offset="5%" stopColor="#22c55e" stopOpacity={0.1} /> */}
-                {/* <stop offset="50%" stopColor="#41bcff" stopOpacity={1} /> */}
                 <stop offset="25%" stopColor="#22c55e" stopOpacity={0.3} />
-                {/* <stop offset="60%" stopColor="#22c55e" stopOpacity={0.7} /> */}
                 <stop offset="90%" stopColor="#22c55e" stopOpacity={1} />
               </linearGradient>
               <linearGradient id="gradientSummer" x1="0" y1="0" x2="0" y2="1">
-                {/* <stop offset="5%" stopColor="#ebbf39" stopOpacity={0.1} /> */}
-                {/* <stop offset="50%" stopColor="#41bcff" stopOpacity={1} /> */}
                 <stop offset="25%" stopColor="#ebbf39" stopOpacity={0.3} />
-                {/* <stop offset="60%" stopColor="#ebbf39" stopOpacity={0.7} /> */}
                 <stop offset="90%" stopColor="#ebbf39" stopOpacity={1} />
               </linearGradient>
               <linearGradient id="gradientFall" x1="0" y1="0" x2="0" y2="1">
-                {/* <stop offset="5%" stopColor="#cd5722" stopOpacity={0.1} /> */}
-                {/* <stop offset="50%" stopColor="#41bcff" stopOpacity={1} /> */}
                 <stop offset="25%" stopColor="#cd5722" stopOpacity={0.3} />
-                {/* <stop offset="60%" stopColor="#cd5722" stopOpacity={0.7} /> */}
                 <stop offset="90%" stopColor="#cd5722" stopOpacity={1} />
               </linearGradient>
               <linearGradient id="gradientDefault" x1="0" y1="0" x2="0" y2="1">

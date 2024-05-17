@@ -18,7 +18,7 @@ export default function FavoriteShows({
   leftovers?: boolean;
   contShowRemoved?: boolean;
 }) {
-  console.log("favorites : ", favorites);
+  // console.log("favorites : ", favorites);
   const displayText = partOfModal
     ? leftovers
       ? "Add to Favorites"

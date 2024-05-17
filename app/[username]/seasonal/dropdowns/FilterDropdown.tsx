@@ -4,7 +4,6 @@ import { useCloseOnOutsideClick } from "@/hooks/useCloseOnOutsideClick";
 import { DropdownType } from "@/app/interfaces";
 import SortFilterOption from "./SortFilterOption";
 import FilterByYear from "./FilterByYear";
-import FilterByShowAmount from "./FilterByShowAmount";
 
 export default function FilterDropdown({
   type,

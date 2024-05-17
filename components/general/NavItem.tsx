@@ -25,9 +25,7 @@ export default function NavItem({
         rel="noopener noreferrer"
       >
         {text}
-        
       </Link>
     </li>
   );
 }
-//py-4 in the Link component is a hack to make the clickable area bigger

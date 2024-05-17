@@ -1,7 +1,7 @@
 import { ChartData, ChartDataKeys } from "@/app/interfaces";
 import { displayedMeanOptions } from "@/app/interfaces";
 import { Action } from "./actions";
-import { checkValidYear } from "@/utils/checkValidValues";
+import { checkValidShowCount, checkValidYear } from "@/utils/checkValidValues";
 import { compareSeasons } from "./sortSeasonalStats";
 
 export type ChartState = {
@@ -83,12 +83,31 @@ export function chartReducer(state: ChartState, action: Action): ChartState {
         ...state,
         displayedMean: action.payload,
       };
+    case "FILTER_BY_SHOW_COUNT":
+      console.log(
+        "minShows: ",
+        action.payload.minShows,
+        "maxShows: ",
+        action.payload.maxShows,
+      );
+      if (!checkValidShowCount(action.payload.minShows))
+        action.payload.minShows = 0;
+      if (!checkValidShowCount(action.payload.maxShows))
+        action.payload.maxShows = 100;
+      return {
+        ...state,
+        displayedChartData: state.chartData.filter(
+          (season) =>
+            season.Shows >= action.payload.minShows &&
+            season.Shows <= action.payload.maxShows,
+        ),
+      };
     case "RESET_FILTER":
       return {
         ...state,
         displayedChartData: state.chartData,
       };
     default:
-      throw new Error();
+      throw new Error("Invalid action type in ChartReducer");
   }
 }

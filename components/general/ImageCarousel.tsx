@@ -13,10 +13,7 @@ export default function ImageCarousel({
   const [animating, setAnimating] = useState(false);
   const [hovered, setHovered] = useState(false);
 
-  // const imagesClosed = [...images];
   const imagesCount = images.length;
-
-  type TransitionType = "Next" | "Previous";
 
   const autoAdvanceDelay = 5000;
 
@@ -27,11 +24,10 @@ export default function ImageCarousel({
       }
     }, autoAdvanceDelay);
 
-    // Clear the timeout if the component unmounts
-    // or if the user interacts and causes a re-render
     return () => clearTimeout(timeoutId);
   }, [currentImageIndex, animating, hovered]);
 
+  type TransitionType = "Next" | "Previous";
   function startTransition(newIndex: number, type: TransitionType) {
     if (animating) return;
 
@@ -59,7 +55,7 @@ export default function ImageCarousel({
   function getImageTranslate(currentImageIndex: number, index: number) {
     let translateClass = "";
     if (currentImageIndex === images.length - 1 && index === 0) {
-      translateClass = "translate-x-full"; // index 4 still on -translate-x-full bad
+      translateClass = "translate-x-full";
     } else if (currentImageIndex === 0 && index === images.length - 1) {
       translateClass = "-translate-x-full";
     } else
@@ -93,8 +89,8 @@ export default function ImageCarousel({
   return (
     <div className="flex flex-col">
       <div
-        className="xl:w-image-carousel relative aspect-[3/2] w-[500px]
-      overflow-hidden rounded-3xl shadow-2xl shadow-blue-900 "
+        className="relative aspect-[3/2] w-[500px] overflow-hidden
+      rounded-3xl shadow-2xl shadow-blue-900 xl:w-image-carousel "
       >
         <ImageCarouselButton
           type="previous"

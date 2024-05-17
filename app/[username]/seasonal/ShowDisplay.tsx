@@ -2,7 +2,6 @@ import { ShowToDisplay, ShowsToDisplay } from "@/app/interfaces";
 import { ModalContext } from "@/contexts/ModalContext";
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
-import errorImg from "@/public/default.png";
 import { updateImageUrl } from "@/app/home/api";
 
 export default function ShowDisplay({
@@ -63,30 +62,6 @@ export default function ShowDisplay({
     updateImageUrl(show.name);
   }
 
-  // useEffect(() => {
-  //   console.log("Testing", show.imageUrl);
-
-  //   // const timer = setTimeout(() => {
-  //   //   if (isLoading) {
-  //   //     console.log("Image loading timeout");
-  //   //     setIsLoading(false);
-  //   //     setError(true);
-  //   //     show.imageUrl = errorImg.src;
-  //   //   }
-  //   // }, 5000);
-
-  //   if (show.imageUrl === errorImg.src) {
-  //     console.log("Error image loaded");
-  //     setError(true);
-  //   }
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [isLoading, setIsLoading, setError]);
-
-  // console.log(show.imageUrl);
-
   return (
     <div className="relative flex flex-col">
       <div
@@ -95,7 +70,9 @@ export default function ShowDisplay({
         }`}
       >
         {!error ? (
-          <img // Not using Next's Image component because html-to-image doesn't support it
+          // Not using Next's Image component because after lots of pain
+          // I realized that html-to-image doesn't support it
+          <img
             src={show.imageUrl}
             alt={show.name}
             width={75}

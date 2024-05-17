@@ -1,6 +1,6 @@
 import Image, { StaticImageData } from "next/image";
 import React, { useState } from "react";
-import { SiteType, StatType } from "../interfaces";
+import { SiteType } from "../interfaces";
 
 export default function LogoButton({
   site,
@@ -18,8 +18,6 @@ export default function LogoButton({
   rounded?: boolean;
 }) {
   const [logoHovered, setLogoHovered] = useState(false);
-  //   console.log("Test border", currentSite);
-  //   console.log(hideBorder);
   return (
     (!hidden || site === currentSite) && (
       <button

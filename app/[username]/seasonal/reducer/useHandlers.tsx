@@ -13,7 +13,6 @@ type SeasonalHandlers = {
   handleSortByMean: () => void;
   handleSortBySeason: () => void;
   handleSortByFavMean: () => void;
-  // handleSortByShows: () => void;
   handleSortByShowCount: () => void;
   handleChangeDisplayedStat: (stat: ChartDataKeys) => void;
   handleFilterByYear: (
@@ -51,11 +50,6 @@ function createSeasonalHandlers(
       dispatch({ type: "SORT", payload: { by: "FavoritesAvgScore" } });
       dispatch({ type: "CHANGE_DISPLAYED_MEAN", payload: "FavoritesAvgScore" });
     },
-
-    // handleSortByShows: () => {
-    //   dispatch({ type: "SORT", payload: { by: "Shows" } });
-    //   dispatch({ type: "CHANGE_DISPLAYED_MEAN", payload: "Shows" });
-    // },
 
     handleChangeDisplayedStat: (stat: ChartDataKeys) => {
       dispatch({ type: "CHANGE_DISPLAYED_MEAN", payload: stat });
@@ -198,20 +192,3 @@ export function useHandlers(
       throw new Error("Affinity handlers not implemented");
   }
 }
-
-// export function useHandlers2<T extends "seasonal" | "recs">(
-//   dispatch: React.Dispatch<any>,
-//   path: T,
-// ): T extends "seasonal" ? SeasonalHandlers : RecHandlers {
-//   // The implementation can be adjusted to handle different paths appropriately
-//   // TypeScript will use the type of `path` to determine which handler type to return
-//   switch (path) {
-//     case "seasonal":
-//       // TypeScript knows this must return SeasonalHandlers
-//       return createSeasonalHandlers(dispatch) as SeasonalHandlers;
-//     case "recs":
-//       // TypeScript knows this must return RecHandlers
-//       return createRecHandlers(dispatch) as RecHandlers;
-//   }
-//   return;
-// }

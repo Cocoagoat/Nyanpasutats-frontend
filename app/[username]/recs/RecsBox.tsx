@@ -42,21 +42,18 @@ export default function RecsBox({
   const [welcomeOpen, setWelcomeOpen] = useState(true);
 
   useEffect(() => {
-    // Define the async function inside the effect
     async function fetchImgUrl() {
       try {
         const show_names = state.displayedRecs
           .slice(0, 50)
           .map((rec) => rec["ShowName"]);
         const urls = await getShowData(show_names, "img_urls");
-        setImgUrls(urls); // Update state with the URL
+        setImgUrls(urls);
       } catch (error) {
-        // Handle any errors here, such as setting a default image or logging the error
         setImgError(true);
       }
     }
 
-    // Call the async function
     fetchImgUrl();
   }, [state.displayedRecs]);
 

@@ -18,7 +18,6 @@ import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
 import SeasonalWelcome from "./SeasonalWelcome";
 import { TbX } from "react-icons/tb";
 import { MdArrowUpward } from "react-icons/md";
-import { FixedSizeList } from "react-window";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const getKEntries = <T extends object>(obj: T, a: number, b: number): T => {
@@ -71,14 +70,13 @@ export default function SeasonalStatsBox({
   );
 
   useEffect(() => {
-    // Reset partialDisplayedStats to the first MAX_ITEMS of the new displayedStats
     setPartialDisplayedStats(getKEntries(displayedStats, 0, MAX_ITEMS));
     setHasMore(true);
     const scrollableContainer = document.getElementById("scrollableDiv");
     if (scrollableContainer) {
       scrollableContainer.scrollTop = 0;
-    } // Reset hasMore in case it was set to false
-  }, [displayedStats]); // This effect depends on displayedStats
+    }
+  }, [displayedStats]);
 
   const fetchMoreData = () => {
     console.log("Entered fetchMoreData");

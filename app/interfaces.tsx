@@ -171,3 +171,8 @@ export type SiteType = (typeof siteOptions)[number];
 export type ShowPathType = "img_url" | "img_urls" | "full";
 
 export type displayedMeanOptions = "AvgScore" | "FavoritesAvgScore" | "Shows";
+
+export type ImageData = [string, string, number];
+// [showName, imageUrl]
+
+export type TiersState = Record<number, ImageData[]>;

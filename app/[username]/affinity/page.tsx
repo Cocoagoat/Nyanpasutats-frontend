@@ -1,12 +1,13 @@
 import { assertUsernameInCache, startTask } from "@/app/home/api";
-import { AffTableType, AffinitiesData } from "@/app/interfaces";
+import { AffinitiesData } from "@/app/interfaces";
 import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
 import React from "react";
 import { Nav } from "@/components/general/Nav";
 import AffTable from "./AffTable";
-import FetchError from "@/components/general/FetchError";
+import GenericError from "@/components/general/GenericError";
 import styles from "./Affinity.module.css";
-import { getSiteCookie } from "@/utils/general";
+import { getSiteCookie, getPathCookie } from "@/utils/general";
+import { revalidatePath } from "next/cache";
 
 export default async function page({
   params,
@@ -16,6 +17,12 @@ export default async function page({
   let error = null;
   let data = [];
   const siteCookie = getSiteCookie();
+  const affinityCookie = getPathCookie("affinity");
+  console.log("affinityCookie is", affinityCookie);
+  if (!affinityCookie) {
+    console.log("revalidating...");
+    revalidatePath(`${params.username}/affinity`);
+  }
 
   let userFound = false;
   try {
@@ -26,12 +33,10 @@ export default async function page({
 
   if (!userFound) {
     return (
-      <FetchError
+      <GenericError
         errorMessage={
           "Unauthorized user - please submit your username through the home page."
         }
-        username={params.username}
-        pathToRetry="seasonal"
       />
     );
   }
@@ -52,11 +57,7 @@ export default async function page({
     <>
       <Nav />
       {error ? (
-        <FetchError
-          errorMessage={error}
-          username={params.username}
-          pathToRetry="affinity"
-        />
+        <GenericError errorMessage={error} />
       ) : (
         <div
           className={`absolute inset-0 mx-auto my-auto flex flex-col items-center justify-center

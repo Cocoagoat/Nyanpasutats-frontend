@@ -4,8 +4,6 @@ import RedirectBoxText from "./RedirectBoxText";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import toast from "react-hot-toast";
 import test from "@/public/nnb6.png";
-import { navigate } from "./RedirectNavigate";
-import { SiteType } from "../interfaces";
 
 type RedirectBoxProps = {
   title: string;
@@ -13,9 +11,7 @@ type RedirectBoxProps = {
   description: string;
   link: string;
   disabled: boolean;
-  // redirectBoxClicked: boolean;
   setRedirectBoxClicked?: React.Dispatch<React.SetStateAction<boolean>>;
-  //onRedirectBoxClick: () => void;
 };
 
 export default function RedirectBox({
@@ -24,10 +20,8 @@ export default function RedirectBox({
   description,
   link,
   disabled,
-  // redirectBoxClicked,
   setRedirectBoxClicked,
-}: //onRedirectBoxClick,
-RedirectBoxProps) {
+}: RedirectBoxProps) {
   const redirectBoxStyle = `flex flex-col justify-between rounded-lg px-6 pt-6 pb-6 
      mt-6 w-64 lg:max-w-[16rem] duration-500  text-center 
     hover:shadow-2xl hover:shadow-lime-600 bg-cover 
@@ -48,27 +42,6 @@ RedirectBoxProps) {
   }
 
   useOutsideClick(ref, onOutsideClick);
-
-  // useEffect(() => {
-  //   if (!disabled) return;
-
-  //   function handleClickOutside(event: MouseEvent) {
-  //     if (
-  //       setRedirectBoxClicked &&
-  //       ref.current &&
-  //       !ref.current.contains(event.target as Node)
-  //     ) {
-  //       setRedirectBoxClicked(false);
-  //     }
-  //   }
-
-  // Bind the event listener
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     // Unbind the event listener on clean up
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [ref]);
 
   function handleRedirectBoxClicked() {
     if (setRedirectBoxClicked) setRedirectBoxClicked(true);

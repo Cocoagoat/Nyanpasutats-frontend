@@ -1,6 +1,5 @@
 import React from "react";
 import { useSingleSeasonContext } from "../reducer/SeasonalContext";
-import { get } from "http";
 
 export default function GradientFill() {
   const { season, backgroundColor } = useSingleSeasonContext();

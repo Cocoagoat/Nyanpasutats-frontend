@@ -16,10 +16,8 @@ export async function getShowData(
       { next: { revalidate: 3600 } },
     );
 
-    // Handling client-side errors
     if (!response.ok) {
       const errorMessage = await response.text();
-      console.error(`Error from server: ${errorMessage}`, 8, 9); // Using console.error for better visibility of errors
       throw new Error(
         `Server responded with status ${response.status}: ${errorMessage}`,
       );
@@ -29,8 +27,6 @@ export async function getShowData(
     const data = JSON.parse(rawData);
     return data;
   } catch (error) {
-    // Handling network errors or parsing errors
-    console.error(`An error occurred while fetching show data: ${error}`);
     throw new Error(`An error occurred while fetching show data: ${error}`);
   }
 }

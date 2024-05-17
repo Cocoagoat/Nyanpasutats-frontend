@@ -19,7 +19,6 @@ export default function ResetUsername({
         placeholder={userName}
         disabled
         onChange={(e) => setUserInputField(e.target.value)}
-        // onChange={handleEnterUsername}
         className="max-w-md rounded-l-lg p-2.5 text-clampsm outline-none"
         required
       ></input>

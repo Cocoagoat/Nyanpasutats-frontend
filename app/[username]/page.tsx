@@ -1,10 +1,9 @@
-"use client";
+// /[username] is not an actual page for now, I might add general user analytics in the future
+// and put it here.
 
-import { useState, useEffect } from "react";
-import RedirectBox from "@/app/home/RedirectBox";
-import { redirectBoxContent } from "@/app/home/RedirectBoxContent";
+"use client";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import ResetUsername from "../home/ResetUsername";
 
 export default function Home() {
   const router = useRouter();

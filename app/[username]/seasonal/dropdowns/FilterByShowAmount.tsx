@@ -18,11 +18,6 @@ export default function FilterByShowAmount({
   const dispatchToUse =
     type === "Full" || !customDispatch ? dispatch : customDispatch;
 
-  // const handlers = useHandlers(dispatchToUse, "seasonal");
-  // if ("handleFilterByShowCount" in handlers) {
-  //   let { handleFilterByShowCount, handleResetFilter } = handlers;
-  // } else throw Error("Invalid range filter type");
-
   let { handleFilterByShowCount, handleResetFilter } = useHandlers(
     dispatchToUse,
     "seasonal",

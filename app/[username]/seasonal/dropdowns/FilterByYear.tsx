@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useHandlers } from "../reducer/useHandlers";
 import { UserPathType, RangeFilterType } from "@/app/interfaces";
 import { SeasonalDispatchContext } from "../reducer/SeasonalContext";
@@ -15,7 +15,7 @@ export default function FilterByYear({
 }) {
   const [min, setMin] = useState("");
   const [max, setMax] = useState("");
-  //   const [isOpen, setIsOpen] = useState(false);
+
   if (!dispatch) {
     dispatch = React.useContext(SeasonalDispatchContext)!;
   }
@@ -73,8 +73,6 @@ export default function FilterByYear({
           onChange={(e) => setMin(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              console.log(5);
-              console.log(min, max);
               handleRangeFilter(Number(min), Number(max));
             }
           }}
@@ -89,7 +87,6 @@ export default function FilterByYear({
           onChange={(e) => setMax(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              console.log(6);
               handleRangeFilter(Number(min), Number(max));
             }
           }}

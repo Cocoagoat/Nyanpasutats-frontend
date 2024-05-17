@@ -1,9 +1,7 @@
 "use client";
-import Link from "next/link";
 import NavItem from "./NavItem";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { MdOutlineMenu } from "react-icons/md";
 import { RiMenuFill } from "react-icons/ri";
 
 const gap = "px-8 py-4";
@@ -16,7 +14,6 @@ export function Nav() {
       className="z-50 flex w-full justify-end bg-gradient-to-tl from-blue-970 text-lg  text-white
      "
     >
-      {/* Toggle Button for small screens */}
       <div className={`z-[170] flex flex-col`}>
         <button
           className={`flex justify-end bg-blue-990 px-8 py-4 transition-colors duration-500

@@ -1,27 +1,19 @@
 "use client";
 
 import { SeasonData, SeasonName } from "@/app/interfaces";
-import React, { useContext, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SeasonCollapsed from "./SeasonCollapsed";
 import SeasonExpanded from "./expanded/SeasonExpanded";
-import {
-  SeasonalContext,
-  SingleSeasonContext,
-} from "./reducer/SeasonalContext";
-import { downloadCardAsImage } from "@/utils/downloadCardAsImage";
-import { RiDownload2Fill, RiUpload2Fill } from "react-icons/ri";
-import { useParams } from "next/navigation";
+import { SingleSeasonContext } from "./reducer/SeasonalContext";
 import winterBackground from "@/public/WinterBackground.png";
 import springBackground from "@/public/SpringBackground.png";
-import summerBackground from "@/public/SummerBackground3.png";
+import summerBackground from "@/public/SummerBackground.png";
 import fallBackground from "@/public/FallBackground.png";
 import nightBackground from "@/public/NightBackground.jpg";
 import UploadImageModal from "./expanded/UploadImageModal";
-import HoverPopup from "@/components/general/HoverPopup";
-import { MdSunny, MdNightsStay } from "react-icons/md";
 import SeasonExpandedToolbar from "./expanded/SeasonExpandedToolbar";
-import SeasonGraphModal from "./expanded/SeasonGraphModal";
 import TierList from "./expanded/tierlist/TierList";
+import useToast from "@/hooks/useToast";
 
 function getBackgroundColor(seasonName: SeasonName) {
   switch (seasonName) {
@@ -67,20 +59,32 @@ export default function Season({
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [imageChanged, setImageChanged] = useState(false);
   const [seasonGraphOpen, setSeasonGraphOpen] = useState(false);
-  const [downloadHovered, setDownloadHovered] = useState(false);
-  const [nightDayHovered, setNightDayHovered] = useState(false);
   const [nightImage, setNightImage] = useState(false);
-  const [uploadHovered, setUploadHovered] = useState(false);
-  const { noSequels } = useContext(SeasonalContext)!;
   const [expanded, setExpanded] = useState(false);
-  const params = useParams<{ username: string }>();
-
+  const isFirstRender = useRef(true);
   const seasonName = season.split(" ")[0] as SeasonName;
 
   let backgroundColor = getBackgroundColor(seasonName);
   let backgroundImg = getDayBackgroundImage(seasonName);
 
   const [backgroundImage, setBackgroundImage] = useState(backgroundImg);
+  const { notifySuccess } = useToast();
+
+  useEffect(() => {
+    if (seasonGraphOpen && isFirstRender.current) {
+      notifySuccess(
+        `This is a customizable tier list automatically made from your ratings for the season.
+
+      You can customize it by dragging and dropping the shows into different tiers, changing the tier names,
+      as well as deleting tiers you don't need by hovering on them and clicking the small X.
+      
+      You can also download the tier list as an image.`,
+        undefined,
+        30000,
+      );
+      isFirstRender.current = false;
+    }
+  }, [notifySuccess, seasonGraphOpen]);
 
   function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files && event.target.files[0];
@@ -140,10 +144,7 @@ export default function Season({
           <SeasonExpanded brightness={brightness} />
           <SeasonExpandedToolbar
             handleDayNightChange={handleDayNightChange}
-            handleImageUpload={handleImageUpload}
-            uploadModalOpen={uploadModalOpen}
             setUploadModalOpen={setUploadModalOpen}
-            seasonGraphOpen={seasonGraphOpen}
             setSeasonGraphOpen={setSeasonGraphOpen}
           />
           {uploadModalOpen && (
@@ -156,7 +157,6 @@ export default function Season({
             />
           )}
           {seasonGraphOpen && (
-            // <SeasonGraphModal closeModal={() => setSeasonGraphOpen(false)} />
             <TierList setSeasonGraphOpen={setSeasonGraphOpen} />
           )}
         </div>

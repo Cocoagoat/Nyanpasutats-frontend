@@ -1,5 +1,4 @@
 import React from "react";
-
 import { AffTableType, AffinitiesData } from "@/app/interfaces";
 import AffTableHeader from "./AffTableHeader";
 import TableHead from "@/components/general/TableHead";

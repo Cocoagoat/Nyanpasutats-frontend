@@ -1,7 +1,5 @@
 import React from "react";
-import Question from "./Question";
-import Answer from "./Answer";
-import FAQItem from "./FAQItem";
+
 import {
   AffinityAnswers,
   RecommendationAnswers,

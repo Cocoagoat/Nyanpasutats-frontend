@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { useState } from "react";
 
 interface ImageWithPlaceholderProps {
@@ -6,7 +5,7 @@ interface ImageWithPlaceholderProps {
   showName: string;
   index: number;
   alt: string;
-  className?: string; // Allow custom styles for the image
+  className?: string;
 }
 
 const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
@@ -19,17 +18,18 @@ const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} cursor-pointer`}>
       {!loaded && (
-        <div className="z-50 h-[72px] w-[54px] animate-pulse bg-zinc-600"></div>
+        <div className="z-50 h-[88px] w-[62px] animate-pulse bg-zinc-600"></div>
       )}
       <img
         key={index}
         src={src}
         alt={alt}
-        width={55}
         height={54}
-        className={`${showName && "opacity-60"} ${!loaded ? "hidden" : ""}`}
+        width="fit-height"
+        style={{ height: "88px", width: "62px" }}
+        className={` ${showName && "opacity-60"} ${!loaded ? "hidden" : ""}`}
         onLoad={() => setLoaded(true)}
       />
       <div

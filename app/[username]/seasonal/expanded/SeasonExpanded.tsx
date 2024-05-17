@@ -12,6 +12,7 @@ import GradientFill from "./GradientFill";
 import Heading from "./Heading";
 import ControversialShow from "./ControversialShow";
 import errorImg from "@/public/default.png";
+import useToast from "@/hooks/useToast";
 
 export default function SeasonExpanded({ brightness }: { brightness: number }) {
   const [favorites, setFavorites] = useState<ShowsToDisplay>({});
@@ -31,6 +32,7 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
     useSingleSeasonContext();
 
   const [favoritesModalOpen, setFavoritesModalOpen] = useState(false);
+  const { notifySuccess } = useToast();
 
   useEffect(() => {
     const getImageUrl = async () => {
@@ -90,7 +92,7 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
     getImageUrl();
   }, []);
 
-  console.log("displayedFavorites : ", displayedFavorites);
+  // console.log("displayedFavorites : ", displayedFavorites);
   return (
     <ModalContext.Provider
       value={{ favoritesModalOpen, setFavoritesModalOpen }}

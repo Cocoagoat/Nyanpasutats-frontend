@@ -9,11 +9,6 @@ const nextConfig = {
         destination: "/home",
         permanent: true,
       },
-      // {
-      //   source: "/:username+/history",
-      //   destination: "/history",
-      //   permanent: true,
-      // },
     ];
   },
   images: {

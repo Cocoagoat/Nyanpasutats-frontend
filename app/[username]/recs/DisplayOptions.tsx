@@ -2,8 +2,6 @@ import SettingsButton from "@/components/general/SettingsButton";
 import React from "react";
 import styles from "./DisplayOptions.module.css";
 import { SORT_BY_PREDICTION_SCORE } from "./RecReducer";
-import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
-import { tooltipsContent } from "@/utils/TooltipsContent";
 import FilterDropdown from "../seasonal/dropdowns/FilterDropdown";
 import { useHandlers } from "../seasonal/reducer/useHandlers";
 import { MdArrowUpward } from "react-icons/md";

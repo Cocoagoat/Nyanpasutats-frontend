@@ -68,9 +68,7 @@ export type RecommendationAction =
 
 export type initialStateType = {
   recs: RecommendationType[];
-  // recsNoWatched: RecommendationType[];
   recsSortedByDiff: RecommendationType[];
-  // recsNoWatchedSortedByDiff: RecommendationType[];
   displayedRecs: RecommendationType[];
   startYear: number;
   endYear: number;
@@ -78,8 +76,6 @@ export type initialStateType = {
   minMALScore: number;
   maxMALScore: number;
   noWatchedOnly: boolean;
-  // sortByPredictionScore: boolean;
-  // sortByScoreDifference: boolean;
   sortedBy: string;
 };
 
@@ -131,14 +127,17 @@ export const recReducer = (
         state.sortedBy === SORT_BY_PREDICTION_SCORE
           ? state.recs
           : state.recsSortedByDiff;
+
       displayRecs = displayRecs.filter(
         (rec) => rec.Year >= state.startYear && rec.Year <= state.endYear,
       );
+
       displayRecs = displayRecs.filter(
         (rec) =>
           rec.MALScore >= state.minMALScore &&
           rec.MALScore <= state.maxMALScore,
       );
+
       displayRecs = state.noWatchedOnly
         ? FilterOutWatchedRecs(displayRecs)
         : displayRecs;
