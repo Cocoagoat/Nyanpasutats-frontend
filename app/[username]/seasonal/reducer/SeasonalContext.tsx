@@ -29,4 +29,7 @@ export type singleSeasonContextType = {
   setExpanded: Dispatch<React.SetStateAction<boolean>>;
   imageChanged: boolean;
   nightImage: boolean;
+  uploadModalOpen: boolean;
+  setUploadModalOpen: Dispatch<React.SetStateAction<boolean>>;
+  editModeOpen: boolean;
 };

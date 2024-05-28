@@ -13,6 +13,9 @@ import Heading from "./Heading";
 import ControversialShow from "./ControversialShow";
 import errorImg from "@/public/default.png";
 import useToast from "@/hooks/useToast";
+import BestX from "./BestX";
+import BestX2 from "./BestX2";
+import { RiArrowUpDoubleFill } from "react-icons/ri";
 
 export default function SeasonExpanded({ brightness }: { brightness: number }) {
   const [favorites, setFavorites] = useState<ShowsToDisplay>({});
@@ -20,6 +23,14 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
   const displayedFavorites = Object.fromEntries(
     Object.entries(favorites).filter((show) => show[1].displayed),
   );
+  const [favoritesModalOpen, setFavoritesModalOpen] = useState(false);
+
+  const [rows, setRows] = useState(1);
+  const [worstImagesNotEmpty, setWorstImagesNotEmpty] = useState<boolean[]>(
+    Array.from({ length: rows }).map(() => true),
+  );
+
+  const { notifyError } = useToast();
 
   const [controversialShow, setControversialShow] = useState<ShowToDisplay>({
     imageUrl: "",
@@ -28,11 +39,23 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
     name: "",
   });
 
-  const { season, seasonStats, backgroundImage, setExpanded, imageChanged } =
-    useSingleSeasonContext();
+  const {
+    season,
+    seasonStats,
+    backgroundImage,
+    setExpanded,
+    imageChanged,
+    editModeOpen,
+  } = useSingleSeasonContext();
 
-  const [favoritesModalOpen, setFavoritesModalOpen] = useState(false);
-  const { notifySuccess } = useToast();
+  function handleAddNewRow() {
+    if (rows < 4) {
+      setRows((prev) => prev + 1);
+      setWorstImagesNotEmpty((prev) => [...prev, true]);
+    } else {
+      notifyError("A maximum of four rows are allowed.");
+    }
+  }
 
   useEffect(() => {
     const getImageUrl = async () => {
@@ -97,9 +120,9 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
     <ModalContext.Provider
       value={{ favoritesModalOpen, setFavoritesModalOpen }}
     >
-      <div className="relative mx-16 mb-8 rounded-3xl">
+      <div className="relative mx-16 mb-8 rounded-3xl bg-zinc-800">
         <div
-          className={`relative overflow-hidden rounded-3xl text-white shadow-lg`}
+          className={`relative overflow-hidden rounded-3xl bg-zinc-800 text-white shadow-lg`}
           style={{
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: "cover",
@@ -116,11 +139,23 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
               <div className="mt-20 grid w-full grid-cols-3 gap-x-10 gap-y-16">
                 <SeasonStatGrid />
 
-                {displayContShow && (
+                {displayContShow ? (
                   <ControversialShow
                     controversialShow={controversialShow}
                     setDisplayContShow={setDisplayContShow}
                   />
+                ) : (
+                  editModeOpen && (
+                    <div
+                      className={`flex h-[105px] w-[75px] cursor-pointer  
+              items-center justify-center justify-self-center rounded-xl
+              bg-zinc-800 text-center text-xs text-lime-600 opacity-40 shadow-md shadow-black 
+              hover:opacity-100`}
+                      onClick={() => setDisplayContShow(true)}
+                    >
+                      <p className="font-semibold">Restore</p>
+                    </div>
+                  )
                 )}
 
                 {Object.keys(displayedFavorites).length ? (
@@ -136,9 +171,26 @@ export default function SeasonExpanded({ brightness }: { brightness: number }) {
                     Add favorites
                   </LargeButton>
                 )}
+                <BestX2
+                  rows={rows}
+                  worstImagesNotEmpty={worstImagesNotEmpty}
+                  setWorstImagesNotEmpty={setWorstImagesNotEmpty}
+                />
               </div>
             </div>
-            <CollapseToggle setExpanded={setExpanded} />
+            {editModeOpen && (
+              <CollapseToggle
+                onClick={handleAddNewRow}
+                IconComponent={RiArrowUpDoubleFill}
+                text="Add Row"
+                alwaysVisible={true}
+              />
+            )}
+            <CollapseToggle
+              onClick={() => setExpanded(false)}
+              IconComponent={RiArrowUpDoubleFill}
+              text="Collapse"
+            />
           </div>
           {favoritesModalOpen && (
             <FavoriteShowsModal

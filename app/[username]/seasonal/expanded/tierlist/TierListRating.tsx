@@ -1,16 +1,19 @@
 import React, { useState } from "react";
+import TierListDeleteButton from "./TierListDeleteButton";
 
 export default function TierListRating({
   color,
   initialScore,
   ratingText,
   deleteRow,
+  deleteMode,
   setRatingText,
 }: {
   color: string;
   initialScore: string;
   ratingText: string;
   deleteRow: (tier: number) => void;
+  deleteMode: boolean;
   setRatingText: (text: string) => void;
 }) {
   // const [score, setScore] = useState(initialScore);
@@ -40,15 +43,17 @@ export default function TierListRating({
         // width: `${textLength(text) * 30}px`,
       }}
     >
-      {hovered && (
+      {deleteMode && (
         <div
-          className="absolute right-0 top-0 h-4 w-4 cursor-pointer 
-        rounded-full bg-zinc-800 text-center text-xs font-semibold text-lime-600"
+          className="absolute right-0 top-0 z-[100] flex h-full w-full
+     cursor-pointer items-center justify-center  bg-gradient-to-t from-red-500 from-5% to-50%
+      text-center text-4xl font-semibold text-red-500 shadow-black text-shadow"
           onClick={() => deleteRow(Number(initialScore))}
         >
-          x
+          <p>x</p>
         </div>
       )}
+
       <input
         type="text"
         value={ratingText}

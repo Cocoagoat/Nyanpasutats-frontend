@@ -61,6 +61,7 @@ export default function Season({
   const [seasonGraphOpen, setSeasonGraphOpen] = useState(false);
   const [nightImage, setNightImage] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [editModeOpen, setEditModeOpen] = useState(false);
   const isFirstRender = useRef(true);
   const seasonName = season.split(" ")[0] as SeasonName;
 
@@ -71,18 +72,23 @@ export default function Season({
   const { notifySuccess } = useToast();
 
   useEffect(() => {
-    if (seasonGraphOpen && isFirstRender.current) {
+    if (
+      seasonGraphOpen &&
+      isFirstRender.current &&
+      localStorage.getItem("firstTierListOpen") === null
+    ) {
       notifySuccess(
         `This is a customizable tier list automatically made from your ratings for the season.
 
       You can customize it by dragging and dropping the shows into different tiers, changing the tier names,
-      as well as deleting tiers you don't need by hovering on them and clicking the small X.
+      as well as deleting tiers you don't shows/tiers you don't want in it.
       
       You can also download the tier list as an image.`,
         undefined,
         30000,
       );
       isFirstRender.current = false;
+      localStorage.setItem("firstTierListOpen", "true");
     }
   }, [notifySuccess, seasonGraphOpen]);
 
@@ -137,6 +143,9 @@ export default function Season({
         seasonCount,
         imageChanged,
         nightImage,
+        uploadModalOpen,
+        setUploadModalOpen,
+        editModeOpen,
       }}
     >
       {expanded ? (
@@ -146,16 +155,18 @@ export default function Season({
             handleDayNightChange={handleDayNightChange}
             setUploadModalOpen={setUploadModalOpen}
             setSeasonGraphOpen={setSeasonGraphOpen}
+            setEditModeOpen={setEditModeOpen}
           />
           {uploadModalOpen && (
             <UploadImageModal
-              onUpload={(e) => {
+              onUpload={(e: any) => {
                 handleImageUpload(e);
                 setUploadModalOpen(false);
               }}
               closeModal={() => setUploadModalOpen(false)}
             />
           )}
+
           {seasonGraphOpen && (
             <TierList setSeasonGraphOpen={setSeasonGraphOpen} />
           )}

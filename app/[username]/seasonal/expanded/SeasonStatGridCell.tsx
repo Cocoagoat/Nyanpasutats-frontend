@@ -3,29 +3,28 @@ import SeasonStat from "./SeasonStat";
 import { ChartData, StatType } from "@/app/interfaces";
 import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
 import { tooltipsContent } from "@/utils/TooltipsContent";
+import { useSingleSeasonContext } from "../reducer/SeasonalContext";
 
 export default function SeasonStatGridCell({
   frontStat,
   backStat,
   toggle,
-  graphStats,
 }: {
   frontStat: StatType;
   backStat?: StatType;
   toggle?: boolean;
-  graphStats?: ChartData[];
 }) {
   const [backOpen, setBackOpen] = useState(false);
   const [graphOpen, setGraphOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
-
+  const { editModeOpen } = useSingleSeasonContext()!;
   return (
     <div
       className="relative  hover:opacity-90 "
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {hovered && (
+      {editModeOpen && (
         <TooltipQuestionMark
           text={
             backOpen && backStat
@@ -39,7 +38,7 @@ export default function SeasonStatGridCell({
         statValue={backOpen && backStat ? backStat.value : frontStat.value}
       />
       <div className="absolute flex w-full justify-center gap-4 text-xs">
-        {toggle && hovered && (
+        {toggle && editModeOpen && (
           <button
             className="rounded-xl border border-zinc-600 bg-zinc-700 px-1.5 py-0.5"
             onClick={() => setBackOpen(!backOpen)}
@@ -47,14 +46,14 @@ export default function SeasonStatGridCell({
             {toggle ? "Toggle" : ""}
           </button>
         )}
-        {hovered && graphStats && (
+        {/* {editModeOpen && graphStats && (
           <button
             className="rounded-xl border border-zinc-600 bg-zinc-700 px-1.5 py-0.5"
             onClick={() => setGraphOpen(!graphOpen)}
           >
             Graph
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );

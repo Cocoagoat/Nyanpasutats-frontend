@@ -2,6 +2,7 @@ import React from "react";
 import ShowDisplay from "../ShowDisplay";
 import { ShowsToDisplay } from "@/app/interfaces";
 import { Lato } from "next/font/google";
+import { useSingleSeasonContext } from "../reducer/SeasonalContext";
 
 const lato = Lato({ weight: "700", subsets: ["latin"] });
 
@@ -24,10 +25,14 @@ export default function FavoriteShows({
       ? "Add to Favorites"
       : "Remove from Favorites"
     : "Favorite Shows";
+
+  const { editModeOpen } = useSingleSeasonContext()!;
   return (
     <div
       className={`row-start-3 ${
-        contShowRemoved ? "col-span-3 col-start-1" : "col-span-2 col-start-2"
+        contShowRemoved && !editModeOpen
+          ? "col-span-3 col-start-1"
+          : "col-span-2 col-start-2"
       } group relative`}
     >
       <div className="flex flex-wrap justify-center gap-4 ">

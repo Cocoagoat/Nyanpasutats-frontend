@@ -1,19 +1,23 @@
 import React from "react";
-import ImageWithPlaceholder from "./TierListImage";
+import TierListImage from "./TierListImage";
 import TierListRating from "./TierListRating";
 import { ImageData } from "@/app/interfaces";
 
 export default function TierListRow({
-  color,
   score,
   images,
   showText,
+  deleteMode,
+  deleteShow,
+  onLoadImage,
   onDropImage,
 }: {
-  color: string;
   score: string;
   images: ImageData[];
   showText: boolean;
+  deleteMode: boolean;
+  deleteShow: (index: number, tier: number) => void;
+  onLoadImage: (index: number) => void;
   onDropImage: (showData: ImageData) => void;
 }) {
   // console.log(images);
@@ -34,6 +38,10 @@ export default function TierListRow({
     e.preventDefault(); // Necessary to allow the drop
   };
 
+  function deleteImageFromTierList(index: number) {
+    console.log("Deleting image from tier list");
+  }
+
   return (
     <div
       className=" flex gap-4"
@@ -51,13 +59,17 @@ export default function TierListRow({
               handleDragStart(e, [showName, imageUrl, +score])
             }
           >
-            <ImageWithPlaceholder
+            <TierListImage
               key={imageIndex}
               src={imageUrl}
               showName={showText ? showName : ""}
               index={imageIndex}
+              tier={+score}
+              deleteMode={deleteMode}
+              onLoadImage={onLoadImage}
               alt="test"
               className=""
+              deleteImage={deleteShow}
             />
           </div>
         ))}

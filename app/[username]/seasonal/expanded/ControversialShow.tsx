@@ -4,6 +4,8 @@ import { TbEyeCancel } from "react-icons/tb";
 import { Lato } from "next/font/google";
 import { ShowToDisplay } from "@/app/interfaces";
 import toast from "react-hot-toast";
+import { useSingleSeasonContext } from "../reducer/SeasonalContext";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 const lato = Lato({ weight: "700", subsets: ["latin"] });
 export default function ControversialShow({
@@ -14,29 +16,21 @@ export default function ControversialShow({
   setDisplayContShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [eyeHovered, setHovered] = React.useState(false);
+  const { editModeOpen } = useSingleSeasonContext()!;
 
-  function handleHideContShow() {
-    setDisplayContShow(false);
-    toast("To restore, collapse and expand the card again.", {
-      duration: 5000,
-      position: "top-center",
-      style: { backgroundColor: "#74ceff", color: "white" },
-      className: "bg-sky-550 text-white",
-    });
-  }
   return (
     <div className="relative">
-      <TbEyeCancel
-        size="36px"
+      <RiDeleteBin6Fill
+        size="32px"
         className={`${
-          eyeHovered ? "opacity-100" : "opacity-0"
-        } absolute -top-8 w-full cursor-pointer text-center text-zinc-700`}
+          editModeOpen ? "opacity-100" : "opacity-0"
+        } absolute -top-8 w-full cursor-pointer text-center text-black`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        onClick={handleHideContShow}
+        onClick={() => setDisplayContShow(false)}
       >
         Test
-      </TbEyeCancel>
+      </RiDeleteBin6Fill>
 
       <div
         className="mx-auto w-fit"

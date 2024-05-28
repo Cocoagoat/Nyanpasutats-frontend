@@ -4,7 +4,13 @@ import { Lato } from "next/font/google";
 import { SeasonalContext } from "../../reducer/SeasonalContext";
 const latoBold = Lato({ weight: "900", subsets: ["latin"] });
 
-export default function TierListHeader({ season }: { season: string }) {
+export default function TierListHeader({
+  season,
+  loaded,
+}: {
+  season: string;
+  loaded: boolean;
+}) {
   const params = useParams<{ username: string }>();
   const { noSequels } = useContext(SeasonalContext)!;
   const [headerText, setHeaderText] = useState(
@@ -14,24 +20,25 @@ export default function TierListHeader({ season }: { season: string }) {
   function getColor() {
     switch (season.split(" ")[0]) {
       case "Winter":
-        return "sky-550";
+        return "28b7fa";
       case "Spring":
-        return "green-400";
+        return "28FA2B";
       case "Summer":
-        return "yellow-300";
+        return "FCD34D";
       case "Fall":
-        return "orange-500";
+        return "F97316";
       default:
-        return "black";
+        return "000000";
     }
   }
 
   let seasonalColor = getColor();
   return (
     <input
-      className={`w-full  bg-zinc-800 pb-6 pt-6 font-bold ${latoBold.className}
-       pt-2 text-center text-4xl text-white shadow-${seasonalColor} text-shadow-md`}
+      className={`w-full ${!loaded && "hidden"}  bg-zinc-800 pb-6 pt-6 font-bold ${latoBold.className}
+       text-shadow-md pt-2 text-center text-4xl text-white`}
       value={headerText}
+      style={{ textShadow: `1px 1.5px 4px #${seasonalColor}` }}
       onChange={(e) => setHeaderText(e.target.value)}
     />
   );
