@@ -73,7 +73,7 @@ export default function Season({
     useState<BackgroundImageType>("Day");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [seasonGraphOpen, setSeasonGraphOpen] = useState(false);
-  const [nightImage, setNightImage] = useState(false);
+  // const [nightImage, setNightImage] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [editModeOpen, setEditModeOpen] = useState(false);
   const [dragModeOpen, setDragModeOpen] = useState(false);
@@ -169,15 +169,15 @@ export default function Season({
   //   }
   // }
 
-  function handleDayNightChange() {
-    if (nightImage) {
-      setNightImage(false);
-      setBackgroundImage(backgroundImg);
-    } else {
-      setNightImage(true);
-      setBackgroundImage(nightBackground.src);
-    }
-  }
+  // function handleDayNightChange() {
+  //   if (nightImage) {
+  //     setNightImage(false);
+  //     setBackgroundImage(backgroundImg);
+  //   } else {
+  //     setNightImage(true);
+  //     setBackgroundImage(nightBackground.src);
+  //   }
+  // }
 
   // function onUrlUpload(url: string) {
   //   setBackgroundImage(url);
@@ -200,7 +200,7 @@ export default function Season({
         setUploadedImage,
         seasonCount,
         imageChanged,
-        nightImage,
+        // nightImage,
         uploadModalOpen,
         setUploadModalOpen,
         editModeOpen,
@@ -208,7 +208,7 @@ export default function Season({
         dragModeOpen,
         setDragModeOpen,
         setSeasonGraphOpen,
-        handleDayNightChange,
+        // handleDayNightChange,
       }}
     >
       {expanded ? (

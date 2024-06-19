@@ -19,15 +19,16 @@ import {
 import SeasonExpandedButton from "./SeasonExpandedButton";
 import { isFirefox } from "@/utils/general";
 
-export default function SeasonExpandedToolbar({
-  handleDayNightChange,
-}: {
-  handleDayNightChange: () => void;
-}) {
+export default function SeasonExpandedToolbar(
+  {
+    // handleDayNightChange,
+  }: {
+    // handleDayNightChange: () => void;
+  },
+) {
   const params = useParams<{ username: string }>();
   const [downloadHovered, setDownloadHovered] = useState(false);
   const [uploadHovered, setUploadHovered] = useState(false);
-  const [nightDayHovered, setNightDayHovered] = useState(false);
   const [seasonGraphHovered, setSeasonGraphHovered] = useState(false);
   const [copyHovered, setCopyHovered] = useState(false);
   const [editModeHovered, setEditModeHovered] = useState(false);
@@ -35,7 +36,7 @@ export default function SeasonExpandedToolbar({
   const { noSequels } = useContext(SeasonalContext)!;
   const {
     season,
-    nightImage,
+    // nightImage,
     editModeOpen,
     uploadModalOpen,
     setUploadModalOpen,
@@ -71,13 +72,13 @@ export default function SeasonExpandedToolbar({
         setHovered={setUploadHovered}
         open={uploadModalOpen}
       />
-      <SeasonExpandedButton
+      {/* <SeasonExpandedButton
         onClick={handleDayNightChange}
         Icon={nightImage ? <MdSunny /> : <MdNightsStay />}
         hoverText={`Switch card to ${nightImage ? "day" : "night"} mode`}
         hovered={nightDayHovered}
         setHovered={setNightDayHovered}
-      />
+      /> */}
       <SeasonExpandedButton
         onClick={() => {
           downloadCardAsImage(

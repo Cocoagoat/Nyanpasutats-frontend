@@ -7,6 +7,7 @@ import {
 } from "./reducer/SeasonalContext";
 import { displayedMeanOptions } from "@/app/interfaces";
 import { hexToRgb } from "@/utils/general";
+import Image from "next/image";
 
 export default function SeasonCollapsed({
   cardOpen,
@@ -21,7 +22,7 @@ export default function SeasonCollapsed({
     backgroundImage,
     backgroundColor,
     setExpanded,
-    nightImage,
+    // nightImage,
   } = useSingleSeasonContext();
 
   const dispatch = useContext(SeasonalDispatchContext);
@@ -37,16 +38,27 @@ export default function SeasonCollapsed({
   return (
     <div
       className="relative mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-      }}
+      // style={{
+      //   backgroundImage: `url(${backgroundImage})`,
+      //   backgroundSize: "cover",
+      // }}
     >
+      <Image
+        src={backgroundImage}
+        layout="fill"
+        alt="Test"
+        className={`absolute inset-0 rounded-3xl  object-cover `}
+        quality={85}
+        // sizes={"(max-width: 768px) 100vw, 75vw"}
+        style={{
+          zIndex: 0,
+        }}
+      />
       <div
         className="absolute inset-0"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(${rgbColor}, 1)
-           ${nightImage ? "0%" : "10%"}, transparent ${nightImage ? "0%" : "50%"})`,
+           10%, transparent 50%`,
           zIndex: 10,
         }}
       ></div>

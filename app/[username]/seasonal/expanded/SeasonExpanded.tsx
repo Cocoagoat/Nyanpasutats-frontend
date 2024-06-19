@@ -67,10 +67,10 @@ export default function SeasonExpanded({
     setExpanded,
     imageChanged,
     uploadModalOpen,
-    nightImage,
+    // nightImage,
     editModeOpen,
     dragModeOpen,
-    handleDayNightChange,
+    // handleDayNightChange,
     displayGradient,
   } = useSingleSeasonContext();
 
@@ -306,19 +306,21 @@ export default function SeasonExpanded({
               />
             )}
 
-            {/* <Image
-              src={backgroundImage}
-              ref={imageRef}
-              layout="fill"
-              alt="Test"
-              className={`absolute inset-0 rounded-3xl  object-cover `}
-              quality={85}
-              // sizes={"(max-width: 768px) 100vw, 75vw"}
-              style={{
-                zIndex: isDragging ? 100000 : 0,
-              }}
-              objectPosition={`${position.x}px 0px`}
-            /> */}
+            {!imageChanged && (
+              <Image
+                src={backgroundImage}
+                ref={imageRef}
+                layout="fill"
+                alt="Test"
+                className={`absolute inset-0 rounded-3xl  object-cover `}
+                quality={85}
+                // sizes={"(max-width: 768px) 100vw, 75vw"}
+                style={{
+                  zIndex: isDragging ? 100000 : 0,
+                }}
+                objectPosition={`${position.x}px 0px`}
+              />
+            )}
             {/* <div
             style={{ width: "100%", height: "100%" }}
             className="min-h-full w-full"
@@ -415,9 +417,7 @@ export default function SeasonExpanded({
             )}
           </div>
           <>
-            <SeasonExpandedToolbar
-              handleDayNightChange={handleDayNightChange}
-            />
+            <SeasonExpandedToolbar />
           </>
         </div>
       </div>

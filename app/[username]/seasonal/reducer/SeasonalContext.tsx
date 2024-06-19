@@ -33,7 +33,7 @@ export type singleSeasonContextType = {
   seasonCount: number;
   setExpanded: Dispatch<React.SetStateAction<boolean>>;
   imageChanged: boolean;
-  nightImage: boolean;
+  // nightImage: boolean;
   uploadModalOpen: boolean;
   setUploadModalOpen: Dispatch<React.SetStateAction<boolean>>;
   editModeOpen: boolean;
@@ -41,5 +41,5 @@ export type singleSeasonContextType = {
   dragModeOpen: boolean;
   setDragModeOpen: Dispatch<React.SetStateAction<boolean>>;
   setSeasonGraphOpen: Dispatch<React.SetStateAction<boolean>>;
-  handleDayNightChange: () => void;
+  // handleDayNightChange: () => void;
 };
