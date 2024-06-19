@@ -13,8 +13,8 @@ export default function SeasonStat({
   statName: string;
 }) {
   return (
-    <div className=" text-center text-shadow shadow-black p-1 bg-opacity-30">
-      <div className="flex justify-center text-4xl content-center mx-auto font-semibold">
+    <div className=" bg-opacity-30 p-1 text-center shadow-black text-shadow">
+      <div className="mx-auto flex content-center justify-center text-4xl font-semibold">
         {statValue && statValue.startsWith("https") ? (
           <div className="">
             <Image src={statValue} alt="Test image" width={75} height={105} />

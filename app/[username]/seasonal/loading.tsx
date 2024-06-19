@@ -7,6 +7,7 @@ import padoru from "@/public/padoru.gif";
 
 export default async function loading() {
   let seasonalCookie = cookies().get("seasonal");
+  console.log("Fuck you", seasonalCookie);
   if (seasonalCookie) {
     return (
       <Image
@@ -16,8 +17,11 @@ export default async function loading() {
       />
     );
   } else {
+    console.log("Fuck you piece of shit");
     let data = await retrieveQueuePosition();
+    console.log("Return of queuePosition", data);
     let queuePosition = data["queuePosition"];
+
     return <UserQueueDisplay queuePosition={queuePosition} />;
   }
 }

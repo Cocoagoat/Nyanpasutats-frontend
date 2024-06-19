@@ -23,8 +23,8 @@ export default function SortFilterOption({
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`cursor-pointer rounded-lg bg-blue-970  py-2 text-center
-       text-xs text-white hover:bg-lime-600  
+      className={` cursor-pointer rounded-lg bg-blue-970 py-2
+       text-center text-xs text-white hover:bg-lime-600 
      md:text-sm ${extraStyles}`}
     >
       {statName}

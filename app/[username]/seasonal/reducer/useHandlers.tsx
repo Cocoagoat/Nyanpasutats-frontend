@@ -57,6 +57,7 @@ function createSeasonalHandlers(
 
     handleSortByShowCount: () => {
       dispatch({ type: "SORT", payload: { by: "Shows" } });
+      dispatch({ type: "RECALCULATE_OVERALL_RANK" });
     },
 
     handleFilterByYear: (
@@ -68,6 +69,7 @@ function createSeasonalHandlers(
         type: "FILTER_BY_YEAR",
         payload: { startYear: startYear, endYear: endYear },
       });
+      dispatch({ type: "RECALCULATE_OVERALL_RANK" });
       if (setDropdownState) {
         setDropdownState(false);
       }
@@ -82,6 +84,7 @@ function createSeasonalHandlers(
         type: "FILTER_BY_SHOW_COUNT",
         payload: { minShows: minShows, maxShows: maxShows },
       });
+      dispatch({ type: "RECALCULATE_OVERALL_RANK" });
       if (setDropdownState) {
         setDropdownState(false);
       }
@@ -92,6 +95,7 @@ function createSeasonalHandlers(
       setDropdownState?: React.Dispatch<React.SetStateAction<boolean>>,
     ) => {
       dispatch({ type: "FILTER_BY_SEASON_NAME", payload: { text: text } });
+      dispatch({ type: "RECALCULATE_OVERALL_RANK" });
       if (setDropdownState) {
         setDropdownState(false);
       }
@@ -99,6 +103,7 @@ function createSeasonalHandlers(
 
     handleResetFilter: () => {
       dispatch({ type: "RESET_FILTER" });
+      dispatch({ type: "RECALCULATE_OVERALL_RANK" });
     },
 
     handleToggleSequels: (nonSequelsOnly: boolean) => {

@@ -4,7 +4,7 @@ import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
 import { RecommendationType } from "@/app/interfaces";
 import RecsBox from "./RecsBox";
 import GenericError from "@/components/general/GenericError";
-import { getSiteCookie } from "@/utils/general";
+import { getSiteCookie } from "@/utils/CookieUtils";
 
 function roundPredictedScores(recs: RecommendationType[]) {
   return recs.map((dict) => ({

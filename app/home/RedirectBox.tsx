@@ -4,6 +4,7 @@ import RedirectBoxText from "./RedirectBoxText";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import toast from "react-hot-toast";
 import test from "@/public/nnb6.png";
+import Image from "next/image";
 
 type RedirectBoxProps = {
   title: string;
@@ -60,10 +61,17 @@ export default function RedirectBox({
   return disabled ? (
     <button
       ref={ref}
-      className={`${redirectBoxStyle} ${!MAL && "grayscale"}`}
-      style={{ backgroundImage: `url(${test.src})` }}
+      className={`${redirectBoxStyle} relative ${!MAL && "grayscale"}`}
+      // style={{ backgroundImage: `url(${test.src})` }}
       onClick={handleRedirectBoxClicked}
     >
+      <Image
+        src={test}
+        fill
+        alt="Disabled"
+        className="-z-50"
+        placeholder="blur"
+      />
       <RedirectBoxText
         title={title}
         MAL={MAL}
@@ -81,9 +89,16 @@ export default function RedirectBox({
     //   >
     <Link
       href={link}
-      style={{ backgroundImage: `url(${test.src})` }}
+      // style={{ backgroundImage: `url(${test.src})` }}
       className={`${redirectBoxStyle} `}
     >
+      <Image
+        src={test}
+        fill
+        alt="Button"
+        className="-z-50"
+        placeholder="blur"
+      />
       <RedirectBoxText
         title={title}
         MAL={MAL}

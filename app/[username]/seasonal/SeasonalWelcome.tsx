@@ -8,23 +8,30 @@ export default function SeasonalWelcome() {
       </h1>
       <p className="mt-8">
         Down below you can see a list of seasonal "cards", which are basically
-        mini-summaries of how each* season went for you. You're welcome to
-        expand the cards and play around with the available buttons to customize
-        them, and then you can save it as an image using the download button to
-        the right.
+        mini-summaries of how each* season went for you. You can expand each
+        card and customize it to your liking - add/remove favorites, change the
+        amount and type of visible stats and the background image***, and create
+        your own Best/Worst X rankings. Once you're done, you can copy** or
+        download the card as an image.
       </p>
 
       <p className="mt-4">
-        You can also upload any image you want as the background for the card
-        using the upload button on the right.**
+        Also, you can play around with the sorting / filtering options in the
+        top bar to easily find the season / year you want and see the statistics
+        for that time period. For example, you can easily see which Winter
+        season was your favorite of the 2010s by using the year range filter and
+        searching for "Winter".
+      </p>
+      <p>
+        Filtering will also change the Overall Rank stat in all your cards - for
+        example, if you use the filter to show only seasons in which you watched
+        over 20 shows, the Overall Rank of each season will reflect that.
       </p>
 
       <p className="mt-4">
-        And finally you can play around with the sorting/filtering options in
-        the top bar to easily find the season/year you want and see the
-        statistics for that time period. For example, you can easily see which
-        Winter season was your favorite of the 2010s by using the year range
-        filter and searching for "Winter".
+        And finally, the lower-most button in the toolbar of an expanded card
+        will turn the card into an automatically generated and customizable tier
+        list, which can also be copied and downloaded as an image.
       </p>
 
       <p className="mt-4">
@@ -35,7 +42,10 @@ export default function SeasonalWelcome() {
         *Only seasons with 5 or more shows scored are included in the list.
       </p>
       <p className="mt-2 text-[0.5rem]">
-        **The default backgrounds are screenshots from the anime "Non Non
+        **Copying is currently not supported on Firefox.
+      </p>
+      <p className="mt-2 text-[0.5rem]">
+        ***The default backgrounds are screenshots from the anime "Non Non
         Biyori", which the creator of this website highly recommends.
       </p>
     </div>

@@ -1,9 +1,13 @@
 import { ToastPosition, toast } from "react-hot-toast";
 
 function useToast() {
-  function notifyError(message: string, position?: ToastPosition) {
+  function notifyError(
+    message: string,
+    position?: ToastPosition,
+    customDuration?: number,
+  ) {
     toast.error(message, {
-      duration: 5000,
+      duration: customDuration? customDuration : 5000,
       position: position ? position : "top-center",
       style: {
         backgroundColor: "#ff0055",

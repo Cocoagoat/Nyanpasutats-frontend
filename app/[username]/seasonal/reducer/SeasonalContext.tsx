@@ -25,6 +25,11 @@ export type singleSeasonContextType = {
   seasonStats: SeasonData;
   backgroundImage: string;
   backgroundColor: string;
+  setBackgroundColor: Dispatch<React.SetStateAction<string>>;
+  uploadedImage: string | null;
+  setUploadedImage: Dispatch<React.SetStateAction<string | null>>;
+  displayGradient: boolean;
+  setDisplayGradient: Dispatch<React.SetStateAction<boolean>>;
   seasonCount: number;
   setExpanded: Dispatch<React.SetStateAction<boolean>>;
   imageChanged: boolean;
@@ -32,4 +37,9 @@ export type singleSeasonContextType = {
   uploadModalOpen: boolean;
   setUploadModalOpen: Dispatch<React.SetStateAction<boolean>>;
   editModeOpen: boolean;
+  setEditModeOpen: Dispatch<React.SetStateAction<boolean>>;
+  dragModeOpen: boolean;
+  setDragModeOpen: Dispatch<React.SetStateAction<boolean>>;
+  setSeasonGraphOpen: Dispatch<React.SetStateAction<boolean>>;
+  handleDayNightChange: () => void;
 };

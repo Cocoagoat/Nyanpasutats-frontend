@@ -6,7 +6,7 @@ import { Nav } from "@/components/general/Nav";
 import AffTable from "./AffTable";
 import GenericError from "@/components/general/GenericError";
 import styles from "./Affinity.module.css";
-import { getSiteCookie, getPathCookie } from "@/utils/general";
+import { getSiteCookie, getPathCookie } from "@/utils/CookieUtils";
 import { revalidatePath } from "next/cache";
 
 export default async function page({

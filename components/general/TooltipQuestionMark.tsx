@@ -22,7 +22,8 @@ export function TooltipQuestionMark({
         </div>
         {showTooltip && (
           <div
-            className="absolute right-0 top-3 z-[60]  mb-2 min-w-[100px] max-w-[300px] whitespace-pre-line rounded-xl bg-zinc-700 px-2 py-1 text-xs text-white sm:min-w-[150px]"
+            className="absolute right-0 top-3 z-[10000]  mb-2 min-w-[100px] max-w-[300px] 
+             -translate-y-1/2 rounded-xl bg-zinc-700 px-2 py-1 text-xs text-white sm:min-w-[150px]"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
           >

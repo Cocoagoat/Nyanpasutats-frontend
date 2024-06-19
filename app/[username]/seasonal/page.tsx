@@ -6,7 +6,7 @@ import SeasonalStatsBox from "./SeasonalStatsBox";
 import { Nav } from "@/components/general/Nav";
 import GenericError from "@/components/general/GenericError";
 import { cookies } from "next/headers";
-import { getSiteCookie } from "@/utils/general";
+import { getSiteCookie } from "@/utils/CookieUtils";
 import { Suspense } from "react";
 
 export default async function page({
@@ -42,10 +42,13 @@ export default async function page({
   let data = [];
 
   const siteCookie = getSiteCookie();
+  console.log(siteCookie);
 
   let userFound = false;
   try {
+    console.log(params.username);
     userFound = await assertUsernameInCache(params.username);
+    console.log(userFound);
   } catch (err) {
     console.log("Error is now : ", err);
   }
@@ -72,7 +75,7 @@ export default async function page({
       throw new Error("Task ID is undefined");
     }
 
-    data = await retrieveTaskData(taskId);
+    data = await retrieveTaskData(taskId, params.username, "seasonal");
   } catch (err) {
     error = (err as Error).message;
     console.log("Error is now : ", error);

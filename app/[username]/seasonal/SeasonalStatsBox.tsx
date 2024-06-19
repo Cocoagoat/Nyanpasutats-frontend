@@ -63,6 +63,7 @@ export default function SeasonalStatsBox({
   const [graphOpen, setGraphOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
   const [brightness, setBrightness] = useState(100);
+  const [cardOpen, setCardOpen] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   const [partialDisplayedStats, setPartialDisplayedStats] = useState(
@@ -114,8 +115,8 @@ export default function SeasonalStatsBox({
       <SeasonalDispatchContext.Provider value={dispatch}>
         {!graphOpen ? (
           <div
-            className={`max-w-front-n-center-60 bg-blue-990 
-     fullhd:max-w-front-n-center  ${styles.firefoxborder} absolute inset-0 mx-auto my-auto
+            className={` max-w-front-n-center-60 bg-blue-990 
+      fullhd:max-w-front-n-center ${styles.firefoxborder} absolute inset-0 mx-auto my-auto
       max-h-front-n-center overflow-x-hidden overflow-y-scroll rounded-3xl border-y-[14px] 
       border-l-[14px] border-r-[2px] border-gray-600 pb-6`}
             id="scrollableDiv"
@@ -133,7 +134,8 @@ export default function SeasonalStatsBox({
             <div className="absolute right-0 top-0 z-50">
               {!welcomeOpen && (
                 <MdArrowUpward
-                  className="h-6 w-6 cursor-pointer rounded-full bg-blue-970 p-1 text-xs text-white hover:bg-lime-600"
+                  className="h-6 w-6 cursor-pointer rounded-full
+                   bg-blue-970 p-1 text-xs text-white hover:bg-lime-600"
                   onClick={() => {
                     if (setWelcomeOpen) {
                       setWelcomeOpen(true);
@@ -142,7 +144,7 @@ export default function SeasonalStatsBox({
                 />
               )}
             </div>
-            <VerticalSlider
+            {/* <VerticalSlider
               value={brightness}
               min={0}
               max={100}
@@ -152,7 +154,7 @@ export default function SeasonalStatsBox({
                 }
               }}
               step={5}
-            />
+            /> */}
             <InfiniteScroll
               dataLength={Object.keys(partialDisplayedStats).length}
               next={fetchMoreData}
@@ -173,6 +175,8 @@ export default function SeasonalStatsBox({
                       }
                       key={season}
                       brightness={brightness}
+                      cardOpen={cardOpen}
+                      setCardOpen={setCardOpen}
                     />
                   ),
                 )

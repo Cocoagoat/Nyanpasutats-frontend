@@ -41,7 +41,7 @@ export async function startTask(
 }
 
 export async function retrieveQueuePosition() {
-  const url = `http://localhost:8000/queue_pos/`;
+  const url = `http://localhost:8000/queue_pos/?test="test"`;
   const res = await fetch(url, { cache: "no-store" });
 
   const rawData = await res.text();
@@ -53,7 +53,7 @@ export async function retrieveQueuePosition() {
 
 export async function assertUsernameInCache(username: string) {
   const url = `http://localhost:8000/recent_users/?username=${encodeURIComponent(username)}`;
-  const res = await fetch(url, { next: { revalidate: 300 } });
+  const res = await fetch(url, { cache: "no-store" });
   const rawData = await res.text();
   const data = JSON.parse(rawData);
   return data["UserFound"];

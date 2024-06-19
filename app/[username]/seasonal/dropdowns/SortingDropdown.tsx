@@ -44,18 +44,21 @@ function SortingDropdown({
     ? customSortedReverse
     : sortedReverse;
 
-  console.log("sortedByToUse", sortedByToUse);
-  console.log("sortedReverseToUse", sortedReverseToUse);
+  // console.log("sortedByToUse", sortedByToUse);
+  // console.log("sortedReverseToUse", sortedReverseToUse);
 
-  const ref = useCloseOnOutsideClick<HTMLDivElement>(isOpen, setIsOpen);
+  const ref = useCloseOnOutsideClick<HTMLDivElement>(isOpen, () =>
+    setIsOpen(false),
+  );
 
   return (
     <div ref={ref} className="relative">
       <SettingsButton onClick={toggleDropdown}>Sorting Options</SettingsButton>
       {isOpen && (
         <div
-          className="absolute -bottom-full left-0 w-24 rounded-b-lg bg-blue-970 
-            shadow-md md:w-44"
+          className={`absolute ${type === "Graph" ? "top-0 -translate-y-full" : "top-full"} left-0 w-24 
+          rounded-lg bg-blue-970 
+            shadow-md md:w-44`}
         >
           <SortFilterOption
             statName="Season"

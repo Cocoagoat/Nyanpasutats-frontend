@@ -37,13 +37,15 @@ export function sortChartData(
 }
 
 export function chartReducer(state: ChartState, action: Action): ChartState {
+  console.log(action);
   switch (action.type) {
     case "SORT":
+      console.log("Entered SORT case");
       if (
-        action.payload.by != "Season" &&
-        action.payload.by != "AvgScore" &&
-        action.payload.by != "FavoritesAvgScore" &&
-        action.payload.by != "Shows"
+        action.payload.by !== "Season" &&
+        action.payload.by !== "AvgScore" &&
+        action.payload.by !== "FavoritesAvgScore" &&
+        action.payload.by !== "Shows"
       )
         return state; //error
       const sortedChartData = sortChartData(
@@ -59,16 +61,18 @@ export function chartReducer(state: ChartState, action: Action): ChartState {
         // seasonalStats: sortSeasonalStats(action.payload, state.reverse),
       };
     case "FILTER_BY_YEAR":
-      if (!checkValidYear(action.payload.startYear))
-        action.payload.startYear = 1960;
-      if (!checkValidYear(action.payload.endYear))
-        action.payload.endYear = new Date().getFullYear();
+      const startYear = checkValidYear(action.payload.startYear)
+        ? action.payload.startYear
+        : 1960;
+      const endYear = checkValidYear(action.payload.endYear)
+        ? action.payload.endYear
+        : new Date().getFullYear();
       return {
         ...state,
         displayedChartData: state.chartData.filter(
           (season) =>
-            parseInt(season.Season.split(" ")[1]) >= action.payload.startYear &&
-            parseInt(season.Season.split(" ")[1]) <= action.payload.endYear,
+            parseInt(season.Season.split(" ")[1]) >= startYear &&
+            parseInt(season.Season.split(" ")[1]) <= endYear,
         ),
       };
     case "FILTER_BY_SEASON_NAME":
@@ -90,16 +94,16 @@ export function chartReducer(state: ChartState, action: Action): ChartState {
         "maxShows: ",
         action.payload.maxShows,
       );
-      if (!checkValidShowCount(action.payload.minShows))
-        action.payload.minShows = 0;
-      if (!checkValidShowCount(action.payload.maxShows))
-        action.payload.maxShows = 100;
+      const minShows = checkValidShowCount(action.payload.minShows)
+        ? action.payload.minShows
+        : 0;
+      const maxShows = checkValidShowCount(action.payload.maxShows)
+        ? action.payload.maxShows
+        : 100;
       return {
         ...state,
         displayedChartData: state.chartData.filter(
-          (season) =>
-            season.Shows >= action.payload.minShows &&
-            season.Shows <= action.payload.maxShows,
+          (season) => season.Shows >= minShows && season.Shows <= maxShows,
         ),
       };
     case "RESET_FILTER":
@@ -107,7 +111,11 @@ export function chartReducer(state: ChartState, action: Action): ChartState {
         ...state,
         displayedChartData: state.chartData,
       };
+
+    case "RECALCULATE_OVERALL_RANK":
+      return state;
     default:
+      console.log(action);
       throw new Error("Invalid action type in ChartReducer");
   }
 }

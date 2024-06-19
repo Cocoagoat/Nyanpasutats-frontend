@@ -1,15 +1,28 @@
 import { tooltipsContent } from "@/utils/TooltipsContent";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   SeasonalContext,
+  SingleSeasonContext,
   useSingleSeasonContext,
 } from "../reducer/SeasonalContext";
 import SeasonStatGridCell from "./SeasonStatGridCell";
 import { SeasonDataKeys, TooltipKeys, statKeysToNames } from "@/app/interfaces";
+import { mod } from "@/utils/general";
+import CollapseToggle from "./CollapseToggle";
+import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
+import useToast from "@/hooks/useToast";
+import {
+  PiMinusCircleFill,
+  PiPlusBold,
+  PiPlusCircle,
+  PiPlusCircleBold,
+  PiPlusCircleDuotone,
+  PiPlusCircleFill,
+} from "react-icons/pi";
 
 export default function SeasonStatGrid() {
   const { seasonStats, seasonCount } = useSingleSeasonContext();
-  const { displayedMean } = useContext(SeasonalContext)!;
+  const { displayedMean, displayedStats } = useContext(SeasonalContext)!;
   const otherMean =
     displayedMean === "AvgScore" ? "FavoritesAvgScore" : "AvgScore";
 
@@ -25,96 +38,181 @@ export default function SeasonStatGrid() {
       ? (["FavoritesRank", "FavYearlyRank"] as [SeasonDataKeys, SeasonDataKeys])
       : (["OverallRank", "YearlyRank"] as [SeasonDataKeys, SeasonDataKeys]);
 
+  type GridStats = {
+    name: string;
+    value: string;
+    tooltipText?: string;
+  };
+
+  const allGridStats: { [key: number]: GridStats } = {
+    0: {
+      name: "Affinity",
+      value: `${(seasonStats["Affinity"] * 100).toFixed(1)}%`,
+      tooltipText: tooltipsContent["Affinity"],
+    },
+    1: {
+      name: "Mean Score",
+      value: seasonStats["AvgScore"].toString(),
+    },
+    2: {
+      name: `Overall Rank`,
+      value: `${seasonStats[rankToDisplay].toString()}/${Object.keys(displayedStats).length}`,
+    },
+    3: {
+      name: "Shows Dropped",
+      value: seasonStats["DroppedShows"].toString(),
+    },
+    4: {
+      name: "Shows Watched",
+      value: seasonStats["Shows"].toString(),
+    },
+    5: {
+      name: `Yearly Rank`,
+      value: `${seasonStats["YearlyRank"].toString()}/4`,
+    },
+    6: {
+      name: "Most Watched Genre",
+      value: seasonStats["MostWatchedGenre"],
+    },
+    7: {
+      name: "Mean Score (Top 10)",
+      value: seasonStats["FavoritesAvgScore"].toString(),
+    },
+    8: {
+      name: "Overall Rank (Top 10)",
+      value: `${seasonStats["FavoritesRank"].toString()}/${Object.keys(displayedStats).length}`,
+    },
+    9: {
+      name: "Percentage Dropped",
+      value: `${((seasonStats["DroppedShows"] / seasonStats["Shows"]) * 100)
+        .toFixed(1)
+        .toString()}%`,
+    },
+    10: {
+      name: "Time Wasted",
+      value: `${(Number(seasonStats["TotalShowsDuration"]) / 60).toFixed(
+        1,
+      )} hrs`,
+    },
+    11: {
+      name: "Yearly Rank (Top 10)",
+      value: `${seasonStats["FavYearlyRank"].toString()}/4`,
+    },
+  };
+
+  const [rows, setRows] = useState(2);
+
+  const [displayedStatIndexes, setDisplayedStatIndexes] = useState<number[]>(
+    Array.from({ length: rows }, (_, i) => [
+      3 * i,
+      3 * i + 1,
+      3 * i + 2,
+    ]).flat(),
+  );
+
+  const { editModeOpen } = useContext(SingleSeasonContext)!;
+  const { notifyError } = useToast();
+
+  function handleAddRow() {
+    if (rows < 4) {
+      setRows((prev) => prev + 1);
+      setDisplayedStatIndexes(
+        Array.from({ length: rows + 1 }, (_, i) => [
+          3 * i,
+          3 * i + 1,
+          3 * i + 2,
+        ]).flat(),
+      );
+    } else {
+      notifyError("A maximum of four rows are allowed.");
+    }
+  }
+
+  function handleRemoveRow() {
+    if (rows > 0) {
+      setRows((prev) => prev - 1);
+      setDisplayedStatIndexes(
+        Array.from({ length: rows - 1 }, (_, i) => [
+          3 * i,
+          3 * i + 1,
+          3 * i + 2,
+        ]).flat(),
+      );
+    } else {
+      notifyError("A minimum of one row is required.");
+    }
+  }
+
+  function handleChangeStat(direction: "left" | "right", cellIndex: number) {
+    const currentStat = displayedStatIndexes[cellIndex];
+    let newStat = currentStat;
+    if (direction === "left") {
+      // while (displayedStatIndexes.includes(newStat) || newStat === null) {
+      // newStat = (newStat - 1) % Object.keys(allGridStats).length;
+      newStat = mod(newStat - 1, Object.keys(allGridStats).length);
+      // }
+    } else {
+      // while (displayedStatIndexes.includes(newStat) || newStat === null) {
+      // newStat = (newStat + 1) % Object.keys(allGridStats).length;
+      newStat = mod(newStat + 1, Object.keys(allGridStats).length);
+      // }
+    }
+    setDisplayedStatIndexes((prev) => {
+      const newStats = [...prev];
+      newStats[cellIndex] = newStat;
+      return newStats;
+    });
+  }
+
+  // console.log(displayedStatIndexes);
+
+  const displayedGridStats: [number, GridStats][] = displayedStatIndexes.map(
+    (key) => [key, allGridStats[key]],
+  );
+
+  // const displayedStats = displayedStatIndexes.reduce((acc, key) => {
+  //   console.log(key);
+  //   if (key in allGridStats) {
+  //     acc.set(key, allGridStats[key]);
+  //   }
+  //   return acc;
+  // }, new Map<number, GridStats>());
+
+  // console.log(displayedStats);
+
   return (
     <>
-      <SeasonStatGridCell
-        frontStat={{
-          name: "Affinity",
-          value: `${(seasonStats["Affinity"] * 100).toFixed(1)}%`,
-          tooltipText: tooltipsContent["Affinity"],
-        }}
-        backStat={{
-          name: "Most Watched Genre",
-          value: seasonStats["MostWatchedGenre"],
-        }}
-        toggle={true}
-      />
+      {displayedGridStats.map(([index, stat], cellIndex) => (
+        <SeasonStatGridCell
+          key={cellIndex}
+          name={stat["name"]}
+          value={stat["value"]}
+          cellIndex={cellIndex}
+          handleChangeStat={handleChangeStat}
+          tooltipText={tooltipsContent[stat["name"] as TooltipKeys]}
+        />
+      ))}
 
-      <SeasonStatGridCell
-        frontStat={{
-          // name: `Mean Score${
-          //   displayedMean === "FavoritesAvgScore" ? " (Top 10)" : ""
-          // }`,
-          name: statKeysToNames[displayedMean] as TooltipKeys,
-          value: seasonStats[displayedMean].toString(),
-        }}
-        backStat={{
-          name: statKeysToNames[otherMean] as TooltipKeys,
-          value: seasonStats[otherMean].toString(),
-        }}
-        toggle={true}
-      />
-
-      <SeasonStatGridCell
-        frontStat={{
-          name: `Overall Rank${
-            rankToDisplay === "FavoritesRank" ? " (Top 10)" : ""
-          }`,
-          value: `${seasonStats[rankToDisplay].toString()}/${seasonCount}`,
-        }}
-        backStat={{
-          name: `Overall Rank${
-            rankToDisplay !== "FavoritesRank" ? " (Top 10)" : ""
-          }`,
-          value: `${seasonStats[otherRank].toString()}/${seasonCount}`,
-        }}
-        toggle={true}
-      />
-
-      <SeasonStatGridCell
-        //Change to SeasonStatGridCell frontStat={"Dropped Shows"} and use statNames?
-        frontStat={{
-          name: "Shows Dropped",
-          value: seasonStats["DroppedShows"].toString(),
-        }}
-        backStat={{
-          name: "Percentage Dropped",
-          value: `${((seasonStats["DroppedShows"] / seasonStats["Shows"]) * 100)
-            .toFixed(1)
-            .toString()}%`,
-        }}
-        toggle={true}
-      />
-
-      <SeasonStatGridCell
-        frontStat={{
-          name: "Shows Watched",
-          value: seasonStats["Shows"].toString(),
-        }}
-        backStat={{
-          name: "Time Wasted",
-          value: `${(Number(seasonStats["TotalShowsDuration"]) / 60).toFixed(
-            2,
-          )} hours`,
-        }}
-        toggle={true}
-      />
-
-      <SeasonStatGridCell
-        frontStat={{
-          name: `Yearly Rank${
-            yearlyRankToDisplay === "FavYearlyRank" ? " (Top 10)" : ""
-          }`,
-          value: `${seasonStats[yearlyRankToDisplay].toString()}/4`,
-        }}
-        backStat={{
-          name: `Yearly Rank${
-            yearlyRankToDisplay !== "FavYearlyRank" ? " (Top 10)" : ""
-          }`,
-          value: `${seasonStats[yearlyOtherRank].toString()}/4`,
-        }}
-        toggle={true}
-      />
+      {editModeOpen && (
+        <div className="col-span-full">
+          {rows > 0 && (
+            <CollapseToggle
+              onClick={handleRemoveRow}
+              IconComponent={RiArrowUpDoubleFill}
+              text="Delete Row "
+              alwaysVisible={true}
+            />
+          )}
+          {rows < 4 && (
+            <CollapseToggle
+              onClick={handleAddRow}
+              IconComponent={RiArrowDownDoubleFill}
+              text="Add Row "
+              alwaysVisible={true}
+            />
+          )}
+        </div>
+      )}
     </>
   );
 }

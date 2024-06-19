@@ -6,8 +6,15 @@ import {
   useSingleSeasonContext,
 } from "./reducer/SeasonalContext";
 import { displayedMeanOptions } from "@/app/interfaces";
+import { hexToRgb } from "@/utils/general";
 
-export default function SeasonCollapsed() {
+export default function SeasonCollapsed({
+  cardOpen,
+  setCardOpen,
+}: {
+  cardOpen: boolean;
+  setCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const {
     season,
     seasonStats,
@@ -25,6 +32,8 @@ export default function SeasonCollapsed() {
 
   const [hovered, setHovered] = useState(false);
 
+  const rgbColor = hexToRgb(backgroundColor);
+
   return (
     <div
       className="relative mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg"
@@ -36,7 +45,7 @@ export default function SeasonCollapsed() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(${backgroundColor}, 1)
+          backgroundImage: `linear-gradient(to right, rgba(${rgbColor}, 1)
            ${nightImage ? "0%" : "10%"}, transparent ${nightImage ? "0%" : "50%"})`,
           zIndex: 10,
         }}
@@ -45,9 +54,8 @@ export default function SeasonCollapsed() {
         <div className="flex items-center justify-between p-4">
           <div>
             <h2
-              className={`text-2xl text-shadow-sm ${
-                season.startsWith("Summer") ? "shadow-slate-700" : ""
-              } font-bold`}
+              className={`text-2xl font-bold shadow-black 
+                text-shadow-sm`}
             >
               {season}
             </h2>
@@ -57,10 +65,10 @@ export default function SeasonCollapsed() {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           >
-            <p className="text-md bg-black bg-opacity-40 p-1 font-semibold">
+            <p className="text-md bg-black bg-opacity-40 p-1 font-semibold shadow-black text-shadow-sm">
               Shows Watched: {seasonStats["Shows"]}
             </p>
-            <p className="text-md  bg-black bg-opacity-40 p-1 font-semibold">
+            <p className="text-md  bg-black bg-opacity-40 p-1 font-semibold shadow-black text-shadow-sm">
               {`Mean Score ${displayedMean == "AvgScore" ? "" : "(Top 10)"}`}:{" "}
               {seasonStats[displayedMean]}
             </p>
@@ -84,7 +92,10 @@ export default function SeasonCollapsed() {
           </div>
         </div>
         <div
-          onClick={() => setExpanded(true)}
+          onClick={() => {
+            setExpanded(true);
+            setCardOpen(true);
+          }}
           className="cursor-pointer bg-black bg-opacity-50 py-2 text-center"
         >
           Expand

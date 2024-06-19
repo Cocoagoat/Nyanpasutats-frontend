@@ -24,6 +24,7 @@ const config: Config = {
       },
       screens: {
         fullhd: "1920px",
+        ultrahd: "2560px",
       },
       fontSize: {
         clampsm: ["clamp(0.8rem, 2vw, 1rem)", "1rem"],
@@ -40,10 +41,12 @@ const config: Config = {
         "front-n-center-600": "max(600px, 45%)",
         "front-n-center-60": "max(600px, 60%)",
         "front-n-center-65": "max(600px, 65%)",
+        "front-n-center-70": "max(600px, 70%)",
+        "front-n-center-75": "max(600px, 75%)",
         "front-n-center-80": "max(600px,80%)",
       },
       maxHeight: {
-        "front-n-center": "80%",
+        "front-n-center": "88%",
       },
       textShadow: {
         sm: "0 1px 2px var(--tw-shadow-color)",
@@ -76,6 +79,7 @@ const config: Config = {
       },
       width: {
         "image-carousel": "clamp(300px, 35vw, 550px)",
+        "small-screen-card": "clamp(500px, 80vw, 900px)",
       },
     },
   },

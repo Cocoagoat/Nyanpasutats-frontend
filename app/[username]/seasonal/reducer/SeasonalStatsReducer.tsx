@@ -3,6 +3,7 @@ import { SeasonsData } from "@/app/interfaces";
 import { sortSeasonalStats } from "./sortSeasonalStats";
 import { checkValidShowCount, checkValidYear } from "@/utils/checkValidValues";
 import { displayedMeanOptions } from "@/app/interfaces";
+import recalculateOverallRank from "./recalculateOverallRank";
 
 export type State = {
   seasonalStats: SeasonsData;
@@ -94,6 +95,14 @@ export function seasonalStatsReducer(state: State, action: Action): State {
             ? state.seasonalStats
             : state.noSequelsSeasonalStats,
         noSequels: action.payload == "Include" ? false : true,
+      };
+    case "RECALCULATE_OVERALL_RANK":
+      const statsWithRecalculatedRank = recalculateOverallRank(
+        state.displayedStats,
+      );
+      return {
+        ...state,
+        displayedStats: statsWithRecalculatedRank,
       };
 
     default:

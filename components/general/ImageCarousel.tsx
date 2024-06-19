@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ImageCarouselButton from "./ImageCarouselButton";
+import Image from "next/image";
 
 export default function ImageCarousel({
   images,
@@ -100,11 +101,12 @@ export default function ImageCarousel({
         />
         {images.map((image, index) => {
           return (
-            <img
+            <Image
               key={index}
               src={image}
               width={500}
               height={150}
+              quality={100}
               alt={`Slide ${index}`}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}

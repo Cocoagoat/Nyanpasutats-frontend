@@ -42,6 +42,10 @@ type ToggleSequelsAction = {
   payload: "Remove" | "Include";
 };
 
+type RecalculateOverallRankAction = {
+  type: "RECALCULATE_OVERALL_RANK";
+};
+
 export type Action =
   | SortAction
   | FilterByYearAction
@@ -49,4 +53,5 @@ export type Action =
   | FilterByNameAction
   | ChangeMeanAction
   | ResetFilterAction
-  | ToggleSequelsAction;
+  | ToggleSequelsAction
+  | RecalculateOverallRankAction;

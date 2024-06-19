@@ -17,7 +17,7 @@ export default function ImageCarouselButton({
       onClick={onClick}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
-      className={`bg-blue-990 absolute ${type === "previous" ? "left-0" : "right-0"} top-1/2 z-10 -translate-y-1/2
+      className={`absolute bg-blue-990 ${type === "previous" ? "left-0" : "right-0"} top-1/2 z-10 -translate-y-1/2
        rounded-full p-2 text-white opacity-80`}
     >
       {type === "previous" ? "<" : ">"}

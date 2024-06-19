@@ -4,10 +4,10 @@ export const tooltipsContent = {
   "Mean Score": `The mean score of all the shows you rated this season.`,
   "Mean Score (Top 10)": `The mean score of your top 10 shows for this season.
   `,
-  "Overall Rank": `The ranking of this season out of all the seasons you've watched at least 5 shows in. 
+  "Overall Rank": `The ranking of this season out of all the seasons you've watched at least 5 shows in (or however you filtered them). 
   Based on the average score of all the shows you rated in this season.`,
 
-  "Overall Rank (Top 10)": `The ranking of this season out of all the seasons you've watched at least 5 shows in.
+  "Overall Rank (Top 10)": `The ranking of this season out of all the seasons you've watched at least 5 shows in (or however you filtered them).
   Based on the average score of your top 10 shows for this season.`,
 
   "Yearly Rank": `The ranking of this season out of all the seasons in this year.

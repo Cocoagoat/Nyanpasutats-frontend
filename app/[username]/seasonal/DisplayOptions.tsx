@@ -20,10 +20,10 @@ export default function DisplayOptions({
   const { handleToggleSequels } = useHandlers(dispatch, "seasonal");
 
   return (
-    <div className="sticky top-0 z-30">
+    <div className="sticky -top-1 z-30">
       <div
         className="z-30 mb-12 flex w-full flex-wrap justify-center gap-12
-       border-b-2 border-zinc-600 bg-blue-990 pb-8 pt-8"
+         bg-blue-990 pb-8 pt-8"
       >
         <SortingDropdown type="Full" />
         <FilterDropdown type="Full" />

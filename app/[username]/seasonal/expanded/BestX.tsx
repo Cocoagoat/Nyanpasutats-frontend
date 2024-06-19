@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import BestXImage from "./BestXImage";
 import { SingleSeasonContext } from "../reducer/SeasonalContext";
 import UploadImageModal from "./UploadImageModal";
-import BestXImageUrlModal from "./BestXImageUrlModal";
+import ImageUrlUploadModal from "./ImageUrlUploadModal";
 import { Lato } from "next/font/google";
 const lato = Lato({ weight: "700", subsets: ["latin"] });
 
@@ -166,7 +166,7 @@ export default function BestX(
           </div>
         ) : (
           // <div className=" h-full w-full bg-zinc-800">
-          <BestXImageUrlModal
+          <ImageUrlUploadModal
             onUpload={handleNewImageUrl}
             closeModal={() => setUploadModalOpen(false)}
             imageIndex={clickedImageIndex}

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { SingleSeasonContext } from "../reducer/SeasonalContext";
 import UploadImageModal from "./UploadImageModal";
-import BestXImageUrlModal from "./BestXImageUrlModal";
+import ImageUrlUploadModal from "./ImageUrlUploadModal";
 import { PiPlus, PiPlusBold } from "react-icons/pi";
 import useToast from "@/hooks/useToast";
 import {
@@ -15,32 +15,32 @@ import {
   RiUpload2Fill,
 } from "react-icons/ri";
 import { TbEyeCancel } from "react-icons/tb";
+import { handleNewImageUrl2 } from "@/utils/general";
 
 export default function BestXImage({
   index,
   image_url,
   // uploadModalOpen,
   setUploadModalOpen,
-  onUpload,
   // handleUploadImage,
   setClickedImageIndex,
+  handleNewImageUrl,
   lastImage,
   ghost,
   solidifyGhost,
-  onMouseEnter,
   remove,
 }: {
   index: number;
   image_url: string;
   // uploadModalOpen: boolean;
   setUploadModalOpen: (value: boolean) => void;
-  onUpload: any;
+
   // handleUploadImage: (index: number, newImageUrl: string) => void;
   setClickedImageIndex: (index: number) => void;
+  handleNewImageUrl: (newImageUrl: string) => void;
   lastImage: boolean;
   ghost?: boolean;
   solidifyGhost?: () => void;
-  onMouseEnter?: () => void;
   remove: () => void;
 }) {
   // console.log("Index is", index, leftImage);
@@ -49,9 +49,10 @@ export default function BestXImage({
   const { notifyError } = useToast();
   const { editModeOpen } = useContext(SingleSeasonContext)!;
   const ImageSymbol = lastImage && ghost ? PiPlusBold : RiUpload2Fill;
+  const [imageClicked, setImageClicked] = useState(false);
   // const [uploadModalOpen, setUploadModalOpen] = useState(false);
   //   const { setUploadModalOpen } = useContext(SingleSeasonContext)!;
-  return (
+  return !imageClicked ? (
     <div className="relative flex flex-col">
       {!ghost && (
         <RiDeleteBin6Fill
@@ -59,8 +60,6 @@ export default function BestXImage({
           className={`${
             editModeOpen ? "" : "hidden"
           } absolute -top-8 w-full cursor-pointer text-center text-black`}
-          onMouseEnter={() => setEyeHovered(true)}
-          onMouseLeave={() => setEyeHovered(false)}
           onClick={remove}
           // onClick={handleHideContShow}
         >
@@ -76,6 +75,7 @@ export default function BestXImage({
             : () => {
                 setClickedImageIndex(index);
                 setUploadModalOpen(true);
+                setImageClicked(true);
               }
         }
         // onMouseEnter={editModeOpen ? onMouseEnter : () => {}}
@@ -90,7 +90,8 @@ export default function BestXImage({
             height={105}
             className={`mx-auto h-full rounded-xl shadow-md shadow-black`}
             onError={() => {
-              onUpload(index, "");
+              // onUpload(index, "");
+              // handleNewImageUrl2(index, "", onUpload);
               notifyError("Image not found. Please enter a valid image URL.");
             }}
           />
@@ -106,13 +107,14 @@ export default function BestXImage({
             )}
           </div>
         )}
-        {/* {lastImage && (
-          <div
-            className={`absolute inset-0 h-[105px] w-[75px] translate-x-full 
-       rounded-xl bg-zinc-800 text-center text-xs shadow-md  shadow-black`}
-          ></div>
-        )} */}
       </div>
     </div>
+  ) : (
+    <ImageUrlUploadModal
+      currentImageUrl={image_url}
+      onUpload={(newImageUrl: string) => handleNewImageUrl(newImageUrl)}
+      closeModal={() => setImageClicked(false)}
+      // imageIndex={clickedImageIndex}
+    />
   );
 }

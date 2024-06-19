@@ -12,7 +12,12 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ["cdn.myanimelist.net"],
+    domains: ["cdn.myanimelist.net", "i.imgur.com", "imgur.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.myanimelist.net" },
+      { protocol: "https", hostname: "i.imgur.com", port: "", pathname: "*" },
+      { protocol: "https", hostname: "imgur.com" },
+    ],
   },
 };
 

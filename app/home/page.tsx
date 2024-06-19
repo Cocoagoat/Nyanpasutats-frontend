@@ -143,11 +143,15 @@ export default function Home() {
       console.log("Queue position is", data.queuePosition);
 
       let taskId = await startTask(userInputField, "seasonal", currentSite);
-      let seasonalData = await retrieveTaskData(taskId, "seasonal");
+      let seasonalData = await retrieveTaskData(
+        taskId,
+        userInputField,
+        "seasonal",
+      );
       console.log("Successfully retrieved seasonal data");
       if (data.queuePosition < 0) {
         taskId = await startTask(userInputField, "recs", currentSite);
-        let recsData = await retrieveTaskData(taskId, "recs");
+        let recsData = await retrieveTaskData(taskId, userInputField, "recs");
         console.log("Successfully retrieved recs data");
 
         if (currentSite === "MAL") {

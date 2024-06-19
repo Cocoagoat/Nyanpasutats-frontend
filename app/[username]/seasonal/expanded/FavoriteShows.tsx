@@ -26,22 +26,25 @@ export default function FavoriteShows({
       : "Remove from Favorites"
     : "Favorite Shows";
 
+  const maxScore = Object.values(favorites)[0]?.score;
+
   const { editModeOpen } = useSingleSeasonContext()!;
   return (
     <div
-      className={`row-start-3 ${
+      className={` ${
         contShowRemoved && !editModeOpen
           ? "col-span-3 col-start-1"
           : "col-span-2 col-start-2"
       } group relative`}
     >
-      <div className="flex flex-wrap justify-center gap-4 ">
+      <div className="flex flex-wrap justify-center gap-4">
         {Object.entries(favorites).map((show, index) => (
           <ShowDisplay
             show={show[1]}
             key={`${show[0]} ${index}`}
             setFavorites={setFavorites}
             partOfModal={partOfModal}
+            topScore={show[1].score === maxScore}
           />
         ))}
       </div>

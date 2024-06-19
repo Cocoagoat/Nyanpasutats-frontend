@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import backgroundImage from "@/public/nnb5.png";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -16,14 +17,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full ">
+    <html lang="en" className=" relative">
       <body
-        style={{ backgroundImage: `url(${backgroundImage.src})` }}
-        className={`{${
-          true && "  bg-repeat-round"
-        } relative inset-0 h-[100vh]  bg-blue-990 2xl:bg-contain  ${inter.className}`}
+        className={`${inter.className} h-full  overflow-y-auto bg-blue-990`}
       >
-        {children}
+        <div className="absolute inset-0 -z-50  w-full">
+          <Image
+            src={backgroundImage}
+            placeholder="blur"
+            fill
+            alt="Background"
+            quality={95}
+            className="h-full object-cover object-top"
+          />
+        </div>
+        <div className="relative z-10 h-full min-h-screen">{children}</div>
       </body>
     </html>
   );

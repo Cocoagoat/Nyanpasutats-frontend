@@ -13,7 +13,9 @@ export default function SiteToggle({
 }) {
   const [clicked, setClicked] = useState(false);
 
-  const ref = useCloseOnOutsideClick<HTMLDivElement>(clicked, setClicked);
+  const ref = useCloseOnOutsideClick<HTMLDivElement>(clicked, () =>
+    setClicked(false),
+  );
   return (
     <div className="relative" onClick={() => setClicked(!clicked)} ref={ref}>
       <LogoButton

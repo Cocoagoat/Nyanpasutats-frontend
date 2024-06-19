@@ -210,7 +210,7 @@ export default function TierList({
 
   return (
     <div
-      className="fixed left-1/2 top-1/2 z-50 flex w-full -translate-x-1/2
+      className="fixed left-1/2 top-1/2 z-[500] flex w-full -translate-x-1/2
      -translate-y-1/2 flex-col bg-zinc-800 xl:w-1/2"
     >
       <div className="right-0 top-0 flex justify-end gap-4 text-right ">
