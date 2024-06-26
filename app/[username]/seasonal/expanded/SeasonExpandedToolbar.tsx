@@ -1,31 +1,25 @@
-import { useParams } from "next/navigation";
-import React, { useContext, useState } from "react";
-import { MdSunny, MdNightsStay, MdEdit } from "react-icons/md";
-import {
-  RiDownload2Fill,
-  RiUpload2Fill,
-  RiBarChart2Fill,
-  RiFileCopyLine,
-  RiDragDropFill,
-} from "react-icons/ri";
 import {
   copyCardAsImage,
   downloadCardAsImage,
 } from "@/utils/downloadCardAsImage";
+import { isFirefox } from "@/utils/general";
+import { useParams } from "next/navigation";
+import { useContext, useState } from "react";
+import { MdClose, MdEdit } from "react-icons/md";
+import { PiImageBold } from "react-icons/pi";
+import {
+  RiBarChart2Fill,
+  RiDownload2Fill,
+  RiDragDropFill,
+  RiFileCopyLine,
+} from "react-icons/ri";
 import {
   SeasonalContext,
   SingleSeasonContext,
 } from "../reducer/SeasonalContext";
 import SeasonExpandedButton from "./SeasonExpandedButton";
-import { isFirefox } from "@/utils/general";
 
-export default function SeasonExpandedToolbar(
-  {
-    // handleDayNightChange,
-  }: {
-    // handleDayNightChange: () => void;
-  },
-) {
+export default function SeasonExpandedToolbar() {
   const params = useParams<{ username: string }>();
   const [downloadHovered, setDownloadHovered] = useState(false);
   const [uploadHovered, setUploadHovered] = useState(false);
@@ -33,17 +27,18 @@ export default function SeasonExpandedToolbar(
   const [copyHovered, setCopyHovered] = useState(false);
   const [editModeHovered, setEditModeHovered] = useState(false);
   const [dragModeHovered, setDragModeHovered] = useState(false);
+  const [closeHovered, setCloseHovered] = useState(false);
   const { noSequels } = useContext(SeasonalContext)!;
   const {
     season,
-    // nightImage,
     editModeOpen,
     uploadModalOpen,
     setUploadModalOpen,
     setEditModeOpen,
-    setSeasonGraphOpen,
+    setTierListOpen,
     dragModeOpen,
     setDragModeOpen,
+    setExpanded,
   } = useContext(SingleSeasonContext)!;
 
   return (
@@ -66,19 +61,12 @@ export default function SeasonExpandedToolbar(
       />
       <SeasonExpandedButton
         onClick={() => setUploadModalOpen(!uploadModalOpen)}
-        Icon={<RiUpload2Fill />}
-        hoverText="Upload your own image"
+        Icon={<PiImageBold />}
+        hoverText="Upload image"
         hovered={uploadHovered}
         setHovered={setUploadHovered}
         open={uploadModalOpen}
       />
-      {/* <SeasonExpandedButton
-        onClick={handleDayNightChange}
-        Icon={nightImage ? <MdSunny /> : <MdNightsStay />}
-        hoverText={`Switch card to ${nightImage ? "day" : "night"} mode`}
-        hovered={nightDayHovered}
-        setHovered={setNightDayHovered}
-      /> */}
       <SeasonExpandedButton
         onClick={() => {
           downloadCardAsImage(
@@ -103,11 +91,18 @@ export default function SeasonExpandedToolbar(
         />
       )}
       <SeasonExpandedButton
-        onClick={() => setSeasonGraphOpen(true)}
+        onClick={() => setTierListOpen(true)}
         Icon={<RiBarChart2Fill />}
         hoverText="View tier list"
         hovered={seasonGraphHovered}
         setHovered={setSeasonGraphHovered}
+      />
+      <SeasonExpandedButton
+        onClick={() => setExpanded(false)}
+        Icon={<MdClose />}
+        hoverText="Close card"
+        hovered={closeHovered}
+        setHovered={setCloseHovered}
       />
     </div>
   );

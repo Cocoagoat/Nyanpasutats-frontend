@@ -1,27 +1,26 @@
+import { getShowData } from "@/app/actions/getShowData";
+import styles from "@/app/globals.module.css";
 import { ShowsToDisplay, ShowToDisplay } from "@/app/interfaces";
-import React, { useEffect, useRef, useState } from "react";
-import { getShowData } from "@/app/home/api";
-import FavoriteShows from "./FavoriteShows";
-import { useSingleSeasonContext } from "../reducer/SeasonalContext";
+import Padoru from "@/components/general/Padoru";
 import { ModalContext } from "@/contexts/ModalContext";
-import FavoriteShowsModal from "./FavoriteShowsModal";
+import useWindowSize from "@/hooks/useWindowSize";
+import errorImg from "@/public/default.png";
+import { range } from "@/utils/general";
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
+import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
 import LargeButton from "../../../../components/general/LargeButton";
-import SeasonStatGrid from "./SeasonStatGrid";
+import { useSingleSeasonContext } from "../reducer/SeasonalContext";
+import BackgroundDesign from "./BackgroundDesign";
+import BestX2 from "./BestX2";
 import CollapseToggle from "./CollapseToggle";
-import styles from "./SeasonExpanded.module.css";
+import ControversialShow from "./ControversialShow";
+import FavoriteShows from "./FavoriteShows";
+import FavoriteShowsModal from "./FavoriteShowsModal";
 import GradientFill from "./GradientFill";
 import Heading from "./Heading";
-import ControversialShow from "./ControversialShow";
-import errorImg from "@/public/default.png";
-import useToast from "@/hooks/useToast";
-import BestX from "./BestX";
-import BestX2 from "./BestX2";
-import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
-import { range } from "@/utils/general";
-import DraggableBackground from "./DraggableBackground";
 import SeasonExpandedToolbar from "./SeasonExpandedToolbar";
-import Image from "next/image";
-import BackgroundDesign from "./BackgroundDesign";
+import SeasonStatGrid from "./SeasonStatGrid";
 
 export type ImageRow = {
   [key: string]: string;
@@ -29,15 +28,15 @@ export type ImageRow = {
 
 export default function SeasonExpanded({
   brightness,
-  cardOpen,
   setCardOpen,
 }: {
   brightness: number;
-  cardOpen: boolean;
   setCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [favorites, setFavorites] = useState<ShowsToDisplay>({});
+  const [loaded, setLoaded] = useState(false);
   const [displayContShow, setDisplayContShow] = useState(true);
+  const { height } = useWindowSize();
 
   const displayedFavorites = Object.fromEntries(
     Object.entries(favorites).filter((show) => show[1].displayed),
@@ -48,8 +47,6 @@ export default function SeasonExpanded({
     true,
   ]);
 
-  const { notifyError } = useToast();
-
   const [controversialShow, setControversialShow] = useState<ShowToDisplay>({
     imageUrl: "",
     score: 0,
@@ -57,7 +54,15 @@ export default function SeasonExpanded({
     name: "",
   });
 
-  const [resolution, setResolution] = useState({ width: 0, height: 0 });
+  let defaultWorstImages = { 0: "" } as ImageRow;
+  let defaultBestImages = { 0: "", 1: "", 2: "", 3: "", 4: "" } as ImageRow;
+
+  const [worstImages, setWorstImages] = useState([defaultWorstImages]);
+  const [bestImages, setBestImages] = useState([defaultBestImages]);
+
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const {
     season,
@@ -67,43 +72,21 @@ export default function SeasonExpanded({
     setExpanded,
     imageChanged,
     uploadModalOpen,
-    // nightImage,
     editModeOpen,
     dragModeOpen,
-    // handleDayNightChange,
     displayGradient,
   } = useSingleSeasonContext();
 
-  let defaultWorstImages = { 0: "" } as ImageRow;
-  let defaultBestImages = { 0: "", 1: "", 2: "", 3: "", 4: "" } as ImageRow;
-
-  const [worstImages, setWorstImages] = useState([defaultWorstImages]);
-  const [bestImages, setBestImages] = useState([defaultBestImages]);
-
-  useEffect(() => {
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
-    setResolution({ width: screenWidth, height: screenHeight });
-  }, []);
-
   function handleAddNewRow() {
-    // if (bestImages.length < 4) {
     setBestImages((prev) => [...prev, defaultBestImages]);
     setWorstImages((prev) => [...prev, defaultWorstImages]);
     setWorstImagesNotEmpty((prev) => [...prev, true]);
-    // } else {
-    //   notifyError("A maximum of four rows are allowed.");
-    // }
   }
 
   function handleRemoveLastRow() {
-    // if (bestImages.length > 1) {
     setBestImages((prev) => prev.slice(0, -1));
     setWorstImages((prev) => prev.slice(0, -1));
     setWorstImagesNotEmpty((prev) => prev.slice(0, -1));
-    // } else {
-    //   notifyError("A minimum of one row is required.");
-    // }
   }
 
   function imagesAreEmpty(images: ImageRow[]) {
@@ -145,7 +128,6 @@ export default function SeasonExpanded({
 
       let parsedSavedWorstImages = JSON.parse(savedWorstImages) as ImageRow[];
       if (!parsedSavedWorstImages) return;
-      // console.log("Test", parsedSavedWorstImages);
       setWorstImagesNotEmpty(
         Array.from(
           range(0, parsedSavedWorstImages.length - 1, 1),
@@ -216,16 +198,10 @@ export default function SeasonExpanded({
         }),
       );
       setFavorites(favorites_data);
+      setLoaded(true);
     };
     getImageUrl();
   }, []);
-
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-
-  // useEffect(() => {}, [imageChanged]);
-  // const isDragging = useRef(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (dragModeOpen) {
@@ -263,9 +239,6 @@ export default function SeasonExpanded({
     };
   }, [isDragging]);
 
-  // const cardWidth = "w-";
-
-  // console.log("displayedFavorites : ", displayedFavorites);
   return (
     <ModalContext.Provider
       value={{ favoritesModalOpen, setFavoritesModalOpen }}
@@ -275,8 +248,7 @@ export default function SeasonExpanded({
            overflow-y-scroll ${styles.hiddenscrollbar} w-small-screen-card  fullhd:w-[978px] 
             ultrahd:w-[1478px]`}
         style={{
-          maxHeight: `${resolution.height - 150}px`,
-          // width: `${resolution.width < 1000 ? `${resolution.width - 10}px` : ""}`,
+          maxHeight: `max(300px, ${height - 150}px)`,
         }}
       >
         <div
@@ -295,16 +267,8 @@ export default function SeasonExpanded({
             id={season}
             onMouseDown={handleMouseDown}
             draggable={true}
-
-            // onMouseMove={handleMouseMove}
-            // onMouseUp={handleMouseUp}
           >
-            {displayGradient && (
-              <GradientFill
-              // displayGradient={displayGradient}
-              // setDisplayGradient={setDisplayGradient}
-              />
-            )}
+            {displayGradient && <GradientFill />}
 
             {!imageChanged && (
               <Image
@@ -314,19 +278,12 @@ export default function SeasonExpanded({
                 alt="Test"
                 className={`absolute inset-0 rounded-3xl  object-cover `}
                 quality={85}
-                // sizes={"(max-width: 768px) 100vw, 75vw"}
                 style={{
                   zIndex: isDragging ? 100000 : 0,
                 }}
                 objectPosition={`${position.x}px 0px`}
               />
             )}
-            {/* <div
-            style={{ width: "100%", height: "100%" }}
-            className="min-h-full w-full"
-          > */}
-
-            {/* </div> */}
 
             <div className="relative z-20">
               <div className="flex flex-col items-center justify-between p-4">
@@ -335,7 +292,11 @@ export default function SeasonExpanded({
                 <div className="mt-20 grid w-full grid-cols-3 gap-x-10 gap-y-16">
                   <SeasonStatGrid />
 
-                  {displayContShow ? (
+                  {!loaded ? (
+                    <div className=" relative col-span-1 col-start-1 h-full w-full ">
+                      <Padoru width={100} />
+                    </div>
+                  ) : displayContShow ? (
                     <ControversialShow
                       controversialShow={controversialShow}
                       setDisplayContShow={setDisplayContShow}
@@ -354,7 +315,11 @@ export default function SeasonExpanded({
                     )
                   )}
 
-                  {Object.keys(displayedFavorites).length ? (
+                  {!loaded ? (
+                    <div className=" relative col-span-2  col-start-2 h-full w-full ">
+                      <Padoru width={100} />
+                    </div>
+                  ) : Object.keys(displayedFavorites).length ? (
                     <FavoriteShows
                       favorites={displayedFavorites}
                       contShowRemoved={!displayContShow}

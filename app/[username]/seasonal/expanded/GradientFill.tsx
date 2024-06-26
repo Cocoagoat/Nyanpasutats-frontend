@@ -11,13 +11,9 @@ export default function GradientFill(
     // setDisplayGradient: React.Dispatch<React.SetStateAction<boolean>>;
   },
 ) {
-  const { season, backgroundColor, nightImage, editModeOpen } =
-    useSingleSeasonContext();
+  const { season, backgroundColor, editModeOpen } = useSingleSeasonContext();
   // const [colorSwitched, setColorSwitched] = React.useState(false);
   function getGradientLength() {
-    if (nightImage) {
-      return "0%";
-    }
     if (season.startsWith("Summer")) {
       return "25%";
     } else {
@@ -31,7 +27,7 @@ export default function GradientFill(
       className="absolute inset-0 rounded-t-3xl"
       style={{
         backgroundImage: `${`linear-gradient(to bottom, rgba(${rgbColor}, 1)
-         ${nightImage ? "0%" : "7%"}, transparent ${getGradientLength()})`}`,
+         ${"7%"}, transparent ${getGradientLength()})`}`,
         zIndex: 10,
       }}
     ></div>

@@ -1,0 +1,7 @@
+@tailwind utilities;
+
+@media screen and (max-width: 1000px) {
+  .tierListWidth {
+    width: 100%;
+  }
+}

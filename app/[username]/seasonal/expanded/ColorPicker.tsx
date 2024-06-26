@@ -6,7 +6,9 @@ function ColorPickerComponent({
   setColor,
 }: {
   color: string;
-  setColor: React.Dispatch<React.SetStateAction<string>>;
+  setColor:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((color: string) => void);
 }) {
   //   const [color, setColor] = useState("#888888");
 

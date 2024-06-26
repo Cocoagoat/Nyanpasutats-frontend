@@ -78,8 +78,7 @@ export default function ImageCarousel({
     if (
       index === currentImageIndex ||
       ((index === (currentImageIndex - 1 + imagesCount) % imagesCount ||
-        index === (currentImageIndex + 1 + imagesCount) % imagesCount ||
-        index === currentImageIndex) &&
+        index === (currentImageIndex + 1 + imagesCount) % imagesCount) &&
         index === previousImageIndex)
     ) {
       opacity = 100;
@@ -110,11 +109,18 @@ export default function ImageCarousel({
               alt={`Slide ${index}`}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
+              style={{
+                opacity: getOpacity(
+                  currentImageIndex,
+                  previousImageIndex,
+                  index,
+                ),
+              }}
               className={`absolute top-0 h-full w-full transform 
           transition-transform duration-1000 ${getImageTranslate(
             currentImageIndex,
             index,
-          )} opacity-${getOpacity(currentImageIndex, previousImageIndex, index)}`}
+          )} `}
             />
           );
         })}
@@ -125,10 +131,10 @@ export default function ImageCarousel({
           setOnHover={setHovered}
         />
       </div>
-      <p className="text-wrap relative  text-center text-[1.45rem] font-semibold leading-tight text-zinc-400 shadow-black text-shadow">
+      <p className="text-wrap relative  text-center text-[1.2rem] font-semibold leading-tight text-zinc-400 shadow-black text-shadow">
         {imagesText[currentImageIndex]}
         {currentImageIndex === imagesCount - 1 && (
-          <p className="absolute w-full text-center text-[7px] ">
+          <p className="absolute w-full text-center text-[0.4rem] ">
             *It's technically AI, but definitely not GPT-4, don't expect much
           </p>
         )}

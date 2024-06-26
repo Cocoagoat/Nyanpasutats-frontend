@@ -9,6 +9,18 @@ import styles from "./Affinity.module.css";
 import { getSiteCookie, getPathCookie } from "@/utils/CookieUtils";
 import { revalidatePath } from "next/cache";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { username: string };
+}) {
+  return {
+    title: `${params.username} / Affinity Finder`,
+    description: `${params.username}'s highest and lowest
+     affinities with other MAL users.`,
+  };
+}
+
 export default async function page({
   params,
 }: {
@@ -16,13 +28,13 @@ export default async function page({
 }) {
   let error = null;
   let data = [];
-  const siteCookie = getSiteCookie();
-  const affinityCookie = getPathCookie("affinity");
-  console.log("affinityCookie is", affinityCookie);
-  if (!affinityCookie) {
-    console.log("revalidating...");
-    revalidatePath(`${params.username}/affinity`);
-  }
+  // const siteCookie = getSiteCookie();
+  // const affinityCookie = getPathCookie("affinity");
+  // console.log("affinityCookie is", affinityCookie);
+  // if (!affinityCookie) {
+  //   console.log("revalidating...");
+  //   revalidatePath(`${params.username}/affinity`);
+  // }
 
   let userFound = false;
   try {
@@ -42,12 +54,12 @@ export default async function page({
   }
 
   try {
-    const taskId = await startTask(params.username, "affinity", siteCookie);
+    const taskId = await startTask(params.username, "affinity", "MAL");
     console.log("Task response in page : ", taskId);
     if (taskId === undefined) {
       throw new Error("Task ID is undefined");
     }
-    data = await retrieveTaskData(taskId);
+    data = await retrieveTaskData(taskId, params.username);
   } catch (err) {
     error = (err as Error).message;
   }

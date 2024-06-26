@@ -1,0 +1,36 @@
+/* Original hidden scrollbar class */
+.hiddenscrollbar::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+/* Works on Firefox */
+.hiddenscrollbar {
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Works on IE and Edge */
+.hiddenscrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Class for hiding only the vertical scrollbar without disabling vertical scrolling */
+
+/* Hide vertical scrollbar for WebKit browsers (Chrome, Safari) */
+.hiddenscrollbarVerticalOnly::-webkit-scrollbar:vertical {
+  width: 0; /* Remove vertical scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+/* Works on Firefox */
+/* .hiddenscrollbarVerticalOnly {
+  scrollbar-width: thin; /* Make scrollbars appear thinner */
+/* } */
+.hiddenscrollbarVerticalOnly::-webkit-scrollbar-thumb:vertical {
+  background: transparent; /* Make vertical scrollbar thumb invisible */
+}
+
+/* Works on IE and Edge */
+.hiddenscrollbarVerticalOnly {
+  -ms-overflow-style: -ms-autohiding-scrollbar; /* Hide scrollbar when not in use */
+}

@@ -10,7 +10,7 @@ export async function startTask(
   site: SiteType,
 ): Promise<string> {
   "use server";
-  cookies().set("currentSite", site);
+  // cookies().set("currentSite", site);
 
   const url = `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
   try {

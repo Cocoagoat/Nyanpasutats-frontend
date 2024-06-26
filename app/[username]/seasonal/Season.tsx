@@ -1,24 +1,16 @@
 "use client";
 
 import { SeasonData, SeasonName } from "@/app/interfaces";
-import React, { useEffect, useRef, useState } from "react";
-import SeasonCollapsed from "./SeasonCollapsed";
-import SeasonExpanded from "./expanded/SeasonExpanded";
-import { SingleSeasonContext } from "./reducer/SeasonalContext";
-import winterBackground from "@/public/WinterBackground.png";
+import fallBackground from "@/public/FallBackground.png";
 import springBackground from "@/public/SpringBackground.png";
 import summerBackground from "@/public/SummerBackground.png";
-import fallBackground from "@/public/FallBackground.png";
-import nightBackground from "@/public/NightBackground.png";
-import UploadImageModal from "./expanded/UploadImageModal";
-import SeasonExpandedToolbar from "./expanded/SeasonExpandedToolbar";
+import winterBackground from "@/public/WinterBackground.png";
+import { useEffect, useState } from "react";
+import SeasonCollapsed from "./SeasonCollapsed";
+import SeasonExpanded from "./expanded/SeasonExpanded";
 import TierList from "./expanded/tierlist/TierList";
-import useToast from "@/hooks/useToast";
-import { handleNewImageUrl2 } from "@/utils/general";
-import ImageUrlUploadModal from "./expanded/ImageUrlUploadModal";
-import ColorPickerComponent from "./expanded/ColorPicker";
-import { display } from "html2canvas/dist/types/css/property-descriptors/display";
-import BackgroundDesign from "./expanded/BackgroundDesign";
+import { SingleSeasonContext } from "./reducer/SeasonalContext";
+import useFirstTimeOpenMessage from "@/hooks/useFirstTimeOpenMessage";
 
 function getBackgroundColor(seasonName: SeasonName) {
   switch (seasonName) {
@@ -57,26 +49,22 @@ export default function Season({
   seasonStats,
   seasonCount,
   brightness,
-  cardOpen,
-  setCardOpen,
 }: {
   season: string;
   seasonStats: SeasonData;
   seasonCount: number;
   brightness: number;
-  cardOpen: boolean;
-  setCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [imageChanged, setImageChanged] = useState(false);
   const [backgroundImageType, setBackgroundImageType] =
     useState<BackgroundImageType>("Day");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [seasonGraphOpen, setSeasonGraphOpen] = useState(false);
-  // const [nightImage, setNightImage] = useState(false);
+  const [tierListOpen, setTierListOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [editModeOpen, setEditModeOpen] = useState(false);
   const [dragModeOpen, setDragModeOpen] = useState(false);
+  // const [cardOpen, setCardOpen] = useState(false);
   const [displayGradient, setDisplayGradient] = useState(true);
 
   const seasonName = season.split(" ")[0] as SeasonName;
@@ -86,10 +74,6 @@ export default function Season({
   let backgroundImg = getDayBackgroundImage(seasonName);
 
   const [backgroundImage, setBackgroundImage] = useState(backgroundImg);
-  const { notifySuccess } = useToast();
-
-  // const isFirstTierListRender = useRef(true);
-  // const isFirstEditModeEntry = useRef(true);
 
   useEffect(() => {
     // Effect for changing state when image is uploaded
@@ -100,90 +84,54 @@ export default function Season({
     }
   }, [uploadedImage]);
 
-  useEffect(() => {
-    // Effect for making tier list message appear
-    if (
-      seasonGraphOpen &&
-      sessionStorage.getItem("firstTierListOpen") === null
-    ) {
-      notifySuccess(
-        `This is a customizable tier list automatically made from your ratings for the season.
+  const tierListOpenMessage = `This is a customizable tier list automatically made from your ratings for the season.
 
-      You can customize it by dragging and dropping the shows into different tiers, changing the tier names,
-      as well as deleting shows/tiers you don't want in it.
-      
-      You can also download the tier list as an image.`,
-        undefined,
-        30000,
-      );
-      sessionStorage.setItem("firstTierListOpen", "true");
-    }
-  }, [notifySuccess, seasonGraphOpen]);
+       You can customize it by dragging and dropping the shows into different tiers, changing the tier names and colors,
+       as well as deleting shows/tiers you don't want in it.
 
-  useEffect(() => {
-    // Effect for making edit mode message appear
-    if (editModeOpen && sessionStorage.getItem("firstEditModeOpen") === null) {
-      notifySuccess(
-        `You are now in edit mode. 
-        
-        You can add up to four "Best/Worst X" categories,
-        change the amount of images in each category, and reorder the stats displayed
-        in the card.
-        
-        Note : The site currently supports images only from Imgur, MyAnimeList and Anilist.
-        If you want to upload an image from a different source, please upload it to Imgur first.`,
-        undefined,
-        20000,
-      );
-      sessionStorage.setItem("firstEditModeOpen", "true");
-    }
-  }, [editModeOpen]);
+       You can also download the tier list as an image.`;
 
-  // function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
-  //   const file = event.target.files && event.target.files[0];
-  //   if (file) {
-  //     const validTypes = ["image/jpg", "image/png", "image/jpeg"];
-  //     if (!validTypes.includes(file.type)) {
-  //       alert(
-  //         "Unsupported file type. Please upload an image (JPG, PNG, JPEG).",
-  //       );
-  //       return;
-  //     }
+  useFirstTimeOpenMessage(
+    tierListOpen,
+    "firstTierListOpen",
+    tierListOpenMessage,
+  );
 
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       if (typeof reader.result === "string") {
-  //         setBackgroundImage(reader.result);
-  //         setUploadModalOpen(false);
-  //         setImageChanged(true);
-  //       }
-  //     };
+  const editModeOpenMessage = `You are now in edit mode.
 
-  //     reader.onerror = () => {
-  //       console.error("There was an error reading the file:", reader.error);
-  //       alert("Error reading file. Please try again.");
-  //       reader.abort();
-  //     };
+       You can add up to four "Best/Worst X" categories,
+         change the amount of images in each category, and reorder the stats displayed
+         in the card.
 
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
+         Note : The site currently supports images only from Imgur, MyAnimeList and Anilist.
+         If you want to upload an image from a different source, please upload it to Imgur first.`;
 
-  // function handleDayNightChange() {
-  //   if (nightImage) {
-  //     setNightImage(false);
-  //     setBackgroundImage(backgroundImg);
-  //   } else {
-  //     setNightImage(true);
-  //     setBackgroundImage(nightBackground.src);
-  //   }
-  // }
+  useFirstTimeOpenMessage(
+    editModeOpen,
+    "firstEditModeOpen",
+    editModeOpenMessage,
+  );
 
-  // function onUrlUpload(url: string) {
-  //   setBackgroundImage(url);
-  //   setUploadModalOpen(false);
-  //   setImageChanged(true);
-  // }
+  const dragModeOpenMessage = `You can now drag the background image horizontally to change its position. 
+
+  To continue editing other parts of the card, first leave this mode. `;
+
+  useFirstTimeOpenMessage(
+    dragModeOpen,
+    "firstDragModeOpen",
+    dragModeOpenMessage,
+  );
+
+  const uploadModalOpenMessage = `Here you can upload a custom background image and change/remove the gradient color.
+  
+  Note : The site currently supports images only from Imgur, MyAnimeList and Anilist.
+         If you want to upload an image from a different source, please upload it to Imgur first.`;
+
+  useFirstTimeOpenMessage(
+    uploadModalOpen,
+    "firstUploadModalOpen",
+    uploadModalOpenMessage,
+  );
 
   return (
     <SingleSeasonContext.Provider
@@ -200,73 +148,24 @@ export default function Season({
         setUploadedImage,
         seasonCount,
         imageChanged,
-        // nightImage,
         uploadModalOpen,
         setUploadModalOpen,
         editModeOpen,
         setEditModeOpen,
         dragModeOpen,
         setDragModeOpen,
-        setSeasonGraphOpen,
-        // handleDayNightChange,
+        setTierListOpen,
       }}
     >
       {expanded ? (
-        <div className="relative">
-          <div className="fixed inset-0 z-40 bg-black opacity-80" />
-          <SeasonExpanded
-            brightness={brightness}
-            cardOpen={cardOpen}
-            setCardOpen={setCardOpen}
-          />
-          {/* <SeasonExpandedToolbar
-            handleDayNightChange={handleDayNightChange}
-            setUploadModalOpen={setUploadModalOpen}
-            setSeasonGraphOpen={setSeasonGraphOpen}
-            setEditModeOpen={setEditModeOpen}
-          /> */}
-          {/* {uploadModalOpen && (
-            
-            // <BackgroundDesign />)}
-            // <>
-            //   <ImageUrlUploadModal
-            //     currentImageUrl={uploadedImage ? uploadedImage : ""}
-            //     onUpload={(newImageUrl: string) =>
-            //       setUploadedImage(newImageUrl)
-            //     }
-            //     closeModal={() => setUploadModalOpen(false)}
-            //     verticalPlacement={25}
-            //   />
-            //   <div
-            //     className="absolute   left-1/2
-            //   top-[70%] z-[60] flex -translate-x-1/2 -translate-y-1/2"
-            //   >
-            //     <div className="flex items-center justify-center gap-4 text-sm text-white">
-            //       <p className="min-w-[80px]">
-            //         Or pick a solid color (also affects gradient) :{" "}
-            //       </p>
-            //       <ColorPickerComponent
-            //         color={backgroundColor}
-            //         setColor={setBackgroundColor}
-            //       />
-            //       <button
-            //         onClick={() => setDisplayGradient(!displayGradient)}
-            //         className="flex max-h-[50px] items-center rounded-3xl
-            //        bg-zinc-800 p-6 font-semibold text-lime-600 hover:bg-zinc-600"
-            //       >
-            //         {displayGradient ? "Remove Gradient" : "Add Gradient"}
-            //       </button>
-            //     </div>
-            //   </div>
-            // </>
-          )} */}
+        <div>
+          <div className="fixed inset-0 z-[200] bg-black opacity-80" />
+          <SeasonExpanded brightness={brightness} setCardOpen={setExpanded} />
 
-          {seasonGraphOpen && (
-            <TierList setSeasonGraphOpen={setSeasonGraphOpen} />
-          )}
+          {tierListOpen && <TierList setSeasonGraphOpen={setTierListOpen} />}
         </div>
       ) : (
-        <SeasonCollapsed cardOpen={cardOpen} setCardOpen={setCardOpen} />
+        <SeasonCollapsed setCardOpen={setExpanded} />
       )}
     </SingleSeasonContext.Provider>
   );

@@ -27,6 +27,11 @@ export default function UsernameInput({
           value={userInputField}
           placeholder={`Enter your ${currentSite} username`}
           onChange={(e) => setUserInputField(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleConfirmUsername();
+            }
+          }}
           className={`${
             redirectBoxClicked ? `border-0` : "border-2"
           } opacity-175 w-64 max-w-md rounded-l-lg border-lime-600 bg-blue-990 p-2.5

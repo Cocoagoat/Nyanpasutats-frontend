@@ -25,6 +25,11 @@ export default function FilterByYear({
   let placeholderText = "";
   const handlers = useHandlers(dispatch, path)!;
 
+  function handleResetInputs() {
+    setMin("");
+    setMax("");
+  }
+
   switch (type) {
     case "Year":
       if ("handleFilterByYear" in handlers) {
@@ -74,6 +79,7 @@ export default function FilterByYear({
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               handleRangeFilter(Number(min), Number(max));
+              handleResetInputs();
             }
           }}
           className=" border-none bg-zinc-700
@@ -88,6 +94,7 @@ export default function FilterByYear({
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               handleRangeFilter(Number(min), Number(max));
+              handleResetInputs();
             }
           }}
           className="border-none bg-zinc-700
@@ -95,7 +102,10 @@ export default function FilterByYear({
         />
         <div className="flex justify-center gap-10">
           <button
-            onClick={() => handleRangeFilter(Number(min), Number(max))}
+            onClick={() => {
+              handleRangeFilter(Number(min), Number(max));
+              handleResetInputs();
+            }}
             className=" w-1/3 self-center rounded-md border
              border-zinc-600 p-1 text-white transition-colors 
              duration-200 hover:bg-lime-600"

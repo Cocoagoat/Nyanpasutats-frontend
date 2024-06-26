@@ -25,8 +25,8 @@ export default function RedirectBox({
 }: RedirectBoxProps) {
   const redirectBoxStyle = `flex flex-col justify-between rounded-lg px-6 pt-6 pb-6 
      mt-6 w-64 lg:max-w-[16rem] duration-500  text-center 
-    hover:shadow-2xl hover:shadow-lime-600 bg-cover 
-    shadow-lg relative text-zinc-200 shadow-blue-950 z-40 h-[250px] group grow`;
+    hover:shadow-2xl hover:shadow-lime-600 
+    shadow-lg relative text-zinc-200 shadow-blue-950 z-40 h-[250px] `;
   //Clamp the w-64?
 
   function getErrorMessage() {

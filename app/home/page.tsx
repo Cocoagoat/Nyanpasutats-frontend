@@ -24,6 +24,14 @@ import ResetUsername from "./ResetUsername";
 import startGlobalInterval from "./ResetIntervalRegulator.js";
 import UserQueueDisplay from "@/components/general/UserQueueDisplay";
 import resetAllServerCookies from "../actions/resetAllServerCookies";
+import Heading from "./Heading";
+
+// export async function generateMetadata() {
+//   return {
+//     title: `Nyanpasutats`,
+//     description: `Get your detailed seasonal anime statistics, anime recommendations and more here.`,
+//   };
+// }
 
 export default function Home() {
   const backgrounds = [img1.src, img2.src, img3.src, img4.src, img5.src];
@@ -128,7 +136,7 @@ export default function Home() {
 
     if (
       localStorage.getItem("resetCount") !== null &&
-      parseInt(localStorage.getItem("resetCount") as string) > 50
+      parseInt(localStorage.getItem("resetCount") as string) > 3
     ) {
       setError(
         "You've been doing that too much lately. Please try again later.",
@@ -182,20 +190,7 @@ export default function Home() {
     <>
       <div className=" mx-auto mt-24 flex min-h-[80%] flex-col justify-between gap-8 xl:max-w-front-n-center-80 fullhd:max-w-front-n-center-60 ">
         <div className="flex flex-col items-center justify-between gap-20 pt-0 xl:flex-row xl:items-start">
-          {/* <div className="flex justify-center w-1/2"> */}
-          <div className="mt-0 flex flex-1 flex-col gap-6 pt-0 text-center xl:text-left">
-            <p
-              style={{ lineHeight: "0.7" }}
-              className="text-wrap mt-0 pt-0 text-clampxl font-bold text-lime-600 shadow-lime-600 text-shadow-lg"
-            >
-              Nyanpasutats
-            </p>
-            <h3 className="text-wrap mx-10 mt-10 text-clampmd font-bold leading-snug text-zinc-400 shadow-black text-shadow lg:mx-0">
-              Various anime-related statistics you never knew you needed...and
-              probably still don't actually need.
-            </h3>
-          </div>
-          {/* </div> */}
+          <Heading />
           <div className="mt-10 flex flex-1 justify-end object-cover xl:mt-0">
             <ImageCarousel images={backgrounds} imagesText={backgroundsText} />
           </div>

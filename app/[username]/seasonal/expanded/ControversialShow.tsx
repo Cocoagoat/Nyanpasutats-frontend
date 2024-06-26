@@ -1,18 +1,9 @@
-import React from "react";
-import ShowDisplay from "../ShowDisplay";
-import { TbEyeCancel } from "react-icons/tb";
-import { Lato } from "next/font/google";
 import { ShowToDisplay } from "@/app/interfaces";
-import toast from "react-hot-toast";
+import { Lato } from "next/font/google";
+import React from "react";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import ShowDisplay from "../ShowDisplay";
 import { useSingleSeasonContext } from "../reducer/SeasonalContext";
-import {
-  RiDeleteBin6Fill,
-  RiVipCrown2Fill,
-  RiVipCrownFill,
-} from "react-icons/ri";
-import { PiCrownDuotone, PiCrownFill } from "react-icons/pi";
-import AOTSCrown from "@/public/AOTSCrown.png";
-import Image from "next/image";
 
 const lato = Lato({ weight: "700", subsets: ["latin"] });
 export default function ControversialShow({
@@ -38,17 +29,6 @@ export default function ControversialShow({
       >
         Test
       </RiDeleteBin6Fill>
-      {/* <div className="flex justify-center">
-        <Image
-          src={AOTSCrown}
-          alt="AOTSCrown"
-          width="56"
-          height="56"
-          className={`${
-            editModeOpen ? "opacity-100" : "hidden"
-          } absolute -top-14   text-black`}
-        />
-      </div> */}
 
       <div
         className="mx-auto w-fit"
@@ -60,7 +40,7 @@ export default function ControversialShow({
       <p
         className={`p-1 text-center text-lg shadow-black text-shadow ${lato.className}`}
       >
-        Most Unusual Score
+        Unpopular Opinion
       </p>
     </div>
   );

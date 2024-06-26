@@ -173,6 +173,14 @@ export type ShowPathType = "img_url" | "img_urls" | "full";
 export type displayedMeanOptions = "AvgScore" | "FavoritesAvgScore" | "Shows";
 
 export type ImageData = [string, string, number];
+
+export type ImageData2 = { showName: string; imageUrl: string; tier: number };
+
+export type TierState = {
+  imageData: ImageData2[];
+  color: string;
+  text: string;
+};
 // [showName, imageUrl]
 
-export type TiersState = Record<number, ImageData[]>;
+export type TiersState = Record<number, TierState>;

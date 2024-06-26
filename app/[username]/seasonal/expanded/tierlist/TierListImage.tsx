@@ -7,7 +7,6 @@ interface ImageWithPlaceholderProps {
   index: number;
   tier: number;
   deleteMode: boolean;
-  onLoadImage: (index: number) => void;
   alt: string;
   className?: string;
   deleteImage?: (index: number, tier: number) => void;
@@ -18,7 +17,6 @@ const TierListImage: React.FC<ImageWithPlaceholderProps> = ({
   index,
   tier,
   deleteMode,
-  onLoadImage,
   alt,
   className,
   deleteImage,
@@ -40,7 +38,6 @@ const TierListImage: React.FC<ImageWithPlaceholderProps> = ({
         className={` ${showName && "opacity-60"} ${!loaded ? "hidden" : ""}`}
         onLoad={() => {
           setLoaded(true);
-          onLoadImage(index);
         }}
       />
       {deleteMode && (

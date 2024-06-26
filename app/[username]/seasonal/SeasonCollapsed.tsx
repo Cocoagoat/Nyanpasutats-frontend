@@ -10,10 +10,8 @@ import { hexToRgb } from "@/utils/general";
 import Image from "next/image";
 
 export default function SeasonCollapsed({
-  cardOpen,
   setCardOpen,
 }: {
-  cardOpen: boolean;
   setCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const {
@@ -34,6 +32,8 @@ export default function SeasonCollapsed({
   const [hovered, setHovered] = useState(false);
 
   const rgbColor = hexToRgb(backgroundColor);
+
+  console.log(`rgbColor of season ${season} is ${rgbColor}`);
 
   return (
     <div
@@ -58,7 +58,7 @@ export default function SeasonCollapsed({
         className="absolute inset-0"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(${rgbColor}, 1)
-           10%, transparent 50%`,
+           10%, transparent 50%)`,
           zIndex: 10,
         }}
       ></div>

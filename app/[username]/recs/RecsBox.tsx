@@ -7,6 +7,7 @@ import DisplayOptions from "./DisplayOptions";
 import RecsTable from "./RecsTable";
 import { getShowData } from "@/app/home/api";
 import styles from "./RecsBox.module.css";
+import scrollbarStyles from "@/app/globals.module.css";
 import TagRanking from "./TagRanking";
 import { TbX } from "react-icons/tb";
 import RecsWelcome from "./RecsWelcome";
@@ -68,7 +69,7 @@ export default function RecsBox({
         <p className="flex-grow-1 mx-auto basis-1/6"></p>
         <div
           className={`flex-grow-1 relative mx-auto my-auto mt-32 flex max-h-[75vh] max-w-front-n-center-600 basis-2/3 flex-col overflow-y-scroll
-        text-white xl:mt-16 ${styles.hiddenscrollbar}`}
+        text-white xl:mt-16 ${scrollbarStyles.hiddenscrollbar}`}
         >
           {welcomeOpen && (
             <div className="mb-20 rounded-xl bg-blue-990 p-3  ">

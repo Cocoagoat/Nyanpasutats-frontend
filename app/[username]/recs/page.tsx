@@ -6,6 +6,17 @@ import RecsBox from "./RecsBox";
 import GenericError from "@/components/general/GenericError";
 import { getSiteCookie } from "@/utils/CookieUtils";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { username: string };
+}) {
+  return {
+    title: `${params.username} / Recs`,
+    description: `${params.username}'s anime recommendations`,
+  };
+}
+
 function roundPredictedScores(recs: RecommendationType[]) {
   return recs.map((dict) => ({
     ...dict,

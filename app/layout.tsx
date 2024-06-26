@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import backgroundImage from "@/public/nnb5.png";
 import Image from "next/image";
+import styles from "@/app/globals.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -18,20 +19,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className=" relative">
-      <body
-        className={`${inter.className} h-full  overflow-y-auto bg-blue-990`}
-      >
-        <div className="absolute inset-0 -z-50  w-full">
+      <body className={`${inter.className} overflow-y-auto bg-blue-990`}>
+        <div className="absolute inset-0 -z-50 ">
           <Image
             src={backgroundImage}
             placeholder="blur"
             fill
             alt="Background"
             quality={95}
-            className="h-full object-cover object-top"
+            className=" object-cover "
           />
         </div>
-        <div className="relative z-10 h-full min-h-screen">{children}</div>
+        <div className="relative  min-h-screen">{children}</div>
       </body>
     </html>
   );

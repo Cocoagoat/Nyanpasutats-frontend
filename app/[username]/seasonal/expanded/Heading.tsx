@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   SeasonalContext,
   useSingleSeasonContext,
@@ -7,30 +7,22 @@ import { useParams } from "next/navigation";
 import { Lato } from "next/font/google";
 const latoBold = Lato({ weight: "900", subsets: ["latin"] });
 
-export default function Heading(
-  {
-    // setDisplayGradient,
-  }: {
-    // setDisplayGradient: React.Dispatch<React.SetStateAction<boolean>>;
-  },
-) {
+export default function Heading() {
   const { season } = useSingleSeasonContext();
   const params = useParams<{ username: string }>();
 
   const { noSequels } = useContext(SeasonalContext)!;
-  const { editModeOpen } = useSingleSeasonContext()!;
+  const [text, setText] =
+    useState(`${params.username}${params.username.endsWith("s") ? "'" : "'s"}
+  ${season} Summary ${noSequels ? "(No Sequels)" : ""}`);
 
   return (
-    <h2
-      // onClick={
-      //   editModeOpen ? () => setDisplayGradient((prev) => !prev) : () => {}
-      // }
-      className={`text-3xl font-bold text-shadow ${
+    <input
+      className={`w-full bg-transparent text-center text-3xl font-bold text-shadow ${
         season.startsWith("Summer") ? "shadow-black" : "shadow-slate-800"
       } ${latoBold.className}`}
-    >
-      {params.username}'{params.username.endsWith("s") ? " " : "s "}
-      {season} Summary {noSequels ? "(No Sequels)" : ""}
-    </h2>
+      value={text}
+      onChange={(e) => setText(e.target.value)}
+    ></input>
   );
 }

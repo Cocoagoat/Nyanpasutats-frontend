@@ -63,7 +63,7 @@ export default function SeasonalStatsBox({
   const [graphOpen, setGraphOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
   const [brightness, setBrightness] = useState(100);
-  const [cardOpen, setCardOpen] = useState(false);
+  // const [cardOpen, setCardOpen] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   const [partialDisplayedStats, setPartialDisplayedStats] = useState(
@@ -175,8 +175,8 @@ export default function SeasonalStatsBox({
                       }
                       key={season}
                       brightness={brightness}
-                      cardOpen={cardOpen}
-                      setCardOpen={setCardOpen}
+                      // cardOpen={cardOpen}
+                      // setCardOpen={setCardOpen}
                     />
                   ),
                 )

@@ -1,30 +1,22 @@
+import { SeasonDataKeys, TooltipKeys } from "@/app/interfaces";
+import useToast from "@/hooks/useToast";
 import { tooltipsContent } from "@/utils/TooltipsContent";
-import React, { useContext, useState } from "react";
+import { mod } from "@/utils/general";
+import { useContext, useState } from "react";
+import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
 import {
   SeasonalContext,
   SingleSeasonContext,
   useSingleSeasonContext,
 } from "../reducer/SeasonalContext";
-import SeasonStatGridCell from "./SeasonStatGridCell";
-import { SeasonDataKeys, TooltipKeys, statKeysToNames } from "@/app/interfaces";
-import { mod } from "@/utils/general";
 import CollapseToggle from "./CollapseToggle";
-import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
-import useToast from "@/hooks/useToast";
-import {
-  PiMinusCircleFill,
-  PiPlusBold,
-  PiPlusCircle,
-  PiPlusCircleBold,
-  PiPlusCircleDuotone,
-  PiPlusCircleFill,
-} from "react-icons/pi";
+import SeasonStatGridCell from "./SeasonStatGridCell";
 
 export default function SeasonStatGrid() {
   const { seasonStats, seasonCount } = useSingleSeasonContext();
   const { displayedMean, displayedStats } = useContext(SeasonalContext)!;
-  const otherMean =
-    displayedMean === "AvgScore" ? "FavoritesAvgScore" : "AvgScore";
+  // const otherMean =
+  //   displayedMean === "AvgScore" ? "FavoritesAvgScore" : "AvgScore";
 
   const [rankToDisplay, yearlyRankToDisplay] =
     displayedMean === "AvgScore"
@@ -33,10 +25,10 @@ export default function SeasonStatGrid() {
           SeasonDataKeys,
           SeasonDataKeys,
         ]);
-  const [otherRank, yearlyOtherRank] =
-    rankToDisplay === "OverallRank"
-      ? (["FavoritesRank", "FavYearlyRank"] as [SeasonDataKeys, SeasonDataKeys])
-      : (["OverallRank", "YearlyRank"] as [SeasonDataKeys, SeasonDataKeys]);
+  // const [otherRank, yearlyOtherRank] =
+  //   rankToDisplay === "OverallRank"
+  //     ? (["FavoritesRank", "FavYearlyRank"] as [SeasonDataKeys, SeasonDataKeys])
+  //     : (["OverallRank", "YearlyRank"] as [SeasonDataKeys, SeasonDataKeys]);
 
   type GridStats = {
     name: string;
