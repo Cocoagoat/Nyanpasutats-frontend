@@ -88,19 +88,15 @@ export default function Home() {
 
   useEffect(() => {
     if (!loading && !error && queuePosition !== 0) {
-      if (queuePosition < 50) {
-        notifySuccess(
-          "Successfully fetched your stats. You may now proceed to any of the sections below.",
-        );
-      } else {
-        notifySuccess(
-          `Successfully fetched your list. Due to heavy demand,
-            only the seasonal stats have been fetched and are immediately available.
-            You may proceed to the other sections as well, but the data may take a while to load.`,
-          undefined,
-          10000,
-        );
-      }
+      notifySuccess(
+        `Successfully fetched your list and seasonal stats. 
+        
+        You may now proceed to the seasonal section 
+        or fetch your recommendations and/or affinity stats separately, but do note that they take significantly longer
+        to fetch than the seasonal stats.`,
+        undefined,
+        20000,
+      );
     }
   }, [loading, queuePosition]);
 
@@ -157,30 +153,27 @@ export default function Home() {
         "seasonal",
       );
       console.log("Successfully retrieved seasonal data");
-      if (data.queuePosition < 0) {
-        taskId = await startTask(userInputField, "recs", currentSite);
-        let recsData = await retrieveTaskData(taskId, userInputField, "recs");
-        console.log("Successfully retrieved recs data");
+      // if (data.queuePosition < 0) {
+      //   taskId = await startTask(userInputField, "recs", currentSite);
+      //   let recsData = await retrieveTaskData(taskId, userInputField, "recs");
+      //   console.log("Successfully retrieved recs data");
 
-        if (currentSite === "MAL") {
-          taskId = await startTask(userInputField, "affinity", currentSite);
-          let affinityData = await retrieveTaskData(taskId, "affinity");
-          console.log("Successfully retrieved affinity data");
-        }
-      }
+      //   if (currentSite === "MAL") {
+      //     taskId = await startTask(userInputField, "affinity", currentSite);
+      //     let affinityData = await retrieveTaskData(taskId, "affinity");
+      //     console.log("Successfully retrieved affinity data");
+      //   }
+      // }
 
       localStorage.setItem("username", userInputField);
       setUserName(userInputField);
       localStorage.setItem("currentSite", currentSite);
-
-      setLoading(false);
     } catch (error) {
       const err = error as Error;
       let errorMessage = err.message;
       if (errorMessage === "Failed to fetch")
         errorMessage = "Unable to reach the server. Please try again later.";
       setError(errorMessage);
-      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -216,9 +209,11 @@ export default function Home() {
 
         <div ref={ref} className="text-center">
           {loading && <UserQueueDisplay queuePosition={queuePosition} />}
-          {userName && (
-            <p className="text-green-400">Successfully fetched your list!</p>
-          )}
+          {/* {userName && (
+            <p className="font-semibold text-lime-600">
+              Successfully fetched your list!
+            </p>
+          )} */}
         </div>
 
         <div

@@ -15,7 +15,7 @@ export default function AffTable({
   const columnNames = ["", "Username", "Affinity", "Shared Anime"];
   return (
     <div
-      className={`relative mb-20 mt-20 h-3/4 overflow-y-scroll  lg:mt-0 
+      className={`relative mb-20 mt-20 max-h-[1000px] overflow-y-scroll  lg:mt-0 
       ${styles.hiddenscrollbar} `}
     >
       <AffTableHeader type={type} />

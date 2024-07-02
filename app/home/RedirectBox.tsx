@@ -24,7 +24,7 @@ export default function RedirectBox({
   setRedirectBoxClicked,
 }: RedirectBoxProps) {
   const redirectBoxStyle = `flex flex-col justify-between rounded-lg px-6 pt-6 pb-6 
-     mt-6 w-64 lg:max-w-[16rem] duration-500  text-center 
+     mt-6 w-64 lg:max-w-[16rem] duration-500 text-center 
     hover:shadow-2xl hover:shadow-lime-600 
     shadow-lg relative text-zinc-200 shadow-blue-950 z-40 h-[250px] `;
   //Clamp the w-64?
@@ -44,7 +44,7 @@ export default function RedirectBox({
 
   useOutsideClick(ref, onOutsideClick);
 
-  function handleRedirectBoxClicked() {
+  function handleRedirectBoxClickedEarly() {
     if (setRedirectBoxClicked) setRedirectBoxClicked(true);
     toast(getErrorMessage(), {
       duration: 5000,
@@ -63,7 +63,7 @@ export default function RedirectBox({
       ref={ref}
       className={`${redirectBoxStyle} relative ${!MAL && "grayscale"}`}
       // style={{ backgroundImage: `url(${test.src})` }}
-      onClick={handleRedirectBoxClicked}
+      onClick={handleRedirectBoxClickedEarly}
     >
       <Image
         src={test}
@@ -91,6 +91,7 @@ export default function RedirectBox({
       href={link}
       // style={{ backgroundImage: `url(${test.src})` }}
       className={`${redirectBoxStyle} `}
+      onClick={() => setRedirectBoxClicked && setRedirectBoxClicked(true)}
     >
       <Image
         src={test}
