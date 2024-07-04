@@ -4,6 +4,8 @@ import "./globals.css";
 import backgroundImage from "@/public/nnb5.png";
 import Image from "next/image";
 import styles from "@/app/globals.module.css";
+import ToasterWithX from "@/components/general/ToasterWithX";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {

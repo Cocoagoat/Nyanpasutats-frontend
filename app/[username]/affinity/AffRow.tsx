@@ -1,4 +1,5 @@
 import { AffinityData } from "@/app/interfaces";
+import toast from "react-hot-toast";
 import React from "react";
 import AffBar from "./AffBar";
 import AffUserLink from "./AffUserLink";

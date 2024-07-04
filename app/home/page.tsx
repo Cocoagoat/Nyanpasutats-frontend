@@ -70,8 +70,9 @@ export default function Home() {
   }
 
   const { notifyError, notifySuccess } = useToast();
-  useOutsideClick(ref, onOutsideClick);
+  useOutsideClick(ref, onOutsideClick); // Not needed
 
+  // UsernameBox
   useEffect(() => {
     const username = localStorage.getItem("username");
     if (username !== null) {
@@ -79,6 +80,7 @@ export default function Home() {
     }
   }, []);
 
+  // UsernameBox
   useEffect(() => {
     const currentSite = localStorage.getItem("currentSite") as SiteType;
     if (currentSite !== null) {

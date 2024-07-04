@@ -39,7 +39,8 @@ export default function RecsBox({
 
   const [state, dispatch] = useReducer(recReducer, initialState);
   const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const [imgError, setImgError] = useState(false);
+  const [imgError, setImgError] = useState(true);
+  const [imgLoading, setImgLoading] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
 
   useEffect(() => {
@@ -52,9 +53,11 @@ export default function RecsBox({
         setImgUrls(urls);
       } catch (error) {
         setImgError(true);
+      } finally {
+        setImgLoading(false);
       }
     }
-
+    setImgLoading(true);
     fetchImgUrl();
   }, [state.displayedRecs]);
 
@@ -91,9 +94,10 @@ export default function RecsBox({
             displayedRecs={state.displayedRecs}
             imageUrls={imgUrls}
             imageError={imgError}
+            imageLoading={imgLoading}
           />
         </div>
-        <div className="flex-grow-1 mx-auto mt-32 flex basis-1/6  flex-col justify-between  gap-24  text-white  xl:mt-16 xl:gap-60">
+        <div className=" mx-auto mt-32 flex flex-col justify-between  gap-24  text-white  xl:mt-16 xl:gap-60">
           <TagRanking tags={favTags} />
           <TagRanking tags={leastFavTags} least_fav={true} />
         </div>

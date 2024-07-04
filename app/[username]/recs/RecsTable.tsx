@@ -16,10 +16,12 @@ export default function RecsTable({
   displayedRecs,
   imageUrls,
   imageError,
+  imageLoading,
 }: {
   displayedRecs: RecommendationType[];
   imageUrls: string[];
   imageError: boolean;
+  imageLoading: boolean;
 }) {
   return (
     <table>
@@ -35,6 +37,7 @@ export default function RecsTable({
             imageUrl={imageUrls[index]}
             key={rec["ShowName"]}
             error={imageUrls[index] === undefined}
+            loading={imageLoading}
           />
         ))}
       </tbody>

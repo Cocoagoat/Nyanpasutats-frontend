@@ -9,6 +9,11 @@ export function checkValidShowCount(showCount: number) {
   return true;
 }
 
+export function checkValidMALScore(score: number) {
+  if (score < 6.5 || score > 10) return false;
+  return true;
+}
+
 export function isValidNumber(str: string) {
   if (typeof str !== "string" || str.trim() === "") {
     return false;

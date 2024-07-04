@@ -1,5 +1,5 @@
 import { RecommendationType } from "@/app/interfaces";
-import { checkValidYear } from "@/utils/checkValidValues";
+import { checkValidMALScore, checkValidYear } from "@/utils/checkValidValues";
 
 export const FILTER_BY_YEAR = "FILTER_BY_YEAR";
 export const FILTER_BY_TAG = "FILTER_BY_TAG";
@@ -107,6 +107,8 @@ export const recReducer = (
       };
 
     case FILTER_BY_MAL_SCORE:
+      if (!checkValidMALScore(action.payload.min)) action.payload.min = 6.5;
+      if (!checkValidMALScore(action.payload.max)) action.payload.max = 10;
       return {
         ...state,
         minMALScore: action.payload.min,

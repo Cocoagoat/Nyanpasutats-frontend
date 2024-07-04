@@ -52,7 +52,7 @@ export default async function page({
     if (taskId === undefined) {
       throw new Error("Task ID is undefined");
     }
-    data = await retrieveTaskData(taskId);
+    data = await retrieveTaskData(taskId, params.username);
   } catch (err) {
     // Delete this later since Server Components can't throw errors
     error = (err as Error).message;

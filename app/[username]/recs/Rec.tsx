@@ -7,11 +7,13 @@ export default function Rec({
   index,
   imageUrl,
   error,
+  loading,
 }: {
   rec: RecommendationType;
   index: number;
   imageUrl: string;
   error: boolean;
+  loading: boolean;
 }) {
   console.log(imageUrl);
   return (
@@ -20,13 +22,17 @@ export default function Rec({
     >
       {!error && (
         <td>
-          <Image
-            className="mx-auto rounded-3xl py-2"
-            src={imageUrl}
-            alt="Test image"
-            width={75}
-            height={105}
-          />
+          {!loading ? (
+            <Image
+              className="mx-auto rounded-3xl py-2"
+              src={imageUrl}
+              alt="Test image"
+              width={75}
+              height={105}
+            />
+          ) : (
+            <div className="mx-auto h-[105px] w-[75px] animate-pulse rounded-3xl bg-zinc-800 py-2" />
+          )}
         </td>
       )}
       <td className="w-[350px] text-center">{rec["ShowName"]}</td>
