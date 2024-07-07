@@ -39,8 +39,8 @@ export default function RecsBox({
 
   const [state, dispatch] = useReducer(recReducer, initialState);
   const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const [imgError, setImgError] = useState(true);
-  const [imgLoading, setImgLoading] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const [imgLoading, setImgLoading] = useState(true);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
 
   useEffect(() => {

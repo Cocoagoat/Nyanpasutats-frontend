@@ -1,13 +1,16 @@
 "use client";
-import NavItem from "./NavItem";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiMenuFill } from "react-icons/ri";
+import NavItem from "./NavItem";
 
-const gap = "px-8 py-4";
 export function Nav() {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-  const params = useParams();
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    let username = localStorage.getItem("username") || "";
+    setUsername(username);
+  });
 
   return (
     <nav
@@ -30,9 +33,9 @@ export function Nav() {
           style={{ justifyContent: "end" }} // justify-end is dumb in tailwind
         >
           <NavItem link={`/home`} text="Home" />
-          <NavItem link={`/${params.username}/affinity`} text="Affinity" />
-          <NavItem link={`/${params.username}/recs`} text="Recommendations" />
-          <NavItem link={`/${params.username}/seasonal`} text="Seasonal" />
+          <NavItem link={`/${username}/affinity`} text="Affinity" />
+          <NavItem link={`/${username}/recs`} text="Recommendations" />
+          <NavItem link={`/${username}/seasonal`} text="Seasonal" />
           <NavItem link="/faq" text="FAQ" />
           <NavItem link="https://nyanpass.com" text="Nyanpasu?" />
         </ul>

@@ -1,6 +1,4 @@
-import {
-  retrieveQueuePosition
-} from "@/app/home/api";
+import { retrieveQueuePosition } from "@/app/home/api";
 import { Nav } from "@/components/general/Nav";
 import Padoru from "@/components/general/Padoru";
 import { Suspense } from "react";
@@ -9,6 +7,8 @@ import AffDisplay from "./AffDisplay";
 import AffQueueDisplay from "./AffQueueDisplay";
 import AffWelcome from "./AffWelcome";
 import { getMinShared } from "./getMinShared";
+import { cookies } from "next/headers";
+import GenericError from "@/components/general/GenericError";
 
 export async function generateMetadata({
   params,
@@ -29,7 +29,17 @@ export default async function page({
   params: { username: string };
   searchParams: URLSearchParams;
 }) {
-  
+  const usernameCookie = cookies().get("username")?.["value"] as string;
+  if (usernameCookie && usernameCookie != params.username) {
+    return (
+      <GenericError
+        errorMessage={
+          "Unauthorized user - please submit your username through the home page."
+        }
+      />
+    );
+  }
+
   searchParams = new URLSearchParams(searchParams);
   let minShared = getMinShared(searchParams);
   let queuePosition = (await retrieveQueuePosition()).queuePosition;
@@ -51,10 +61,7 @@ export default async function page({
           }
           key={minShared}
         >
-          <AffDisplay
-            params={params}
-            searchParams={searchParams}
-          />
+          <AffDisplay params={params} searchParams={searchParams} />
         </Suspense>
       </>
     </>

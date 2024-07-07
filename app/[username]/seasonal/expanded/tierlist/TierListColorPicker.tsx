@@ -14,7 +14,7 @@ export default function TierListColorPicker({
       ...prev,
       [tier]: { ...prev[tier], color },
     }));
-    console.log("handleSetColorBase", tier, color);
+    // console.log("handleSetColorBase", tier, color);
   }
 
   type SetColorFunction = (color: string) => void;
@@ -35,16 +35,19 @@ export default function TierListColorPicker({
 
   return (
     <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col gap-2">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {Object.entries(currentTierColors).map(([tier, color]) => (
           <div
             key={tier}
-            className="h-10 w-10 cursor-pointer"
+            className="flex h-10 w-10 cursor-pointer items-center 
+            justify-center text-xs font-semibold text-white"
             style={{
               backgroundColor: color,
             }}
             onClick={() => handleClickedTier(Number(tier))}
-          ></div>
+          >
+            {tier}
+          </div>
         ))}
       </div>
       <ColorPickerComponent

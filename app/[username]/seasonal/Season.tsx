@@ -155,6 +155,7 @@ export default function Season({
         dragModeOpen,
         setDragModeOpen,
         setTierListOpen,
+        tierListOpen,
       }}
     >
       {expanded ? (
@@ -162,7 +163,7 @@ export default function Season({
           <div className="fixed inset-0 z-[200] bg-black opacity-80" />
           <SeasonExpanded brightness={brightness} setCardOpen={setExpanded} />
 
-          {tierListOpen && <TierList setSeasonGraphOpen={setTierListOpen} />}
+          {/* {tierListOpen && <TierList setSeasonGraphOpen={setTierListOpen} />} */}
         </div>
       ) : (
         <SeasonCollapsed setCardOpen={setExpanded} />

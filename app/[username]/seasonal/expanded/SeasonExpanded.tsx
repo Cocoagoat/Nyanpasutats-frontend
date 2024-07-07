@@ -1,6 +1,6 @@
 import { getShowData } from "@/app/actions/getShowData";
 import styles from "@/app/globals.module.css";
-import { ShowsToDisplay, ShowToDisplay } from "@/app/interfaces";
+import { ShowsToDisplay, ShowToDisplay, TiersState } from "@/app/interfaces";
 import Padoru from "@/components/general/Padoru";
 import { ModalContext } from "@/contexts/ModalContext";
 import useWindowSize from "@/hooks/useWindowSize";
@@ -21,10 +21,47 @@ import GradientFill from "./GradientFill";
 import Heading from "./Heading";
 import SeasonExpandedToolbar from "./SeasonExpandedToolbar";
 import SeasonStatGrid from "./SeasonStatGrid";
+import TierList from "./tierlist/TierList";
 
 export type ImageRow = {
   [key: string]: string;
 };
+
+export const initialTierColors: Record<number, string> = {
+  0.5: "#270202",
+  1: "#440404",
+  1.5: "#6f1515",
+  2: "#b71c1c",
+  2.5: "#d32f2f",
+  3: "#d84300",
+  3.5: "#e64a19",
+  4: "#ef6c00",
+  4.5: "#ff9100",
+  5: "#ffd000",
+  5.5: "#ffea00",
+  6: "#eeff41",
+  6.5: "#e1f515",
+  7: "#b3ff00",
+  7.5: "#97ff00",
+  8: "#56ff03",
+  8.5: "#00ff45",
+  9: "#00ff99",
+  9.5: "#00fff0",
+  10: "#00b0ff",
+};
+
+// const initialRatingTexts: Record<number, string> = {
+//   1: "1/10",
+//   2: "2/10",
+//   3: "3/10",
+//   4: "4/10",
+//   5: "5/10",
+//   6: "6/10",
+//   7: "7/10",
+//   8: "8/10",
+//   9: "9/10",
+//   10: "10/10",
+// };
 
 export default function SeasonExpanded({
   brightness,
@@ -37,6 +74,7 @@ export default function SeasonExpanded({
   const [loaded, setLoaded] = useState(false);
   const [displayContShow, setDisplayContShow] = useState(true);
   const { height } = useWindowSize();
+  const [tiers, setTiers] = useState<TiersState>({});
 
   const displayedFavorites = Object.fromEntries(
     Object.entries(favorites).filter((show) => show[1].displayed),
@@ -75,6 +113,8 @@ export default function SeasonExpanded({
     editModeOpen,
     dragModeOpen,
     displayGradient,
+    setTierListOpen,
+    tierListOpen,
   } = useSingleSeasonContext();
 
   function handleAddNewRow() {
@@ -144,65 +184,6 @@ export default function SeasonExpanded({
     }
   }, []);
 
-  useEffect(() => {
-    const getImageUrl = async () => {
-      const showScores = Object.values(seasonStats["ShowList"]);
-      const thresholdScore = showScores[4];
-
-      const favorite_show_scores = showScores.filter(
-        (score) => score >= thresholdScore && score >= seasonStats["AvgScore"],
-      );
-
-      const favorite_shows = Object.keys(seasonStats["ShowList"]).slice(
-        0,
-        favorite_show_scores.length,
-      );
-
-      let contr_img_url = "";
-      try {
-        contr_img_url = await getShowData(
-          seasonStats["MostUnusualShow"],
-          "img_url",
-        );
-      } catch (error) {
-        console.error(error);
-        contr_img_url = errorImg.src;
-      }
-      setControversialShow({
-        imageUrl: contr_img_url,
-        score: seasonStats["ShowList"][seasonStats["MostUnusualShow"]],
-        displayed: false,
-        name: seasonStats["MostUnusualShow"],
-      });
-
-      let fav_img_urls = [] as string[];
-      try {
-        fav_img_urls = await getShowData(favorite_shows, "img_urls");
-      } catch (error) {
-        console.error(error);
-        fav_img_urls = Array(favorite_shows.length).fill(errorImg.src);
-      }
-      const favorites_data = Object.fromEntries(
-        favorite_shows.map((title, index) => {
-          return [
-            title,
-            {
-              imageUrl: fav_img_urls[index],
-              score: favorite_show_scores[index],
-              displayed:
-                index < 5 &&
-                favorite_show_scores[index] >= seasonStats["AvgScore"],
-              name: title,
-            },
-          ];
-        }),
-      );
-      setFavorites(favorites_data);
-      setLoaded(true);
-    };
-    getImageUrl();
-  }, []);
-
   const handleMouseDown = (e: React.MouseEvent) => {
     if (dragModeOpen) {
       console.log(e.target);
@@ -239,6 +220,58 @@ export default function SeasonExpanded({
     };
   }, [isDragging]);
 
+  useEffect(() => {
+    async function getImageUrls() {
+      const showList = seasonStats.ShowList;
+      const showNames = Object.keys(showList);
+      let imageUrls = await getShowData(showNames, "img_urls");
+      let initialTiers: TiersState = {};
+      for (let i = 1; i <= 10; i++) {
+        initialTiers[i] = {
+          imageData: [],
+          color: initialTierColors[i],
+          text: `${i}/10`,
+        };
+      }
+
+      const showScores = Object.values(showList);
+      const thresholdScore = showScores[4];
+
+      const favorite_show_data = {} as ShowsToDisplay;
+
+      Object.entries(showList).forEach(([name, score], index) => {
+        const tier = Math.max(1, Math.round(score)); // In case someone has scores below 0.5 on Anilist
+        if (score) {
+          const show_data = {
+            name: showNames[index],
+            imageUrl: imageUrls[index],
+            score: tier,
+            displayed: false,
+          } as ShowToDisplay;
+          initialTiers[tier]["imageData"].push(show_data);
+
+          if (score >= thresholdScore && score >= seasonStats["AvgScore"]) {
+            let show_data_for_favs = {
+              ...show_data,
+              displayed: index < 5 && score >= seasonStats["AvgScore"],
+            };
+            favorite_show_data[showNames[index]] = show_data_for_favs;
+          }
+
+          if (showNames[index] === seasonStats["MostUnusualShow"]) {
+            setControversialShow(show_data);
+          }
+        }
+      });
+
+      setTiers(initialTiers);
+      setLoaded(true);
+      setFavorites(favorite_show_data);
+    }
+
+    getImageUrls();
+  }, []);
+
   return (
     <ModalContext.Provider
       value={{ favoritesModalOpen, setFavoritesModalOpen }}
@@ -274,7 +307,7 @@ export default function SeasonExpanded({
               <Image
                 src={backgroundImage}
                 ref={imageRef}
-                layout="fill"
+                fill
                 alt="Test"
                 className={`absolute inset-0 rounded-3xl  object-cover `}
                 quality={85}
@@ -386,6 +419,14 @@ export default function SeasonExpanded({
           </>
         </div>
       </div>
+      {tierListOpen && (
+        <TierList
+          tiers={tiers}
+          setTiers={setTiers}
+          imagesLoaded={loaded}
+          setSeasonGraphOpen={setTierListOpen}
+        />
+      )}
     </ModalContext.Provider>
   );
 }

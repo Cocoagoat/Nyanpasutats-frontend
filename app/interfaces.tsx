@@ -33,6 +33,7 @@ export type ShowToDisplay = {
   score: number;
   displayed: boolean;
   name: string;
+  tier?: number;
 };
 export type ShowsToDisplay = {
   [key: string]: ShowToDisplay;
@@ -172,12 +173,17 @@ export type ShowPathType = "img_url" | "img_urls" | "full";
 
 export type displayedMeanOptions = "AvgScore" | "FavoritesAvgScore" | "Shows";
 
-export type ImageData = [string, string, number];
+export type ImageData2 = [string, string, number];
 
-export type ImageData2 = { showName: string; imageUrl: string; tier: number };
+export type ImageData = {
+  showName: string;
+  imageUrl: string;
+  tier: number;
+  deleted: boolean;
+};
 
 export type TierState = {
-  imageData: ImageData2[];
+  imageData: ShowToDisplay[];
   color: string;
   text: string;
 };

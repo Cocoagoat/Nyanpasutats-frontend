@@ -31,7 +31,7 @@ export default function Rec({
               height={105}
             />
           ) : (
-            <div className="mx-auto h-[105px] w-[75px] animate-pulse rounded-3xl bg-zinc-800 py-2" />
+            <div className="mx-auto h-[105px] w-[75px] animate-pulse rounded-3xl bg-zinc-600 py-2" />
           )}
         </td>
       )}

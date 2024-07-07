@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TierListImage from "./TierListImage";
 import TierListRating from "./TierListRating";
-import { ImageData, ImageData2 } from "@/app/interfaces";
+import { ImageData, ImageData2, ShowToDisplay } from "@/app/interfaces";
 
 export default function TierListRow({
   score,
@@ -12,16 +12,16 @@ export default function TierListRow({
   onDropImage,
 }: {
   score: string;
-  images: ImageData2[];
+  images: ShowToDisplay[];
   showText: boolean;
   deleteMode: boolean;
   deleteShow: (index: number, tier: number) => void;
-  onDropImage: (showData: ImageData2) => void;
+  onDropImage: (showData: ShowToDisplay) => void;
 }) {
   // console.log(images);
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
-    showData: ImageData2,
+    showData: ShowToDisplay,
   ) => {
     e.dataTransfer.setData("text", JSON.stringify(showData));
   };
@@ -29,7 +29,7 @@ export default function TierListRow({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     try {
-      const showData = JSON.parse(e.dataTransfer.getData("text")) as ImageData2;
+      const showData = JSON.parse(e.dataTransfer.getData("text")) as ShowToDisplay;
       onDropImage(showData);
     } catch (err) {
       e.dataTransfer.clearData();
@@ -40,6 +40,10 @@ export default function TierListRow({
     e.preventDefault(); // Necessary to allow the drop
   };
 
+  function filterImages(imageData: ShowToDisplay) {
+    return deleteMode || !imageData.displayed;
+  }
+
   return (
     <div
       className=" flex gap-4"
@@ -48,7 +52,7 @@ export default function TierListRow({
     >
       {/* <TierListRating color={color} initialScore={score} /> */}
       <div className="relative flex h-[88px] ">
-        {images.map((imageData, imageIndex) => (
+        {images.filter(filterImages).map((imageData, imageIndex) => (
           <div
             className=""
             key={imageIndex}
@@ -57,14 +61,15 @@ export default function TierListRow({
           >
             <TierListImage
               key={imageIndex}
-              src={imageData["imageUrl"]}
-              showName={showText ? imageData["showName"] : ""}
+              imageData={imageData}
+              // src={imageData["imageUrl"]}
+              // showName={showText ? imageData["showName"] : ""}
               index={imageIndex}
-              tier={+score}
+              // tier={+score}
               deleteMode={deleteMode}
-              alt="test"
               className=""
               deleteImage={deleteShow}
+              showText={showText}
             />
           </div>
         ))}

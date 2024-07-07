@@ -5,6 +5,7 @@ import { RecommendationType } from "@/app/interfaces";
 import RecsBox from "./RecsBox";
 import GenericError from "@/components/general/GenericError";
 import { getSiteCookie } from "@/utils/CookieUtils";
+import { cookies } from "next/headers";
 
 export async function generateMetadata({
   params,
@@ -34,9 +35,8 @@ export default async function page({
 
   const siteCookie = getSiteCookie();
 
-  let userFound = await assertUsernameInCache(params.username);
-
-  if (!userFound) {
+  const usernameCookie = cookies().get("username")?.["value"] as string;
+  if (usernameCookie && usernameCookie != params.username) {
     return (
       <GenericError
         errorMessage={

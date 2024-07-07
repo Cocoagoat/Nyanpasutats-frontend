@@ -41,5 +41,6 @@ export type singleSeasonContextType = {
   dragModeOpen: boolean;
   setDragModeOpen: Dispatch<React.SetStateAction<boolean>>;
   setTierListOpen: Dispatch<React.SetStateAction<boolean>>;
+  tierListOpen: boolean;
   // handleDayNightChange: () => void;
 };

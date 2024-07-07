@@ -19,6 +19,8 @@ import SeasonalWelcome from "./SeasonalWelcome";
 import { TbX } from "react-icons/tb";
 import { MdArrowUpward } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useParams } from "next/navigation";
+import updateCookie from "@/app/actions/updateCookie";
 
 const getKEntries = <T extends object>(obj: T, a: number, b: number): T => {
   return Object.keys(obj)
@@ -69,6 +71,15 @@ export default function SeasonalStatsBox({
   const [partialDisplayedStats, setPartialDisplayedStats] = useState(
     getKEntries(displayedStats, 0, MAX_ITEMS),
   );
+  const username = useParams().username;
+
+  console.log("Params are", username);
+
+  useEffect(() => {
+    if (typeof username === "string") {
+      updateCookie("username", username);
+    }
+  }, []);
 
   useEffect(() => {
     setPartialDisplayedStats(getKEntries(displayedStats, 0, MAX_ITEMS));
@@ -79,8 +90,7 @@ export default function SeasonalStatsBox({
     }
   }, [displayedStats]);
 
-  const fetchMoreData = () => {
-    console.log("Entered fetchMoreData");
+  function fetchMoreData() {
     if (
       Object.keys(partialDisplayedStats).length >=
       Object.keys(displayedStats).length
@@ -88,9 +98,6 @@ export default function SeasonalStatsBox({
       setHasMore(false);
       return;
     }
-    console.log(
-      `fetching more data: ${Object.keys(partialDisplayedStats).length}`,
-    );
 
     const nextItems = getKEntries(
       displayedStats,
@@ -98,7 +105,7 @@ export default function SeasonalStatsBox({
       Object.keys(partialDisplayedStats).length + MAX_ITEMS,
     );
     setPartialDisplayedStats({ ...partialDisplayedStats, ...nextItems });
-  };
+  }
 
   return (
     <SeasonalContext.Provider

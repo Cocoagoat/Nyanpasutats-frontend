@@ -92,3 +92,7 @@ export function hexToRgb(hex: string) {
 
   return `${r},${g},${b}`;
 }
+
+export function roundToTwo(num: number, round_to: number): number {
+  return Math.round(num * 10 ** round_to) / 10 ** round_to;
+}

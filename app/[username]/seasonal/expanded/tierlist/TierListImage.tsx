@@ -1,26 +1,23 @@
 import React, { useState } from "react";
 import TierListDeleteButton from "./TierListDeleteButton";
+import { image } from "html2canvas/dist/types/css/types/image";
+import { ImageData, ShowToDisplay } from "@/app/interfaces";
 
-interface ImageWithPlaceholderProps {
-  src: string;
-  showName: string;
-  index: number;
-  tier: number;
-  deleteMode: boolean;
-  alt: string;
-  className?: string;
-  deleteImage?: (index: number, tier: number) => void;
-}
-const TierListImage: React.FC<ImageWithPlaceholderProps> = ({
-  src,
-  showName,
+function TierListImage({
+  imageData,
   index,
-  tier,
   deleteMode,
-  alt,
   className,
   deleteImage,
-}) => {
+  showText,
+}: {
+  imageData: ShowToDisplay;
+  index: number;
+  deleteMode: boolean;
+  className: string;
+  deleteImage?: (index: number, tier: number) => void;
+  showText?: boolean;
+}) {
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -30,12 +27,12 @@ const TierListImage: React.FC<ImageWithPlaceholderProps> = ({
       )}
       <img
         key={index}
-        src={src}
-        alt={alt}
+        src={imageData["imageUrl"]}
+        alt={imageData["name"]}
         height={54}
         width="fit-height"
         style={{ height: "88px", width: "62px" }}
-        className={` ${showName && "opacity-60"} ${!loaded ? "hidden" : ""}`}
+        className={` ${showText && "opacity-60"} ${!loaded ? "hidden" : ""}`}
         onLoad={() => {
           setLoaded(true);
         }}
@@ -45,12 +42,16 @@ const TierListImage: React.FC<ImageWithPlaceholderProps> = ({
         //   onClick={deleteImage ? () => deleteImage(index, tier) : () => {}}
         // />
         <div
-          className="absolute right-0 top-0 z-[100] flex h-full w-full
-        cursor-pointer items-center justify-center  bg-gradient-to-t from-red-500 from-5% to-50%
-         text-center text-4xl font-semibold text-red-500 shadow-black text-shadow"
-          onClick={deleteImage ? () => deleteImage(index, tier) : () => {}}
+          className={`absolute right-0 top-0 z-[100] flex h-full w-full
+        cursor-pointer items-center justify-center  bg-gradient-to-t  from-5% to-50%
+         text-center text-4xl font-semibold ${imageData["displayed"] ? "from-lime-600 text-lime-600" : "from-red-500 text-red-500"} shadow-black text-shadow`}
+          onClick={
+            deleteImage
+              ? () => deleteImage(index, imageData["score"])
+              : () => {}
+          }
         >
-          <p>x</p>
+          <p>{imageData["displayed"] ? "+" : "x"}</p>
         </div>
       )}
       <div
@@ -62,11 +63,11 @@ const TierListImage: React.FC<ImageWithPlaceholderProps> = ({
           className="z-[60] mb-2 text-center opacity-100 shadow-black 
         text-shadow"
         >
-          {showName}
+          {showText && imageData["name"]}
         </p>
       </div>
     </div>
   );
-};
+}
 
 export default TierListImage;

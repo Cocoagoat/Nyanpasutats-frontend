@@ -1,7 +1,13 @@
 // Refactor this with Reducer + Context later
 import { getShowData } from "@/app/actions/getShowData";
 import styles from "@/app/globals.module.css";
-import { ImageData2, TiersState } from "@/app/interfaces";
+import _ from "lodash";
+import {
+  ImageData2,
+  TiersState,
+  ImageData,
+  ShowToDisplay,
+} from "@/app/interfaces";
 import useToast from "@/hooks/useToast";
 import useWindowSize from "@/hooks/useWindowSize";
 import {
@@ -9,11 +15,35 @@ import {
   downloadCardAsImage,
 } from "@/utils/downloadCardAsImage";
 import { useParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
-import { MdClose, MdColorLens } from "react-icons/md";
-import { PiTextTBold } from "react-icons/pi";
-import { RiDownload2Fill, RiFileCopyLine } from "react-icons/ri";
-import { TbTrash } from "react-icons/tb";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+  MdClose,
+  MdColorLens,
+  MdCompress,
+  MdDoubleArrow,
+  MdExpandCircleDown,
+  MdExpandMore,
+  MdHorizontalRule,
+} from "react-icons/md";
+import {
+  PiArrowsHorizontalBold,
+  PiFadersHorizontalFill,
+  PiSlidersHorizontal,
+  PiTextTBold,
+} from "react-icons/pi";
+import {
+  RiDownload2Fill,
+  RiExpandLeftFill,
+  RiExpandRightFill,
+  RiFileCopyLine,
+} from "react-icons/ri";
+import {
+  TbArrowsMoveHorizontal,
+  TbCarouselHorizontalFilled,
+  TbLayoutNavbarExpandFilled,
+  TbTrash,
+} from "react-icons/tb";
+import { FaExpandArrowsAlt, FaCompressArrowsAlt } from "react-icons/fa";
 import {
   SeasonalContext,
   SingleSeasonContext,
@@ -24,47 +54,33 @@ import TierListHeader from "./TierListHeader";
 import TierListLoader from "./TierListLoader";
 import TierListRating from "./TierListRating";
 import TierListRow from "./TierListRow";
+import Image from "next/image";
+import { initialTierColors } from "../SeasonExpanded";
 
-const initialTierColors: Record<number, string> = {
-  1: "#440404",
-  2: "#b71c1c",
-  3: "#d84300",
-  4: "#ef6c00",
-  5: "#ffea00",
-  6: "#eeff41",
-  7: "#b3ff00",
-  8: "#56ff03",
-  9: "#00ff99",
-  10: "#00b0ff",
-};
-
-const initialRatingTexts: Record<number, string> = {
-  1: "1/10",
-  2: "2/10",
-  3: "3/10",
-  4: "4/10",
-  5: "5/10",
-  6: "6/10",
-  7: "7/10",
-  8: "8/10",
-  9: "9/10",
-  10: "10/10",
-};
+type TierMode = "normal" | "collapsed" | "expanded";
 
 export default function TierList({
+  tiers,
+  setTiers,
+  imagesLoaded,
   setSeasonGraphOpen,
 }: {
+  tiers: TiersState;
+  setTiers: React.Dispatch<React.SetStateAction<TiersState>>;
+  imagesLoaded: boolean;
   setSeasonGraphOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { season, seasonStats } = useContext(SingleSeasonContext)!;
   const { noSequels } = useContext(SeasonalContext)!;
-
+  const initialTiers = useRef(tiers);
   const [showText, setShowText] = useState(false);
-  const [tiers, setTiers] = useState<TiersState>({});
+  // const [tiers, setTiers] = useState<TiersState>({});
+  // const [deletedImages, setDeletedImages] = useState<ImageData[]>([]);
   const [colorMode, setColorMode] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const { width, height } = useWindowSize();
+  const [tierMode, setTierMode] = useState<TierMode>("normal");
 
   const [objectWasDeleted, setObjectWasDeleted] = useState(false);
   const params = useParams<{ username: string }>();
@@ -75,12 +91,12 @@ export default function TierList({
   function getMaxRatingTextLength() {
     let maxLength = 0;
     for (const tier of Object.values(tiers)) {
-      console.log("Rating text is", tier["text"]);
+      // console.log("Rating text is", tier["text"]);
       if (tier["text"].length > maxLength) {
         maxLength = tier["text"].length;
       }
     }
-    console.log("Max length is", maxLength);
+    // console.log("Max length is", maxLength);
     return maxLength;
   }
 
@@ -95,30 +111,145 @@ export default function TierList({
     return maxRowSize;
   }
 
+  function toggleTiers(toggle: "expand" | "collapse") {
+    if (toggle === "expand") {
+      const expandTo = Object.keys(tiers).length <= 5 ? 10 : 20;
+      if (expandTo === 10) {
+        setTiers(initialTiers.current);
+        return;
+      } else {
+        for (let i = 0.5; i <= expandTo / 2; i += 0.5) {
+          let index = (i * 20) / expandTo;
+          setTiers((prev) => {
+            if (prev[index]) {
+              return {
+                ...prev,
+                [index]: {
+                  ...prev[index],
+                  color: initialTierColors[index],
+                  text: `${index}/10`,
+                },
+              };
+            } else
+              return {
+                ...prev,
+                [index]: {
+                  ...prev[index],
+                  imageData: [],
+                  color: initialTierColors[index],
+                  text: `${index}/10`,
+                },
+              };
+          });
+        }
+      }
+      // setTierMode(expandTo === 10 ? "normal" : "expanded");
+    } else {
+      const collapseTo = Object.keys(tiers).length <= 10 ? 5 : 10;
+      let newTiers = {} as TiersState;
+
+      for (let i = 1; i <= collapseTo; i++) {
+        const index = (i * 10) / collapseTo;
+        if (tiers[index]) {
+          let oldImageData = tiers[index]["imageData"].map((imageData) => {
+            return { ...imageData, score: i };
+          });
+          let lowerImageData = [] as ShowToDisplay[];
+          if (tiers[index - (0.5 * 10) / collapseTo]) {
+            lowerImageData = tiers[index - (0.5 * 10) / collapseTo][
+              "imageData"
+            ].map((imageData) => {
+              return { ...imageData, score: i };
+            });
+          }
+
+          newTiers[i] = {
+            ...newTiers[index],
+            imageData: [...oldImageData, ...lowerImageData],
+            color: initialTierColors[index],
+            text: `${i}/${collapseTo}`,
+          };
+          // delete newTiers[index - (0.5 * 10) / collapseTo];
+        } else {
+          delete newTiers[index];
+          newTiers[i] = {
+            imageData: [],
+            color: initialTierColors[index],
+            text: `${i}/${collapseTo}`,
+          };
+        }
+      }
+
+      setTiers(newTiers);
+      setTierMode(collapseTo === 5 ? "collapsed" : "normal");
+    }
+    setTiers((prev) => {
+      const sortedTiers = Object.entries(prev).sort(
+        (a, b) => Number(b[0]) - Number(a[0]),
+      );
+      return Object.fromEntries(sortedTiers);
+    });
+  }
+  console.log("Tiers are", tiers);
+
   // Function to handle dropping an image from one tier to another
-  function handleDrop(newTier: number, showData: ImageData2) {
-    const oldTier = +showData["tier"];
+  function handleDrop(newTier: number, showData: ShowToDisplay) {
+    let oldTier = +showData["score"];
+    console.log(showData);
+
+    // if (tierMode === "collapsed") {
+    //   console.log(
+    //     "newTier, oldTier, tierMode before",
+    //     newTier,
+    //     oldTier,
+    //     tierMode,
+    //   );
+    //   oldTier = Math.ceil(oldTier / 2);
+    //   // newTier = Math.ceil(newTier / 2);
+    //   console.log(
+    //     "newTier, oldTier, tierMode after",
+    //     newTier,
+    //     oldTier,
+    //     tierMode,
+    //   );
+    // }
+
     const newTiers = { ...tiers };
 
     newTiers[oldTier]["imageData"] = newTiers[oldTier]["imageData"].filter(
-      (image) => image["showName"] !== showData["showName"],
+      (image) => image["name"] !== showData["name"],
     );
 
     // newTiers[newTier].push([showData[0], showData[1], newTier]);
     newTiers[newTier]["imageData"].push({
-      showName: showData["showName"],
+      name: showData["name"],
       imageUrl: showData["imageUrl"],
-      tier: newTier,
+      score: newTier,
+      displayed: showData["displayed"],
     });
     setTiers(newTiers);
   }
 
-  function deleteShowFromTierList(index: number, tier: number) {
+  function toggleShowDeleted(index: number, tier: number) {
+    // const deletedImage = tiers[tier]["imageData"][index];
+    // setDeletedImages((prev) => [...prev, deletedImage]);
+    // console.log("Deleted show is", tiers[tier]["imageData"][index]);
+    // console.log(
+    //   "Test2",
+    //   tiers[tier]["imageData"],
+    //   index,
+    //   tiers[tier]["imageData"][index],
+    // );
     const newTiers = { ...tiers };
-    newTiers[tier]["imageData"] = newTiers[tier]["imageData"].filter(
-      (_, i) => i !== index,
-    );
+    // newTiers[tier]["imageData"] = newTiers[tier]["imageData"].filter(
+    //   (_, i) => i !== index,
+    // );
+    newTiers[tier]["imageData"][index]["displayed"] =
+      !newTiers[tier]["imageData"][index]["displayed"];
+
+    // setDeletedImages((prev) => [...prev, tiers[tier]["imageData"][index]]);
     setTiers(newTiers);
+
     if (!objectWasDeleted) {
       setObjectWasDeleted(true);
     }
@@ -141,39 +272,40 @@ export default function TierList({
     }
   }
 
-  useEffect(() => {
-    async function getImageUrls() {
-      const showList = seasonStats.ShowList;
-      const showNames = Object.keys(showList);
-      let imageUrls = await getShowData(showNames, "img_urls");
-      console.log(imageUrls);
-      let initialTiers: TiersState = {};
-      for (let i = 1; i <= 10; i++) {
-        initialTiers[i] = {
-          imageData: [],
-          color: initialTierColors[i],
-          text: initialRatingTexts[i],
-        };
-      }
+  // useEffect(() => {
+  //   async function getImageUrls() {
+  //     const showList = seasonStats.ShowList;
+  //     const showNames = Object.keys(showList);
+  //     let imageUrls = await getShowData(showNames, "img_urls");
+  //     // console.log(imageUrls);
+  //     let initialTiers: TiersState = {};
+  //     for (let i = 1; i <= 10; i++) {
+  //       initialTiers[i] = {
+  //         imageData: [],
+  //         color: initialTierColors[i],
+  //         text: initialRatingTexts[i],
+  //       };
+  //     }
 
-      Object.entries(showList).forEach(([name, score], index) => {
-        const tier = Math.max(1, Math.round(score)); // In case someone has scores below 0.5 on Anilist
-        if (score) {
-          // initialTiers[tier].push([showNames[index], imageUrls[index], tier]);
-          initialTiers[tier]["imageData"].push({
-            showName: showNames[index],
-            imageUrl: imageUrls[index],
-            tier: tier,
-          });
-        }
-      });
+  //     Object.entries(showList).forEach(([name, score], index) => {
+  //       const tier = Math.max(1, Math.round(score)); // In case someone has scores below 0.5 on Anilist
+  //       if (score) {
+  //         // initialTiers[tier].push([showNames[index], imageUrls[index], tier]);
+  //         initialTiers[tier]["imageData"].push({
+  //           showName: showNames[index],
+  //           imageUrl: imageUrls[index],
+  //           tier: tier,
+  //           deleted: false,
+  //         });
+  //       }
+  //     });
 
-      setTiers(initialTiers);
-      setLoaded(true);
-    }
+  //     setTiers(initialTiers);
+  //     setLoaded(true);
+  //   }
 
-    getImageUrls();
-  }, []);
+  //   getImageUrls();
+  // }, []);
 
   useEffect(() => {
     // We want the effect to run only the first time an object is deleted
@@ -185,7 +317,7 @@ export default function TierList({
 
   return (
     <>
-      {!loaded && (
+      {!imagesLoaded && (
         <TierListLoader width={width} height={height} maxRowSize={maxRowSize} />
       )}
 
@@ -203,6 +335,26 @@ export default function TierList({
       >
         <div className="flex justify-end gap-4 text-right ">
           <TierListButton
+            onClick={
+              Object.keys(tiers).length < 20
+                ? () => toggleTiers("expand")
+                : () => {}
+            }
+            descText="Expand tier list"
+          >
+            <FaExpandArrowsAlt />
+          </TierListButton>
+          <TierListButton
+            onClick={
+              Object.keys(tiers).length > 5
+                ? () => toggleTiers("collapse")
+                : () => {}
+            }
+            descText="Collapse tier list"
+          >
+            <FaCompressArrowsAlt />
+          </TierListButton>
+          <TierListButton
             onClick={() => setColorMode(!colorMode)}
             descText="Change colors"
           >
@@ -214,6 +366,7 @@ export default function TierList({
           >
             <TbTrash />
           </TierListButton>
+
           <TierListButton
             onClick={() => setShowText(!showText)}
             descText="Display text"
@@ -249,11 +402,13 @@ export default function TierList({
           style={{ width: `max(1000px, ${maxRowSize * 65 + 100}px)` }}
         >
           <div id={`${season} Tier List`} className=" w-full  bg-zinc-800">
-            <TierListHeader season={season} loaded={loaded} />
+            <TierListHeader season={season} loaded={true} />
             <div className="flex">
               <div
                 className="flex w-20 flex-col"
-                style={{ width: `${getMaxRatingTextLength() * 14 + 30}px` }}
+                style={{
+                  width: `max(90px, ${getMaxRatingTextLength() * 14 + 30}px)`,
+                }}
               >
                 {Object.keys(tiers)
                   .map(Number)
@@ -289,8 +444,8 @@ export default function TierList({
                           images={images["imageData"]}
                           showText={showText}
                           deleteMode={deleteMode}
-                          deleteShow={deleteShowFromTierList}
-                          onDropImage={(showData: ImageData2) =>
+                          deleteShow={toggleShowDeleted}
+                          onDropImage={(showData: ShowToDisplay) =>
                             handleDrop(+score, showData)
                           }
                         />
