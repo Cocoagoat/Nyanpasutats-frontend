@@ -1,19 +1,5 @@
-import html2canvas from "html2canvas";
 import * as htmlToImage from "html-to-image";
 
-// export async function downloadCardAsImage2(cardId: string, imageName: string) {
-//   const cardElement = document.getElementById(cardId);
-//   if (cardElement) {
-//     const canvas = await html2canvas(cardElement);
-//     const image = canvas.toDataURL("image/png");
-//     const link = document.createElement("a");
-//     link.href = image;
-//     link.download = `${imageName}.png`;
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//   }
-// }
 const PROXY_URL = "http://localhost:8080/";
 function getProxiedUrl(url: string) {
   return `${PROXY_URL}${url}`;
@@ -63,7 +49,6 @@ export async function copyCardAsImage(cardId: string) {
       ) {
         const clipboardItem = new ClipboardItem({ "image/png": blob });
         await navigator.clipboard.write([clipboardItem]);
-        console.log("Image copied to clipboard");
       } else {
         // Fallback for browsers that do not support ClipboardItem
         // Provide a link for the user to download the image
@@ -73,7 +58,6 @@ export async function copyCardAsImage(cardId: string) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log("Image download link provided");
       }
     } catch (error) {
       console.error("Could not generate image", error);

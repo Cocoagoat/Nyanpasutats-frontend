@@ -17,7 +17,6 @@ export default function error({
       <div className="flex flex-col gap-5 md:flex-row md:gap-20">
         <Link
           href={"/home"}
-          // onClick={tryAgain}
           className="rounded-3xl bg-blue-990 p-4 text-white shadow-lg shadow-lime-600"
         >
           Go back

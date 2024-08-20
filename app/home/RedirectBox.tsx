@@ -27,7 +27,6 @@ export default function RedirectBox({
      mt-6 w-64 lg:max-w-[16rem] duration-500 text-center 
     hover:shadow-2xl hover:shadow-lime-600 
     shadow-lg relative text-zinc-200 shadow-blue-950 z-40 h-[250px] `;
-  //Clamp the w-64?
 
   function getErrorMessage() {
     if (!MAL) {
@@ -52,7 +51,6 @@ export default function RedirectBox({
       style: {
         backgroundColor: "#ff0055",
         color: "white",
-        // padding: "1rem 2rem",
         fontSize: "1.2rem",
       },
     });
@@ -80,16 +78,8 @@ export default function RedirectBox({
       />
     </button>
   ) : (
-    // <form action={navigate}>
-    //   <input type="hidden" name="path" value={link} />
-    //   <button
-    //     style={{ backgroundImage: `url(${test.src})` }}
-    //     className={`${redirectBoxStyle} rounded-xl bg-gray-950 bg-cover text-zinc-200
-    //      shadow-lg shadow-blue-950 hover:shadow-lime-600 `}
-    //   >
     <Link
       href={link}
-      // style={{ backgroundImage: `url(${test.src})` }}
       className={`${redirectBoxStyle} `}
       onClick={() => setRedirectBoxClicked && setRedirectBoxClicked(true)}
     >
@@ -107,7 +97,5 @@ export default function RedirectBox({
         disabled={disabled}
       />
     </Link>
-
-    // </form>
   );
 }

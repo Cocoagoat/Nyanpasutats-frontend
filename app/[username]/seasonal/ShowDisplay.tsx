@@ -1,5 +1,5 @@
 import { ShowToDisplay, ShowsToDisplay } from "@/app/interfaces";
-import { ModalContext } from "@/contexts/ModalContext";
+import { ModalContext } from "./expanded/ModalContext";
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { updateImageUrl } from "@/app/home/api";
@@ -23,7 +23,6 @@ export default function ShowDisplay({
   const [hovered, setHovered] = useState(false);
   const [crownHovered, setCrownHovered] = useState(false);
   const [AOTS, setAOTS] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { setFavoritesModalOpen } = useContext(ModalContext);
   const { editModeOpen } = useSingleSeasonContext()!;
@@ -78,6 +77,7 @@ export default function ShowDisplay({
           alt="AOTSCrown"
           width="46"
           height="46"
+          unoptimized={true}
           className={`
             ${
               editModeOpen
@@ -106,8 +106,7 @@ export default function ShowDisplay({
       >
         {!error ? (
           // Not using Next's Image component because after lots of pain
-          // I realized that html-to-image doesn't support it
-
+          // I realized that html-to-image doesn't always support it
           <img
             src={show.imageUrl}
             alt={show.name}
@@ -117,21 +116,8 @@ export default function ShowDisplay({
               hovered ? "opacity-50" : ""
             }`}
             onError={handleImageError}
-            onLoad={() => setIsLoading(false)}
           />
         ) : (
-          // <img
-          //   src={show.imageUrl}
-          //   alt={show.name}
-          //   width={75}
-          //   height={105}
-          //   className={`mx-auto h-full rounded-xl shadow-md shadow-black ${
-          //     hovered ? "opacity-50" : ""
-          //   }`}
-          //   onError={handleImageError}
-          //   onLoad={() => setIsLoading(false)}
-          // />
-
           <div
             className="flex h-[105px] w-[75px] items-center rounded-xl
            bg-zinc-800 text-center text-xs shadow-md shadow-black"

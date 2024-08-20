@@ -1,17 +1,15 @@
 "use client";
+import updateCookie from "@/app/actions/updateCookie";
+import scrollbarStyles from "@/app/globals.module.css";
+import { getShowData } from "@/app/home/api";
 import { RecommendationType } from "@/app/interfaces";
 import { useEffect, useReducer, useState } from "react";
-import { recReducer, SORT_BY_PREDICTION_SCORE } from "./RecReducer";
-import { Nav } from "@/components/general/Nav";
-import DisplayOptions from "./DisplayOptions";
-import RecsTable from "./RecsTable";
-import { getShowData } from "@/app/home/api";
-import styles from "./RecsBox.module.css";
-import scrollbarStyles from "@/app/globals.module.css";
-import TagRanking from "./TagRanking";
 import { TbX } from "react-icons/tb";
+import DisplayOptions from "./DisplayOptions";
+import { SORT_BY_PREDICTION_SCORE, recReducer } from "./RecReducer";
+import RecsTable from "./RecsTable";
 import RecsWelcome from "./RecsWelcome";
-import updateCookie from "@/app/actions/updateCookie";
+import TagRanking from "./TagRanking";
 
 export default function RecsBox({
   recs,
@@ -43,6 +41,8 @@ export default function RecsBox({
   const [imgLoading, setImgLoading] = useState(true);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
 
+  // Currently fetching images for each rec on-demand to avoid fetching
+  // a very large amount of images at the start, since there are hundreds of recommendations.
   useEffect(() => {
     async function fetchImgUrl() {
       try {
@@ -63,11 +63,10 @@ export default function RecsBox({
 
   useEffect(() => {
     updateCookie("recs", "true");
-  }, []);
+  }, []); // Remove?
 
   return (
     <>
-      <Nav />
       <div className="flex flex-col xl:flex-row">
         <p className="flex-grow-1 mx-auto basis-1/6"></p>
         <div

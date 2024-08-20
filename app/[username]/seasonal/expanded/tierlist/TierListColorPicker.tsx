@@ -1,5 +1,5 @@
 import React from "react";
-import ColorPickerComponent from "../ColorPicker"; // Import your ColorPickerComponent
+import ColorPicker from "../../../../../components/general/ColorPicker"; // Import your ColorPickerComponent
 import { TiersState } from "@/app/interfaces";
 
 export default function TierListColorPicker({
@@ -9,12 +9,16 @@ export default function TierListColorPicker({
   currentTierColors: Record<number, string>;
   setCurrentTiers: React.Dispatch<React.SetStateAction<TiersState>>;
 }) {
+  // A base function which createHandleSetColor uses to
+  // create a handleSetColor function for a specific tier.
+  // This is needed for the color picker itself, since we
+  // want it to use a setter that only needs a color to work,
+  // and not a tier as well.
   function handleSetColorBase(tier: number, color: string) {
     setCurrentTiers((prev) => ({
       ...prev,
       [tier]: { ...prev[tier], color },
     }));
-    // console.log("handleSetColorBase", tier, color);
   }
 
   type SetColorFunction = (color: string) => void;
@@ -24,6 +28,9 @@ export default function TierListColorPicker({
   }
 
   const [clickedTier, setClickedTier] = React.useState(1);
+
+  // The function that's in the state will always have the clicked tier in it,
+  // and is the function we pass to ColorPicker to set the color of the clicked tier.
   const [handleSetColor, setHandleSetColor] = React.useState<SetColorFunction>(
     () => createHandleSetColor(1),
   );
@@ -50,7 +57,7 @@ export default function TierListColorPicker({
           </div>
         ))}
       </div>
-      <ColorPickerComponent
+      <ColorPicker
         color={currentTierColors[clickedTier]}
         setColor={(color: string) => handleSetColor(color)}
       />

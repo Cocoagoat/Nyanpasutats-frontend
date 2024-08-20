@@ -44,9 +44,6 @@ function SortingDropdown({
     ? customSortedReverse
     : sortedReverse;
 
-  // console.log("sortedByToUse", sortedByToUse);
-  // console.log("sortedReverseToUse", sortedReverseToUse);
-
   const ref = useCloseOnOutsideClick<HTMLDivElement>(isOpen, () =>
     setIsOpen(false),
   );

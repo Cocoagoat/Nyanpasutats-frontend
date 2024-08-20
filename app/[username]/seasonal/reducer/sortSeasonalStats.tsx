@@ -18,21 +18,19 @@ export function compareSeasons(a: string, b: string) {
 export function sortSeasonalStats(
   seasonalStats: SeasonsData,
   by: string,
-  reverse: boolean
+  reverse: boolean,
 ) {
-  console.log(by, reverse);
   switch (by) {
     case "Season":
       return Object.fromEntries(
         Object.entries(seasonalStats).sort((a, b) => {
           const coeff = reverse ? -1 : 1;
           return coeff * compareSeasons(a[0], b[0]);
-        })
+        }),
       );
     case "AvgScore":
     case "FavoritesAvgScore":
     case "Shows":
-      console.log(Object.entries(seasonalStats)[0]);
       return Object.fromEntries(
         Object.entries(seasonalStats).sort((a, b) => {
           const comparisonValue = a[1][by] - b[1][by];
@@ -42,7 +40,7 @@ export function sortSeasonalStats(
           } else {
             return -comparisonValue;
           }
-        })
+        }),
       );
     default:
       return seasonalStats;

@@ -14,7 +14,7 @@ export default function NavItem({
     <li
       className={`${
         hovered && "bg-lime-600"
-      } z-50 cursor-pointer py-4 transition-colors duration-200`}
+      } z-50 cursor-pointer py-2 transition-colors duration-200 2xl:py-4`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

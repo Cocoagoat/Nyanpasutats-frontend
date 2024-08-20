@@ -1,26 +1,25 @@
 "use client";
 
-import { SeasonsData } from "@/app/interfaces";
+import updateCookie from "@/app/actions/updateCookie";
+import { SeasonsData, displayedMeanOptions } from "@/app/interfaces";
+import ToasterWithX from "@/components/general/ToasterWithX";
+import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
+import { useParams } from "next/navigation";
 import { useEffect, useReducer, useState } from "react";
-import Season from "./Season";
+import { MdArrowUpward } from "react-icons/md";
+import { TbX } from "react-icons/tb";
+import InfiniteScroll from "react-infinite-scroll-component";
 import DisplayOptions from "./DisplayOptions";
-import { seasonalStatsReducer } from "./reducer/SeasonalStatsReducer";
-import { displayedMeanOptions } from "@/app/interfaces";
+import Season from "./Season";
+import SeasonalGraph from "./SeasonalGraph";
+import styles from "./SeasonalStatsBox.module.css";
+import SeasonalWelcome from "./SeasonalWelcome";
 import {
   SeasonalContext,
   SeasonalDispatchContext,
 } from "./reducer/SeasonalContext";
-import SeasonalGraph from "./SeasonalGraph";
-import VerticalSlider from "@/components/general/VerticalSlider";
-import styles from "./SeasonalStatsBox.module.css";
-import ToasterWithX from "@/components/general/ToasterWithX";
-import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
-import SeasonalWelcome from "./SeasonalWelcome";
-import { TbX } from "react-icons/tb";
-import { MdArrowUpward } from "react-icons/md";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useParams } from "next/navigation";
-import updateCookie from "@/app/actions/updateCookie";
+import { seasonalStatsReducer } from "./reducer/SeasonalStatsReducer";
+import Padoru from "@/components/general/Padoru";
 
 const getKEntries = <T extends object>(obj: T, a: number, b: number): T => {
   return Object.keys(obj)
@@ -60,20 +59,18 @@ export default function SeasonalStatsBox({
     dispatch,
   ] = useReducer(seasonalStatsReducer, initialState);
 
-  const MAX_ITEMS = 5;
+  const MAX_ITEMS = 7;
 
   const [graphOpen, setGraphOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
-  const [brightness, setBrightness] = useState(100);
-  // const [cardOpen, setCardOpen] = useState(false);
+  // const [brightness, setBrightness] = useState(100);
+
   const [hasMore, setHasMore] = useState(true);
 
   const [partialDisplayedStats, setPartialDisplayedStats] = useState(
     getKEntries(displayedStats, 0, MAX_ITEMS),
   );
   const username = useParams().username;
-
-  console.log("Params are", username);
 
   useEffect(() => {
     if (typeof username === "string") {
@@ -166,7 +163,11 @@ export default function SeasonalStatsBox({
               dataLength={Object.keys(partialDisplayedStats).length}
               next={fetchMoreData}
               hasMore={hasMore}
-              loader={<h4>Loading...</h4>}
+              loader={
+                Object.keys(seasonalStats).length > 0 ? (
+                  <Padoru width={50} />
+                ) : null
+              }
               scrollableTarget="scrollableDiv"
             >
               {Object.keys(partialDisplayedStats).length ? (
@@ -181,9 +182,7 @@ export default function SeasonalStatsBox({
                           : Object.keys(seasonalStats).length
                       }
                       key={season}
-                      brightness={brightness}
-                      // cardOpen={cardOpen}
-                      // setCardOpen={setCardOpen}
+                      // brightness={brightness}
                     />
                   ),
                 )

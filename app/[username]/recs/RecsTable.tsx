@@ -26,6 +26,7 @@ export default function RecsTable({
   return (
     <table>
       <TableHead
+        // Remove the image column if there was an error loading images
         columnNames={!imageError ? showColumns : showColumns.slice(1)}
         extraStyles="bg-gradient-to-tr from-lime-800"
       />

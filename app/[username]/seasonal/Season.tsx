@@ -1,6 +1,7 @@
 "use client";
 
 import { SeasonData, SeasonName } from "@/app/interfaces";
+import useFirstTimeOpenMessage from "@/hooks/useFirstTimeOpenMessage";
 import fallBackground from "@/public/FallBackground.png";
 import springBackground from "@/public/SpringBackground.png";
 import summerBackground from "@/public/SummerBackground.png";
@@ -8,9 +9,7 @@ import winterBackground from "@/public/WinterBackground.png";
 import { useEffect, useState } from "react";
 import SeasonCollapsed from "./SeasonCollapsed";
 import SeasonExpanded from "./expanded/SeasonExpanded";
-import TierList from "./expanded/tierlist/TierList";
 import { SingleSeasonContext } from "./reducer/SeasonalContext";
-import useFirstTimeOpenMessage from "@/hooks/useFirstTimeOpenMessage";
 
 function getBackgroundColor(seasonName: SeasonName) {
   switch (seasonName) {
@@ -42,29 +41,22 @@ function getDayBackgroundImage(seasonName: SeasonName) {
   }
 }
 
-type BackgroundImageType = "Day" | "Custom" | "None";
-
 export default function Season({
   season,
   seasonStats,
   seasonCount,
-  brightness,
 }: {
   season: string;
   seasonStats: SeasonData;
   seasonCount: number;
-  brightness: number;
 }) {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [imageChanged, setImageChanged] = useState(false);
-  const [backgroundImageType, setBackgroundImageType] =
-    useState<BackgroundImageType>("Day");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [tierListOpen, setTierListOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [editModeOpen, setEditModeOpen] = useState(false);
   const [dragModeOpen, setDragModeOpen] = useState(false);
-  // const [cardOpen, setCardOpen] = useState(false);
   const [displayGradient, setDisplayGradient] = useState(true);
 
   const seasonName = season.split(" ")[0] as SeasonName;
@@ -79,7 +71,6 @@ export default function Season({
     // Effect for changing state when image is uploaded
     if (uploadedImage) {
       setBackgroundImage(uploadedImage);
-      setBackgroundImageType("Custom");
       setImageChanged(true);
     }
   }, [uploadedImage]);
@@ -161,9 +152,7 @@ export default function Season({
       {expanded ? (
         <div>
           <div className="fixed inset-0 z-[200] bg-black opacity-80" />
-          <SeasonExpanded brightness={brightness} setCardOpen={setExpanded} />
-
-          {/* {tierListOpen && <TierList setSeasonGraphOpen={setTierListOpen} />} */}
+          <SeasonExpanded setCardOpen={setExpanded} />
         </div>
       ) : (
         <SeasonCollapsed setCardOpen={setExpanded} />

@@ -13,7 +13,6 @@ export default function ControversialShow({
   controversialShow: ShowToDisplay;
   setDisplayContShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [eyeHovered, setHovered] = React.useState(false);
   const { editModeOpen } = useSingleSeasonContext()!;
 
   return (
@@ -23,18 +22,12 @@ export default function ControversialShow({
         className={`${
           editModeOpen ? "opacity-100" : "hidden"
         } absolute -top-8 w-full cursor-pointer text-center text-black`}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         onClick={() => setDisplayContShow(false)}
       >
         Test
       </RiDeleteBin6Fill>
 
-      <div
-        className="mx-auto w-fit"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
+      <div className="mx-auto w-fit">
         <ShowDisplay show={controversialShow} controversialImage={true} />
       </div>
       <p

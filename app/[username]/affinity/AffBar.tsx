@@ -7,9 +7,7 @@ function AffBar({ affinity }: { affinity: number }) {
   const barWidthCoeff = Math.abs(affinity) / 100;
 
   return (
-    // I tried to make a single half component and pass positive or negative as a prop
-    // but the amount of conditions made it very hard to read so I decided against it.
-    <div className="flex w-56 bg-black h-8">
+    <div className="flex h-8 w-56 bg-black">
       <AffBarNegativeHalf
         isPositive={isPositive}
         affinity={affinity}

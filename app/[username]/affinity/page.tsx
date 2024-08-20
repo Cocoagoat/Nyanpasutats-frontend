@@ -29,8 +29,9 @@ export default async function page({
   params: { username: string };
   searchParams: URLSearchParams;
 }) {
+  // In case someone got past the middleware that redirects people who change the URL
   const usernameCookie = cookies().get("username")?.["value"] as string;
-  if (usernameCookie && usernameCookie != params.username) {
+  if (!usernameCookie || usernameCookie != params.username) {
     return (
       <GenericError
         errorMessage={

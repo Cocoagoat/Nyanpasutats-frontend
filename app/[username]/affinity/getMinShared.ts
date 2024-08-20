@@ -1,13 +1,10 @@
-import { isValidNumber } from "@/utils/checkValidValues";
 import { URLSearchParams } from "url";
 
 export function getMinShared(searchParams: URLSearchParams) {
+  // Avoid too low/too high/troll values for searchParams
   let minSharedSearchParam =
     (searchParams.get && searchParams.get("minShared")) || "20";
-  console.log(
-    "is minSharedSearchParam valid?",
-    isValidNumber(minSharedSearchParam),
-  );
+
   let minShared = parseInt(minSharedSearchParam);
   minShared =
     !isNaN(minShared) && minShared > 20

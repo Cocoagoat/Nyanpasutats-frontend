@@ -1,4 +1,4 @@
-import { SeasonDataKeys, TooltipKeys } from "@/app/interfaces";
+import { TooltipKeys } from "@/app/interfaces";
 import useToast from "@/hooks/useToast";
 import { tooltipsContent } from "@/utils/TooltipsContent";
 import { mod } from "@/utils/general";
@@ -6,29 +6,25 @@ import { useContext, useState } from "react";
 import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
 import {
   SeasonalContext,
-  SingleSeasonContext,
   useSingleSeasonContext,
 } from "../reducer/SeasonalContext";
 import CollapseToggle from "./CollapseToggle";
 import SeasonStatGridCell from "./SeasonStatGridCell";
 
 export default function SeasonStatGrid() {
-  const { seasonStats, seasonCount } = useSingleSeasonContext();
-  const { displayedMean, displayedStats } = useContext(SeasonalContext)!;
-  // const otherMean =
-  //   displayedMean === "AvgScore" ? "FavoritesAvgScore" : "AvgScore";
+  const { seasonStats, editModeOpen } = useSingleSeasonContext();
+  const { displayedStats } = useContext(SeasonalContext)!;
 
-  const [rankToDisplay, yearlyRankToDisplay] =
-    displayedMean === "AvgScore"
-      ? (["OverallRank", "YearlyRank"] as [SeasonDataKeys, SeasonDataKeys])
-      : (["FavoritesRank", "FavYearlyRank"] as [
-          SeasonDataKeys,
-          SeasonDataKeys,
-        ]);
-  // const [otherRank, yearlyOtherRank] =
-  //   rankToDisplay === "OverallRank"
-  //     ? (["FavoritesRank", "FavYearlyRank"] as [SeasonDataKeys, SeasonDataKeys])
-  //     : (["OverallRank", "YearlyRank"] as [SeasonDataKeys, SeasonDataKeys]);
+  const [rows, setRows] = useState(2);
+  const [displayedStatIndexes, setDisplayedStatIndexes] = useState<number[]>(
+    Array.from({ length: rows }, (_, i) => [
+      3 * i,
+      3 * i + 1,
+      3 * i + 2,
+    ]).flat(),
+  );
+
+  const { notifyError } = useToast();
 
   type GridStats = {
     name: string;
@@ -48,7 +44,7 @@ export default function SeasonStatGrid() {
     },
     2: {
       name: `Overall Rank`,
-      value: `${seasonStats[rankToDisplay].toString()}/${Object.keys(displayedStats).length}`,
+      value: `${seasonStats["OverallRank"].toString()}/${Object.keys(displayedStats).length}`,
     },
     3: {
       name: "Shows Dropped",
@@ -92,19 +88,6 @@ export default function SeasonStatGrid() {
     },
   };
 
-  const [rows, setRows] = useState(2);
-
-  const [displayedStatIndexes, setDisplayedStatIndexes] = useState<number[]>(
-    Array.from({ length: rows }, (_, i) => [
-      3 * i,
-      3 * i + 1,
-      3 * i + 2,
-    ]).flat(),
-  );
-
-  const { editModeOpen } = useContext(SingleSeasonContext)!;
-  const { notifyError } = useToast();
-
   function handleAddRow() {
     if (rows < 4) {
       setRows((prev) => prev + 1);
@@ -139,15 +122,9 @@ export default function SeasonStatGrid() {
     const currentStat = displayedStatIndexes[cellIndex];
     let newStat = currentStat;
     if (direction === "left") {
-      // while (displayedStatIndexes.includes(newStat) || newStat === null) {
-      // newStat = (newStat - 1) % Object.keys(allGridStats).length;
       newStat = mod(newStat - 1, Object.keys(allGridStats).length);
-      // }
     } else {
-      // while (displayedStatIndexes.includes(newStat) || newStat === null) {
-      // newStat = (newStat + 1) % Object.keys(allGridStats).length;
       newStat = mod(newStat + 1, Object.keys(allGridStats).length);
-      // }
     }
     setDisplayedStatIndexes((prev) => {
       const newStats = [...prev];
@@ -156,21 +133,9 @@ export default function SeasonStatGrid() {
     });
   }
 
-  // console.log(displayedStatIndexes);
-
   const displayedGridStats: [number, GridStats][] = displayedStatIndexes.map(
     (key) => [key, allGridStats[key]],
   );
-
-  // const displayedStats = displayedStatIndexes.reduce((acc, key) => {
-  //   console.log(key);
-  //   if (key in allGridStats) {
-  //     acc.set(key, allGridStats[key]);
-  //   }
-  //   return acc;
-  // }, new Map<number, GridStats>());
-
-  // console.log(displayedStats);
 
   return (
     <>

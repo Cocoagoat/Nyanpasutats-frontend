@@ -25,7 +25,7 @@ export default function FilterDropdown({
     setShowAmountIsOpen(false);
     setMALScoreIsOpen(false);
   });
-  // console.log(extraStyles);
+
   return (
     <div ref={ref} className="relative">
       <SettingsButton
@@ -39,10 +39,6 @@ export default function FilterDropdown({
         <div
           className={` ${type === "Graph" ? "-top-20" : ""} absolute left-0 w-24 rounded-lg
             bg-blue-970 py-2 shadow-md md:w-44 ${extraStyles}`}
-          // onMouseLeave={() => {
-          //   setYearRangeIsOpen(false);
-          //   setShowAmountIsOpen(false);
-          // }}
         >
           <SortFilterOption
             statName="Year Range"

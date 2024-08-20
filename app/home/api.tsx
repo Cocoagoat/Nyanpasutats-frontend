@@ -14,6 +14,8 @@ export async function getUserData(taskId: string) {
   const url = `http://localhost:8000/tasks/?task_id=${taskId}`;
   try {
     const res = await fetch(url, { cache: "force-cache" });
+    // The view connected to this endpoint will poll the Celery task
+    // until it's done, then return the data/error message.
     const rawData = await res.text();
     const data = JSON.parse(rawData);
 
@@ -41,23 +43,23 @@ export async function startTask(
 }
 
 export async function retrieveQueuePosition() {
-  const url = `http://localhost:8000/queue_pos/?test="test"`;
+  const url = `http://localhost:8000/queue_pos/?test=${Math.random()}`;
   const res = await fetch(url, { cache: "no-store" });
 
   const rawData = await res.text();
   const data = JSON.parse(rawData);
-  console.log("Queue_pos response is: ", data);
 
   return { queuePosition: data["queuePosition"] };
 }
 
-export async function assertUsernameInCache(username: string) {
-  const url = `http://localhost:8000/recent_users/?username=${encodeURIComponent(username)}`;
-  const res = await fetch(url, { cache: "no-store" });
-  const rawData = await res.text();
-  const data = JSON.parse(rawData);
-  return data["UserFound"];
-}
+// old way of user verification, remove later
+// export async function assertUsernameInCache(username: string) {
+//   const url = `http://localhost:8000/recent_users/?username=${encodeURIComponent(username)}`;
+//   const res = await fetch(url, { cache: "no-store" });
+//   const rawData = await res.text();
+//   const data = JSON.parse(rawData);
+//   return data["UserFound"];
+// }
 
 export async function updateImageUrl(showName: string) {
   const url = `http://localhost:8000/update_img_url/`;
@@ -71,7 +73,6 @@ export async function updateImageUrl(showName: string) {
   });
   const rawData = await res.text();
   const data = JSON.parse(rawData);
-  console.log("Response is: ", data);
 }
 
 export async function getShowData(

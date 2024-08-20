@@ -1,3 +1,4 @@
+// The reducer for the seasonal graph (Graph button in the DisplayOptions component)
 import { ChartData, ChartDataKeys } from "@/app/interfaces";
 import { displayedMeanOptions } from "@/app/interfaces";
 import { Action } from "./actions";
@@ -37,21 +38,19 @@ export function sortChartData(
 }
 
 export function chartReducer(state: ChartState, action: Action): ChartState {
-  console.log(action);
   switch (action.type) {
     case "SORT":
-      console.log("Entered SORT case");
       if (
         action.payload.by !== "Season" &&
         action.payload.by !== "AvgScore" &&
         action.payload.by !== "FavoritesAvgScore" &&
         action.payload.by !== "Shows"
       )
-        return state; //error
+        return state; // Invalid sort key
       const sortedChartData = sortChartData(
         state.displayedChartData,
         action.payload.by,
-        state.sortedReverse, // toggle the sort direction before sorting
+        state.sortedReverse,
       );
       return {
         ...state,
@@ -88,12 +87,6 @@ export function chartReducer(state: ChartState, action: Action): ChartState {
         displayedMean: action.payload,
       };
     case "FILTER_BY_SHOW_COUNT":
-      console.log(
-        "minShows: ",
-        action.payload.minShows,
-        "maxShows: ",
-        action.payload.maxShows,
-      );
       const minShows = checkValidShowCount(action.payload.minShows)
         ? action.payload.minShows
         : 0;
@@ -115,7 +108,6 @@ export function chartReducer(state: ChartState, action: Action): ChartState {
     case "RECALCULATE_OVERALL_RANK":
       return state;
     default:
-      console.log(action);
       throw new Error("Invalid action type in ChartReducer");
   }
 }

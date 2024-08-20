@@ -14,12 +14,13 @@ export function Nav() {
 
   return (
     <nav
-      className="z-50 flex w-full justify-end bg-gradient-to-tl from-blue-970 text-lg  text-white
+      className="z-50 flex w-full justify-end 
+      bg-gradient-to-tl from-blue-970 text-lg  text-white
      "
     >
       <div className={`z-[170] flex w-full flex-col`}>
         <button
-          className={`flex justify-end bg-blue-990 px-8 py-4 transition-colors duration-500
+          className={`flex justify-end bg-blue-990 px-8  transition-colors duration-500
               md:hidden
            ${isAccordionOpen ? "text-right" : "text-left"}`}
           onClick={() => setIsAccordionOpen(!isAccordionOpen)}

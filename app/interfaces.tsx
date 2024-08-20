@@ -1,17 +1,15 @@
-import { tooltipsContent } from "@/utils/TooltipsContent";
-import { NumberValueToken } from "html2canvas/dist/types/css/syntax/tokenizer";
-import { Dispatch, SetStateAction } from "react";
 import AnilistLogo from "@/public/AniList_logo.png";
 import MALLogo from "@/public/MALLogo.png";
-import { StaticImageData } from "next/image";
+import { tooltipsContent } from "@/utils/TooltipsContent";
+import { Dispatch, SetStateAction } from "react";
 
 export type User = {
   username: string;
   setUsername: Dispatch<SetStateAction<string>>;
 };
 
-export type TaskReturnType = {
-  taskId: string;
+export type ImageRow = {
+  [key: string]: string;
 };
 
 export type RecommendationType = {

@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# old unused components
+**/unused.tsx
+/unused
+/.unused
+

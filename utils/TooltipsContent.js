@@ -25,7 +25,3 @@ export const tooltipsContent = {
   "Recommendation Sort": `The model does take into account MAL scores, so if you want lesser known shows 
   that the model decided you might like, sort by score difference.`,
 };
-
-// export const tooltipsContent = {
-//   "Contrarian Index": `Testing backslashes \n This is supposed to appear on a new line \n Same for this \n`,
-// };

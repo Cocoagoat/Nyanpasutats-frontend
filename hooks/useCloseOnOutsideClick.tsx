@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import useOutsideClick from "./useOutsideClick";
 
 export function useCloseOnOutsideClick<T extends HTMLElement>(

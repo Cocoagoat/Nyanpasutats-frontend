@@ -15,7 +15,6 @@ export default function Rec({
   error: boolean;
   loading: boolean;
 }) {
-  console.log(imageUrl);
   return (
     <tr
       className={` ${index % 2 == 0 ? " bg-gradient-to-br from-blue-970" : " bg-opacity-10 bg-gradient-to-tr from-lime-800"} h-[105px]`}

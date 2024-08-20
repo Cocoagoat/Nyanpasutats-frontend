@@ -1,14 +1,13 @@
+import SettingsButton from "@/components/general/SettingsButton";
 import React, { useContext } from "react";
-import SortingDropdown from "./dropdowns/SortingDropdown";
 import FilterDropdown from "./dropdowns/FilterDropdown";
 import SearchSeason from "./dropdowns/SearchSeason";
-import SeasonalGraphDropdown from "./dropdowns/SeasonalGraphDropdown";
-import SettingsButton from "@/components/general/SettingsButton";
-import { useHandlers } from "./reducer/useHandlers";
+import SortingDropdown from "./dropdowns/SortingDropdown";
 import {
   SeasonalContext,
   SeasonalDispatchContext,
 } from "./reducer/SeasonalContext";
+import { useHandlers } from "./reducer/useHandlers";
 
 export default function DisplayOptions({
   setGraphOpen,
@@ -28,7 +27,10 @@ export default function DisplayOptions({
         <SortingDropdown type="Full" />
         <FilterDropdown type="Full" />
         <SearchSeason />
-        <SeasonalGraphDropdown setGraphOpen={setGraphOpen} />
+        {/* <SeasonalGraphDropdown setGraphOpen={setGraphOpen} /> */}
+        <SettingsButton onClick={() => setGraphOpen(true)}>
+          Graph
+        </SettingsButton>
         <SettingsButton
           onClick={() => {
             handleToggleSequels(noSequels);

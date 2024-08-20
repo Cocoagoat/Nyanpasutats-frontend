@@ -14,14 +14,8 @@ export default function SeasonCollapsed({
 }: {
   setCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const {
-    season,
-    seasonStats,
-    backgroundImage,
-    backgroundColor,
-    setExpanded,
-    // nightImage,
-  } = useSingleSeasonContext();
+  const { season, seasonStats, backgroundImage, backgroundColor, setExpanded } =
+    useSingleSeasonContext();
 
   const dispatch = useContext(SeasonalDispatchContext);
 
@@ -33,23 +27,14 @@ export default function SeasonCollapsed({
 
   const rgbColor = hexToRgb(backgroundColor);
 
-  console.log(`rgbColor of season ${season} is ${rgbColor}`);
-
   return (
-    <div
-      className="relative mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg"
-      // style={{
-      //   backgroundImage: `url(${backgroundImage})`,
-      //   backgroundSize: "cover",
-      // }}
-    >
+    <div className="relative mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg">
       <Image
         src={backgroundImage}
-        layout="fill"
+        fill
         alt="Test"
         className={`absolute inset-0 rounded-3xl  object-cover `}
         quality={85}
-        // sizes={"(max-width: 768px) 100vw, 75vw"}
         style={{
           zIndex: 0,
         }}

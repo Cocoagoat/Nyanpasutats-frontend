@@ -4,7 +4,6 @@ export function checkValidYear(year: number) {
 }
 
 export function checkValidShowCount(showCount: number) {
-  console.log(showCount);
   if (showCount <= 0 || showCount > 100) return false;
   return true;
 }

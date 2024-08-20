@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import { SiteType } from "@/app/interfaces";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
@@ -12,7 +12,6 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 import img1 from "@/public/Test-card.png";
 import img2 from "@/public/Test-edited-card.png";
 import img3 from "@/public/Test-tierlist.png";
-// import img4 from "@/public/Test-edited-tierlist.png";
 import img4 from "@/public/Affinity.png";
 import img5 from "@/public/Recs.png";
 
@@ -21,10 +20,16 @@ import ToasterWithX from "@/components/general/ToasterWithX";
 import useToast from "@/hooks/useToast";
 import UsernameInput from "./UsernameInput";
 import ResetUsername from "./ResetUsername";
-import startGlobalInterval from "./ResetIntervalRegulator.js";
+import startGlobalInterval, {
+  startGlobalIntervalServerSide,
+} from "./ResetIntervalRegulator.js";
 import UserQueueDisplay from "@/components/general/UserQueueDisplay";
 import resetAllServerCookies from "../actions/resetAllServerCookies";
 import Heading from "./Heading";
+import useSetFromCookie from "@/hooks/useSetFromCookie";
+import { useNotify } from "@/hooks/useNotify";
+import getCookie from "../actions/getCookie";
+import updateCookie from "../actions/updateCookie";
 
 // export async function generateMetadata() {
 //   return {
@@ -52,6 +57,7 @@ export default function Home() {
   const [redirectBoxClicked, setRedirectBoxClicked] = useState(false);
   const [queuePosition, setQueuePosition] = useState(0);
   const [currentSite, setCurrentSite] = useState<SiteType>("MAL");
+  const { notifyError, notifySuccess } = useToast();
 
   const boxesDisabled = [
     !Boolean(userName) || currentSite !== "MAL",
@@ -69,60 +75,45 @@ export default function Home() {
     setError("");
   }
 
-  const { notifyError, notifySuccess } = useToast();
-  useOutsideClick(ref, onOutsideClick); // Not needed
+  useOutsideClick(ref, onOutsideClick);
 
-  // UsernameBox
-  useEffect(() => {
-    const username = localStorage.getItem("username");
-    if (username !== null) {
-      setUserName(username);
-    }
-  }, []);
+  useSetFromCookie(setUserName, "username");
+  useSetFromCookie(setCurrentSite, "currentSite");
 
-  // UsernameBox
-  useEffect(() => {
-    const currentSite = localStorage.getItem("currentSite") as SiteType;
-    if (currentSite !== null) {
-      setCurrentSite(currentSite);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!loading && !error && queuePosition !== 0) {
-      notifySuccess(
-        `Successfully fetched your list and seasonal stats. 
+  useNotify(notifyError, error, [error], Boolean(error));
+  const successMessage = `Successfully fetched your list and seasonal stats. 
         
-        You may now proceed to the seasonal section 
-        or fetch your recommendations and/or affinity stats separately, but do note that they take significantly longer
-        to fetch than the seasonal stats.`,
-        undefined,
-        20000,
-      );
-    }
-  }, [loading, queuePosition]);
+         You may now proceed to the seasonal section 
+         or fetch your recommendations and/or affinity stats separately, but do note that they take significantly longer
+         to fetch than the seasonal stats.`;
+  useNotify(
+    notifySuccess,
+    successMessage,
+    [loading, queuePosition],
+    !loading && !error && queuePosition !== 0,
+  );
 
+  // Reduces the count for the number of times the user has reset their username
+  // every 2 minutes
   useEffect(() => {
-    if (error) {
-      notifyError(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    startGlobalInterval();
+    startGlobalIntervalServerSide();
   }, []);
 
   async function handleResetUsername(e: React.MouseEvent<HTMLButtonElement>) {
     setUserName("");
     localStorage.removeItem("username");
-    resetAllServerCookies();
+    resetAllServerCookies(); // except for resetCount
+    let resetCount = await getCookie("resetCount");
 
-    if (localStorage.getItem("resetCount") === null) {
-      localStorage.setItem("resetCount", "1");
+    // let resetCount = localStorage.getItem("resetCount");
+    if (!resetCount) {
+      // localStorage.setItem("resetCount", "1");
+      updateCookie("resetCount", "1");
     } else {
-      let count = parseInt(localStorage.getItem("resetCount") as string);
-      count++;
-      localStorage.setItem("resetCount", count.toString());
+      // let count = parseInt(localStorage.getItem("resetCount") as string);
+      // count++;
+      updateCookie("resetCount", (parseInt(resetCount) + 1).toString());
+      // localStorage.setItem("resetCount", count.toString());
     }
   }
 
@@ -131,11 +122,9 @@ export default function Home() {
       setError("Please enter a username.");
       return;
     }
-
-    if (
-      localStorage.getItem("resetCount") !== null &&
-      parseInt(localStorage.getItem("resetCount") as string) > 3
-    ) {
+    let resetCount = await getCookie("resetCount");
+    // let resetCount = localStorage.getItem("resetCount");
+    if (resetCount && parseInt(resetCount) >= 3) {
       setError(
         "You've been doing that too much lately. Please try again later.",
       );
@@ -146,7 +135,6 @@ export default function Home() {
       let data = await retrieveQueuePosition();
       setQueuePosition(data.queuePosition);
       setLoading(true);
-      console.log("Queue position is", data.queuePosition);
 
       let taskId = await startTask(userInputField, "seasonal", currentSite);
       let seasonalData = await retrieveTaskData(
@@ -154,18 +142,6 @@ export default function Home() {
         userInputField,
         "seasonal",
       );
-      console.log("Successfully retrieved seasonal data");
-      // if (data.queuePosition < 0) {
-      //   taskId = await startTask(userInputField, "recs", currentSite);
-      //   let recsData = await retrieveTaskData(taskId, userInputField, "recs");
-      //   console.log("Successfully retrieved recs data");
-
-      //   if (currentSite === "MAL") {
-      //     taskId = await startTask(userInputField, "affinity", currentSite);
-      //     let affinityData = await retrieveTaskData(taskId, "affinity");
-      //     console.log("Successfully retrieved affinity data");
-      //   }
-      // }
 
       localStorage.setItem("username", userInputField);
       setUserName(userInputField);
@@ -211,11 +187,6 @@ export default function Home() {
 
         <div ref={ref} className="text-center">
           {loading && <UserQueueDisplay queuePosition={queuePosition} />}
-          {/* {userName && (
-            <p className="font-semibold text-lime-600">
-              Successfully fetched your list!
-            </p>
-          )} */}
         </div>
 
         <div

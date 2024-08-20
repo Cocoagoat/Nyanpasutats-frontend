@@ -1,7 +1,7 @@
 import React from "react";
 import FavoriteShows from "./FavoriteShows";
 import { ShowsToDisplay } from "@/app/interfaces";
-import LargeButton from "../../../../components/general/LargeButton";
+import LargeButton from "@/components/general/LargeButton";
 
 export default function FavoriteShowsModal({
   favorites,
@@ -12,16 +12,18 @@ export default function FavoriteShowsModal({
   setFavorites: React.Dispatch<React.SetStateAction<ShowsToDisplay>>;
   setFavoritesModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  // The favorites that will initially be displayed on the card
   const topFiveFavorites = Object.fromEntries(
-    Object.entries(favorites).filter((show) => show[1].displayed)
+    Object.entries(favorites).filter((show) => show[1].displayed),
   );
 
+  // The favorites that won't initially be displayed but can be added to the card
   const leftoverFavorites = Object.fromEntries(
-    Object.entries(favorites).filter((show) => !show[1].displayed)
+    Object.entries(favorites).filter((show) => !show[1].displayed),
   );
 
   return (
-    <div className="absolute w-full h-full flex flex-col items-center justify-center gap-20 bg-zinc-700 z-40 top-0 text-white">
+    <div className="absolute top-0 z-40 flex h-full w-full flex-col items-center justify-center gap-20 bg-zinc-700 text-white">
       <div>
         <FavoriteShows
           favorites={topFiveFavorites}

@@ -28,11 +28,9 @@ export default function DisplayOptions({
       <SettingsButton
         extraStyles={`${styles.modifiedButton}`}
         onClick={() => {
-          console.log("Before handle");
           sortedBy === SORT_BY_PREDICTION_SCORE
             ? handleToggleSort("SORT_BY_SCORE_DIFFERENCE")
             : handleToggleSort("SORT_BY_PREDICTION_SCORE");
-          console.log("After handle");
         }}
       >
         {sortedBy === SORT_BY_PREDICTION_SCORE

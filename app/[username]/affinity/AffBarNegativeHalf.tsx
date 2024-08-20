@@ -1,24 +1,24 @@
 import React from "react";
 
 export default function AffBarNegativeHalf({
-  isPositive,
   affinity,
+  isPositive,
   barWidthCoeff,
 }: {
-  isPositive: boolean;
   affinity: number;
+  isPositive: boolean;
   barWidthCoeff: number;
 }) {
   return (
-    <div className="text-right relative justify-end flex items-center bg-green-MAL-outer w-28">
+    <div className="relative flex w-28 items-center justify-end bg-green-MAL-outer text-right">
       <span
         style={{
           width: `${!isPositive ? (barWidthCoeff * 112).toFixed(0) : 0}px`,
         }}
-        className="bg-green-MAL-inner absolute text-left h-full "
+        className="absolute h-full bg-green-MAL-inner text-left "
       ></span>
       <p
-        className={`mr-2 z-10 ${
+        className={`z-10 mr-2 ${
           !isPositive ? "font-semibold" : "font-extralight"
         } `}
       >

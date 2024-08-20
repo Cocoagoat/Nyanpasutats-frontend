@@ -1,31 +1,33 @@
+import useLoadBestXImagesFromCookies from "@/app/[username]/seasonal/expanded/useLoadBestXImagesFromCookies";
+import useSaveBestXImagesIntoCookies from "@/app/[username]/seasonal/expanded/useSaveBestXImagesIntoCookies";
 import { getShowData } from "@/app/actions/getShowData";
 import styles from "@/app/globals.module.css";
-import { ShowsToDisplay, ShowToDisplay, TiersState } from "@/app/interfaces";
+import {
+  ImageRow,
+  ShowsToDisplay,
+  ShowToDisplay,
+  TiersState,
+} from "@/app/interfaces";
 import Padoru from "@/components/general/Padoru";
-import { ModalContext } from "@/contexts/ModalContext";
+import { ModalContext } from "./ModalContext";
 import useWindowSize from "@/hooks/useWindowSize";
-import errorImg from "@/public/default.png";
-import { range } from "@/utils/general";
-import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
+import { RiArrowUpDoubleFill } from "react-icons/ri";
 import LargeButton from "../../../../components/general/LargeButton";
 import { useSingleSeasonContext } from "../reducer/SeasonalContext";
-import BackgroundDesign from "./BackgroundDesign";
-import BestX2 from "./BestX2";
+import BackgroundDesignModal from "./BackgroundDesignModal";
+import BestX from "./BestX";
+import BestXRowToggle from "./BestXRowToggle";
 import CollapseToggle from "./CollapseToggle";
 import ControversialShow from "./ControversialShow";
 import FavoriteShows from "./FavoriteShows";
 import FavoriteShowsModal from "./FavoriteShowsModal";
-import GradientFill from "./GradientFill";
 import Heading from "./Heading";
+import SeasonBackgroundImageContainer from "./SeasonBackgroundImageContainer";
 import SeasonExpandedToolbar from "./SeasonExpandedToolbar";
 import SeasonStatGrid from "./SeasonStatGrid";
 import TierList from "./tierlist/TierList";
-
-export type ImageRow = {
-  [key: string]: string;
-};
+import { useParams } from "next/navigation";
 
 export const initialTierColors: Record<number, string> = {
   0.5: "#270202",
@@ -50,31 +52,17 @@ export const initialTierColors: Record<number, string> = {
   10: "#00b0ff",
 };
 
-// const initialRatingTexts: Record<number, string> = {
-//   1: "1/10",
-//   2: "2/10",
-//   3: "3/10",
-//   4: "4/10",
-//   5: "5/10",
-//   6: "6/10",
-//   7: "7/10",
-//   8: "8/10",
-//   9: "9/10",
-//   10: "10/10",
-// };
-
 export default function SeasonExpanded({
-  brightness,
   setCardOpen,
 }: {
-  brightness: number;
   setCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [favorites, setFavorites] = useState<ShowsToDisplay>({});
   const [loaded, setLoaded] = useState(false);
   const [displayContShow, setDisplayContShow] = useState(true);
   const { height } = useWindowSize();
-  const [tiers, setTiers] = useState<TiersState>({});
+  const tiers = useRef<TiersState>({});
+  const username = useParams<{ username: string }>().username;
 
   const displayedFavorites = Object.fromEntries(
     Object.entries(favorites).filter((show) => show[1].displayed),
@@ -98,21 +86,12 @@ export default function SeasonExpanded({
   const [worstImages, setWorstImages] = useState([defaultWorstImages]);
   const [bestImages, setBestImages] = useState([defaultBestImages]);
 
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const imageRef = useRef<HTMLImageElement | null>(null);
-
   const {
     season,
     seasonStats,
-    backgroundImage,
-    backgroundColor,
     setExpanded,
-    imageChanged,
     uploadModalOpen,
     editModeOpen,
-    dragModeOpen,
-    displayGradient,
     setTierListOpen,
     tierListOpen,
   } = useSingleSeasonContext();
@@ -129,118 +108,42 @@ export default function SeasonExpanded({
     setWorstImagesNotEmpty((prev) => prev.slice(0, -1));
   }
 
-  function imagesAreEmpty(images: ImageRow[]) {
-    for (const imageRow of images) {
-      for (const key in imageRow) {
-        if (imageRow[key] !== "") {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+  useSaveBestXImagesIntoCookies(worstImages, season, "worst");
+  useSaveBestXImagesIntoCookies(bestImages, season, "best");
+
+  useLoadBestXImagesFromCookies(
+    season,
+    setWorstImages,
+    setBestImages,
+    setWorstImagesNotEmpty,
+  );
 
   useEffect(() => {
-    if (!imagesAreEmpty(worstImages) || worstImages.length > 1) {
-      sessionStorage.setItem(
-        `${season}_worstImages`,
-        JSON.stringify(worstImages),
-      );
-    }
-  }, [worstImages]);
-
-  useEffect(() => {
-    if (!imagesAreEmpty(bestImages) || bestImages.length > 1) {
-      sessionStorage.setItem(
-        `${season}_bestImages`,
-        JSON.stringify(bestImages),
-      );
-    }
-  }, [bestImages]);
-
-  useEffect(() => {
-    let savedWorstImages = sessionStorage.getItem(`${season}_worstImages`);
-    let savedBestImages = sessionStorage.getItem(`${season}_bestImages`);
-
-    if (savedWorstImages) {
-      console.log(sessionStorage.getItem(`${season}_worstImages`)!);
-      setWorstImages(JSON.parse(savedWorstImages)); // ffs typescript
-
-      let parsedSavedWorstImages = JSON.parse(savedWorstImages) as ImageRow[];
-      if (!parsedSavedWorstImages) return;
-      setWorstImagesNotEmpty(
-        Array.from(
-          range(0, parsedSavedWorstImages.length - 1, 1),
-          (i: number) =>
-            Object.keys(parsedSavedWorstImages[i]).length >= 1 ||
-            (parsedSavedWorstImages[i][0] !== "" &&
-              parsedSavedWorstImages[i][0] !== undefined),
-        ),
-      );
-    }
-    if (savedBestImages) {
-      console.log(sessionStorage.getItem(`${season}_bestImages`)!);
-      setBestImages(JSON.parse(savedBestImages));
-    }
-  }, []);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (dragModeOpen) {
-      console.log(e.target);
-      e.preventDefault();
-      setIsDragging(true);
-    }
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (isDragging) {
-      setPosition((prevPosition) => ({
-        x: prevPosition.x + e.movementX,
-        y: prevPosition.y + e.movementY,
-      }));
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    } else {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging]);
-
-  useEffect(() => {
+    // This hook fetches the image urls for all the shows the user watched,
+    // and updates all the image-dependent state
+    // (tiers, favorites, controversial show) in one go.
     async function getImageUrls() {
       const showList = seasonStats.ShowList;
       const showNames = Object.keys(showList);
       let imageUrls = await getShowData(showNames, "img_urls");
-      let initialTiers: TiersState = {};
+      let tempInitialTiers: TiersState = {};
       for (let i = 1; i <= 10; i++) {
-        initialTiers[i] = {
+        tempInitialTiers[i] = {
           imageData: [],
           color: initialTierColors[i],
           text: `${i}/10`,
         };
       }
 
+      // Favorites are shows that have a score higher than the user's
+      // mean score and equal to or higher than their 5th highest score
       const showScores = Object.values(showList);
       const thresholdScore = showScores[4];
-
       const favorite_show_data = {} as ShowsToDisplay;
 
       Object.entries(showList).forEach(([name, score], index) => {
         const tier = Math.max(1, Math.round(score)); // In case someone has scores below 0.5 on Anilist
+
         if (score) {
           const show_data = {
             name: showNames[index],
@@ -248,8 +151,11 @@ export default function SeasonExpanded({
             score: tier,
             displayed: false,
           } as ShowToDisplay;
-          initialTiers[tier]["imageData"].push(show_data);
 
+          // Add all shows to tiers
+          tempInitialTiers[tier]["imageData"].push(show_data);
+
+          // Add all shows meeting favorites condition to favorites
           if (score >= thresholdScore && score >= seasonStats["AvgScore"]) {
             let show_data_for_favs = {
               ...show_data,
@@ -258,13 +164,24 @@ export default function SeasonExpanded({
             favorite_show_data[showNames[index]] = show_data_for_favs;
           }
 
+          // Backend already calculated the most "controversial" show
           if (showNames[index] === seasonStats["MostUnusualShow"]) {
             setControversialShow(show_data);
           }
         }
       });
 
-      setTiers(initialTiers);
+      if (sessionStorage.getItem(`${username}_${season}_TierList`)) {
+        const savedTiers = JSON.parse(
+          sessionStorage.getItem(`${username}_${season}_TierList`) as string,
+        );
+        // setTiers(savedTiers);
+        tiers.current = savedTiers;
+      } else {
+        // setTiers(tempInitialTiers);
+        tiers.current = tempInitialTiers;
+      }
+
       setLoaded(true);
       setFavorites(favorite_show_data);
     }
@@ -285,39 +202,18 @@ export default function SeasonExpanded({
         }}
       >
         <div
-          style={{ backgroundColor: backgroundColor }}
-          className="relative mx-16 mb-8   rounded-3xl"
+          style={
+            {
+              // html2Images does not like inline styles, the solid-colored
+              // background is now created inside GradientFill alongside
+              // the gradient.
+            }
+          }
+          className="relative mx-16 mb-8  rounded-3xl"
         >
-          {uploadModalOpen && <BackgroundDesign />}
-          <div
-            className={`relative ${dragModeOpen && "cursor-move"} rounded-3xl bg-cover  text-white shadow-lg`}
-            style={{
-              backgroundImage: `${imageChanged ? `url(${backgroundImage})` : ""}`,
-              // backgroundSize: `${imageChanged && !nightImage ? "auto 120%" : "auto 102%"}`,
-              backgroundPosition: `${position.x}px 0px`,
-              opacity: brightness / 100,
-            }}
-            id={season}
-            onMouseDown={handleMouseDown}
-            draggable={true}
-          >
-            {displayGradient && <GradientFill />}
-
-            {!imageChanged && (
-              <Image
-                src={backgroundImage}
-                ref={imageRef}
-                fill
-                alt="Test"
-                className={`absolute inset-0 rounded-3xl  object-cover `}
-                quality={85}
-                style={{
-                  zIndex: isDragging ? 100000 : 0,
-                }}
-                objectPosition={`${position.x}px 0px`}
-              />
-            )}
-
+          {uploadModalOpen && <BackgroundDesignModal />}
+          <SeasonBackgroundImageContainer>
+            {/* Basically a div with a background image and dragging capabilities*/}
             <div className="relative z-20">
               <div className="flex flex-col items-center justify-between p-4">
                 <Heading />
@@ -335,6 +231,7 @@ export default function SeasonExpanded({
                       setDisplayContShow={setDisplayContShow}
                     />
                   ) : (
+                    // If edit mode is open, show the button that restores the contShow
                     editModeOpen && (
                       <div
                         className={`flex h-[105px] w-[75px] cursor-pointer  
@@ -365,7 +262,7 @@ export default function SeasonExpanded({
                       Add favorites
                     </LargeButton>
                   )}
-                  <BestX2
+                  <BestX
                     worstImages={worstImages}
                     bestImages={bestImages}
                     setWorstImages={setWorstImages}
@@ -375,26 +272,15 @@ export default function SeasonExpanded({
                   />
                 </div>
               </div>
+
               {editModeOpen && (
-                <>
-                  {bestImages.length > 0 && (
-                    <CollapseToggle
-                      onClick={handleRemoveLastRow}
-                      IconComponent={RiArrowUpDoubleFill}
-                      text="Delete Row"
-                      alwaysVisible={true}
-                    />
-                  )}
-                  {bestImages.length < 4 && (
-                    <CollapseToggle
-                      onClick={handleAddNewRow}
-                      IconComponent={RiArrowDownDoubleFill}
-                      text="Add Row"
-                      alwaysVisible={true}
-                    />
-                  )}
-                </>
+                <BestXRowToggle
+                  currentRows={bestImages.length}
+                  handleAddNewRow={handleAddNewRow}
+                  handleRemoveLastRow={handleRemoveLastRow}
+                />
               )}
+
               {!editModeOpen && (
                 <CollapseToggle
                   onClick={() => {
@@ -413,19 +299,24 @@ export default function SeasonExpanded({
                 setFavoritesModalOpen={setFavoritesModalOpen}
               />
             )}
-          </div>
+          </SeasonBackgroundImageContainer>
+
           <>
             <SeasonExpandedToolbar />
           </>
         </div>
       </div>
+
       {tierListOpen && (
-        <TierList
-          tiers={tiers}
-          setTiers={setTiers}
-          imagesLoaded={loaded}
-          setSeasonGraphOpen={setTierListOpen}
-        />
+        <div>
+          <div className="fixed inset-0 z-[450] bg-black opacity-90" />
+
+          <TierList
+            tiersFromRef={tiers.current}
+            imagesLoaded={loaded}
+            setSeasonGraphOpen={setTierListOpen}
+          />
+        </div>
       )}
     </ModalContext.Provider>
   );

@@ -1,11 +1,11 @@
-import React from "react";
-import { assertUsernameInCache, startTask } from "@/app/home/api";
 import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
+import { startTask } from "@/app/home/api";
 import { RecommendationType } from "@/app/interfaces";
-import RecsBox from "./RecsBox";
 import GenericError from "@/components/general/GenericError";
 import { getSiteCookie } from "@/utils/CookieUtils";
 import { cookies } from "next/headers";
+import RecsBox from "./RecsBox";
+import { Nav } from "@/components/general/Nav";
 
 export async function generateMetadata({
   params,
@@ -30,13 +30,13 @@ export default async function page({
 }: {
   params: { username: string };
 }) {
-  let error = null;
   let data = [];
-
+  // Set on the home page when fetching user data
   const siteCookie = getSiteCookie();
 
+  // In case someone got past the middleware that redirects people who change the URL
   const usernameCookie = cookies().get("username")?.["value"] as string;
-  if (usernameCookie && usernameCookie != params.username) {
+  if (!usernameCookie || usernameCookie != params.username) {
     return (
       <GenericError
         errorMessage={
@@ -46,17 +46,14 @@ export default async function page({
     );
   }
 
-  try {
-    const taskId = await startTask(params.username, "recs", siteCookie);
-    console.log("Task response in page : ", taskId);
-    if (taskId === undefined) {
-      throw new Error("Task ID is undefined");
-    }
-    data = await retrieveTaskData(taskId, params.username);
-  } catch (err) {
-    // Delete this later since Server Components can't throw errors
-    error = (err as Error).message;
+  // Start Celery task to get recommendations, then ping server in intervals
+  // until data is ready
+  const taskId = await startTask(params.username, "recs", siteCookie);
+  if (taskId === undefined) {
+    throw new Error("Unknown error. Please try again.");
   }
+  data = await retrieveTaskData(taskId, params.username);
+
   let recs: RecommendationType[] = data["Recommendations"],
     recs_sorted_by_diff: RecommendationType[] =
       data["RecommendationsSortedByDiff"];
@@ -66,21 +63,16 @@ export default async function page({
 
   recs = roundPredictedScores(recs);
   recs_sorted_by_diff = roundPredictedScores(recs_sorted_by_diff);
+
   return (
     <>
-      {error ? (
-        <GenericError errorMessage={error} />
-      ) : (
-        <>
-          {/* <Test /> */}
-          <RecsBox
-            recs={recs}
-            recs_sorted_by_diff={recs_sorted_by_diff}
-            favTags={favTags}
-            leastFavTags={leastFavTags}
-          ></RecsBox>
-        </>
-      )}
+      <Nav />
+      <RecsBox
+        recs={recs}
+        recs_sorted_by_diff={recs_sorted_by_diff}
+        favTags={favTags}
+        leastFavTags={leastFavTags}
+      ></RecsBox>
     </>
   );
 }

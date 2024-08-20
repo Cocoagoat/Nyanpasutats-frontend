@@ -15,6 +15,8 @@ export default function FilterByShowAmount({
   const [maxShows, setMaxShows] = useState("");
 
   const dispatch = React.useContext(SeasonalDispatchContext)!;
+  // If type is Full, use the default dispatch (from seasonalReducer),
+  // otherwise use the custom dispatch (like the chartReducer one)
   const dispatchToUse =
     type === "Full" || !customDispatch ? dispatch : customDispatch;
 
@@ -30,7 +32,7 @@ export default function FilterByShowAmount({
           placeholder="Minimum Show Amount"
           value={minShows}
           onChange={(e) => setMinShows(e.target.value)}
-          className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
+          className="border border-zinc-600 bg-zinc-700 text-white"
         />
         <input
           type="number"
@@ -40,20 +42,20 @@ export default function FilterByShowAmount({
           onKeyDown={() => {
             handleFilterByShowCount(Number(minShows), Number(maxShows));
           }}
-          className="border border-zinc-600 bg-zinc-700 text-white focus:border-sky-550"
+          className="border border-zinc-600 bg-zinc-700 text-white"
         />
         <div className="flex justify-center gap-10">
           <button
             onClick={() =>
               handleFilterByShowCount(Number(minShows), Number(maxShows))
             }
-            className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white transition-colors duration-200 hover:bg-sky-550"
+            className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white  "
           >
             Apply
           </button>
           <button
             onClick={handleResetFilter}
-            className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white transition-colors duration-200 hover:bg-sky-550"
+            className=" w-1/3 self-center rounded-md border border-zinc-600 p-1 text-white"
           >
             Reset
           </button>

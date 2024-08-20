@@ -4,7 +4,6 @@ import SeasonalStatsBox from "./SeasonalStatsBox";
 import { SeasonsData } from "@/app/interfaces";
 import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
 import { getSiteCookie } from "@/utils/CookieUtils";
-import { assertUsernameInCache } from "@/app/home/api";
 import { startTask } from "@/app/actions/startTask";
 import { cookies } from "next/headers";
 import { roundToTwo } from "@/utils/general";
@@ -38,6 +37,8 @@ export default async function SeasonalStatsFetcher({
   let data = [];
 
   const siteCookie = getSiteCookie();
+
+  // In case someone got past the middleware that redirects people who change the URL
   const usernameCookie = cookies().get("username")?.["value"] as string;
   if (usernameCookie && usernameCookie != username) {
     return (

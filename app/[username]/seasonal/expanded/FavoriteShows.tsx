@@ -19,7 +19,6 @@ export default function FavoriteShows({
   leftovers?: boolean;
   contShowRemoved?: boolean;
 }) {
-  // console.log("favorites : ", favorites);
   const displayText = partOfModal
     ? leftovers
       ? "Add to Favorites"
@@ -44,7 +43,7 @@ export default function FavoriteShows({
             key={`${show[0]} ${index}`}
             setFavorites={setFavorites}
             partOfModal={partOfModal}
-            topScore={show[1].score === maxScore}
+            topScore={show[1].score >= maxScore}
           />
         ))}
       </div>

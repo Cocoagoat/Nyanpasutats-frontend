@@ -54,8 +54,7 @@ export function isUrlPartOfHosts(url: string, hostnames: string[]) {
   return hostnames.some((hostname) => isUrlPartOfHost(url, hostname));
 }
 
-export function handleNewImageUrl2(newImageUrl: string, onUpload: any) {
-  console.log("New image URL is", newImageUrl);
+export function handleNewImageUrl(newImageUrl: string, onUpload: any) {
   const allowedHosts = ["imgur.com", "myanimelist.net", "anilist.co"];
   if (!isUrlPartOfHosts(newImageUrl, allowedHosts)) {
     notifyError(
@@ -71,8 +70,6 @@ export function handleNewImageUrl2(newImageUrl: string, onUpload: any) {
     );
     return;
   }
-  console.log("Got past error check");
-
   onUpload();
 }
 

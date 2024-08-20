@@ -1,7 +1,7 @@
 "use server";
+import { cookies } from "next/headers";
 import { getUserData } from "../home/api";
 import { UserPathType } from "../interfaces";
-import { cookies } from "next/headers";
 import updateCookie from "./updateCookie";
 
 export async function retrieveTaskData(
@@ -14,11 +14,18 @@ export async function retrieveTaskData(
   let error = "";
   try {
     if (path) {
-      console.log(`Setting cookie ${path} to ${userName}`);
-      updateCookie(path, userName);
-      console.log("After setting cookie");
+      updateCookie("username", userName);
     }
+
+    // if (path === "seasonal") {
+    //   let currentResetCount = cookies().get("resetCount")?.["value"];
+    //   console.log("currentResetCount", currentResetCount);
+    //   let resetCount = currentResetCount ? parseInt(currentResetCount) + 1 : 1;
+    //   updateCookie("resetCount", resetCount.toString());
+    // }
     const taskData = await getUserData(taskId);
+    // getUserData will do backend polling until the task is
+    // successful or fails (in which case it will throw an error).
     if (taskData.status === "error") {
       throw new Error(taskData.data);
     }

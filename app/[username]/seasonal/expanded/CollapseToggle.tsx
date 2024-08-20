@@ -1,6 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { IconType } from "react-icons";
-import { RiArrowUpDoubleFill } from "react-icons/ri";
 
 export default function CollapseToggle({
   onClick,

@@ -1,4 +1,4 @@
-import { handleNewImageUrl2 } from "@/utils/general";
+import { handleNewImageUrl } from "@/utils/general";
 import React, { useState } from "react";
 import { RiCloseFill, RiUpload2Fill } from "react-icons/ri";
 
@@ -6,16 +6,17 @@ export default function ImageUrlUploadModal({
   currentImageUrl,
   onUpload,
   closeModal,
-  imageIndex,
   verticalPlacement,
+  includeTitle,
 }: {
   currentImageUrl: string;
   onUpload: any;
   closeModal: () => void;
-  imageIndex?: number;
   verticalPlacement?: number;
+  includeTitle?: boolean;
 }) {
-  const [text, setText] = useState(currentImageUrl);
+  const [imageUrl, setImageUrl] = useState(currentImageUrl);
+  const [text, setText] = useState("");
   return (
     <>
       <div
@@ -28,35 +29,65 @@ export default function ImageUrlUploadModal({
         justify-center gap-4"
           style={{ top: `${verticalPlacement ? verticalPlacement : 35}%` }}
         >
-          <label
-            htmlFor="image-url"
-            className=" translate-y-[30%]  
+          <div className="flex flex-col gap-20">
+            <div className="flex gap-4">
+              <label
+                htmlFor="image-url"
+                className=" translate-y-[30%]  
              text-xs text-white lg:text-sm"
-          >
-            Paste image URL here
-          </label>
-          <input
-            type="text"
-            id="image-url"
-            className="h-[48px] w-1/2 min-w-0 rounded-3xl
+              >
+                Paste image URL here
+              </label>
+              <input
+                type="text"
+                id="image-url"
+                className="h-[48px] w-full min-w-[50%] rounded-3xl
            border-zinc-600 text-black focus:ring-4
             focus:ring-lime-600"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            aria-label={`Paste image URL here`}
-          />
-          <div className="flex  gap-2">
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                aria-label={`Paste image URL here`}
+              />
+            </div>
+            {includeTitle && (
+              <div className="flex gap-4">
+                <label
+                  htmlFor="image-url"
+                  className=" translate-y-[30%]  
+             text-xs text-white lg:text-sm"
+                >
+                  Show Name
+                </label>
+                <input
+                  type="text"
+                  id="text"
+                  className="h-[48px] w-full min-w-[50%] rounded-3xl
+           border-zinc-600 text-black focus:ring-4
+            focus:ring-lime-600"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  aria-label={`Write down the show's name here`}
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex gap-2">
             <button
-              className="p-1 text-2xl text-lime-600 hover:bg-zinc-600"
+              className="h-12 p-1 text-2xl text-lime-600 hover:bg-zinc-600"
               onClick={() => {
-                handleNewImageUrl2(text, () => onUpload(text));
+                handleNewImageUrl(
+                  imageUrl,
+                  includeTitle
+                    ? () => onUpload(imageUrl, text)
+                    : () => onUpload(imageUrl),
+                );
                 closeModal();
               }}
             >
               <RiUpload2Fill />
             </button>
             <button
-              className="p-1 text-2xl text-lime-600 hover:bg-zinc-600"
+              className="h-12 p-1 text-2xl text-lime-600 hover:bg-zinc-600"
               onClick={closeModal}
             >
               <RiCloseFill />

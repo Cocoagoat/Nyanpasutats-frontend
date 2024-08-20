@@ -1,12 +1,15 @@
+import getCookie from "../actions/getCookie";
+import updateCookie from "../actions/updateCookie";
+
 let intervalSet = false;
 
 export default function startGlobalInterval() {
   if (!intervalSet) {
     setInterval(
       () => {
-        if (localStorage.getItem("resetCount") !== null) {
-          let count = parseInt(localStorage.getItem("resetCount"), 10);
-          console.log(count);
+        let resetCount = localStorage.getItem("resetCount");
+        if (resetCount !== null) {
+          let count = parseInt(resetCount, 10);
           if (count > 0) {
             count--;
             localStorage.setItem("resetCount", count.toString());
@@ -17,8 +20,27 @@ export default function startGlobalInterval() {
     ); // 2 minutes
     intervalSet = true;
   }
-  console.log(
-    "Reset count after startGlobalInterval :",
-    localStorage.getItem("resetCount"),
-  );
+}
+
+export function startGlobalIntervalServerSide() {
+  if (!intervalSet) {
+    setInterval(
+      async () => {
+        console.log("Entered interval");
+        let resetCount = await getCookie("resetCount");
+        console.log("Reset count: ", resetCount);
+        if (resetCount !== null) {
+          let count = parseInt(resetCount, 10);
+          if (count > 0) {
+            count--;
+            console.log("Entered if");
+            console.log("updatedCount", count.toString());
+            updateCookie("resetCount", count.toString());
+          }
+        }
+      },
+      2 * 60 * 1000,
+    ); // 2 minutes
+    intervalSet = true;
+  }
 }

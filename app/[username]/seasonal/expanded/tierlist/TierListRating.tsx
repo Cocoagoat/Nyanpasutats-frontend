@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import TierListDeleteButton from "./TierListDeleteButton";
+import React from "react";
 
 export default function TierListRating({
   color,
@@ -16,31 +15,15 @@ export default function TierListRating({
   deleteMode: boolean;
   setRatingText: (text: string) => void;
 }) {
-  // const [score, setScore] = useState(initialScore);
-  // const [text, setText] = useState(`${initialScore}/10`);
-  const [hovered, setHovered] = useState(false);
-
   const handleScoreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRatingText(event.target.value);
   };
 
-  function textLength(text: string) {
-    return text.length;
-  }
-
-  // console.log("Text length is: ", textLength(text) * 30);
   return (
     <div
       className={`relative z-[60]  h-[88px] border-zinc-800`}
-      onMouseEnter={() => {
-        setHovered(true);
-      }}
-      onMouseLeave={() => {
-        setHovered(false);
-      }}
       style={{
         backgroundColor: color,
-        // width: `${textLength(text) * 30}px`,
       }}
     >
       {deleteMode && (
@@ -58,9 +41,9 @@ export default function TierListRating({
         type="text"
         value={ratingText}
         onChange={handleScoreChange}
-        className="text-shadow-smd absolute left-1/2 top-1/2 w-full
-         -translate-x-1/2 -translate-y-1/2 border-none bg-transparent p-2
-           text-center font-semibold text-white shadow-black outline-none"
+        className="absolute left-1/2 top-1/2 w-full -translate-x-1/2
+         -translate-y-1/2 border-none bg-transparent p-2 text-center
+           font-semibold text-white shadow-black outline-none text-shadow-smd"
       />
     </div>
   );

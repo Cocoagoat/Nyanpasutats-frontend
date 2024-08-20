@@ -18,7 +18,7 @@ export default function Heading() {
 
   return (
     <input
-      className={`w-full bg-transparent  text-center text-3xl font-bold text-shadow ${
+      className={` w-full bg-transparent text-center text-3xl font-bold text-shadow ${
         season.startsWith("Summer") ? "shadow-black" : "shadow-slate-800"
       } ${latoBold.className}`}
       value={text}
