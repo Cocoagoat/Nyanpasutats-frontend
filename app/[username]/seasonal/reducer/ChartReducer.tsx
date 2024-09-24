@@ -57,7 +57,6 @@ export function chartReducer(state: ChartState, action: Action): ChartState {
         sortedBy: action.payload.by,
         sortedReverse: !state.sortedReverse,
         displayedChartData: sortedChartData,
-        // seasonalStats: sortSeasonalStats(action.payload, state.reverse),
       };
     case "FILTER_BY_YEAR":
       const startYear = checkValidYear(action.payload.startYear)

@@ -41,7 +41,6 @@ export async function copyCardAsImage(cardId: string) {
       });
       const blob = await (await fetch(dataUrl)).blob();
 
-      // Check if ClipboardItem is supported
       if (
         navigator.clipboard &&
         "write" in navigator.clipboard &&

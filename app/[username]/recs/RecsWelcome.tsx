@@ -1,8 +1,15 @@
+import WelcomeClose from "@/components/WelcomeClose";
 import React from "react";
 
-export default function RecsWelcome() {
+export default function RecsWelcome({
+  setOpen,
+}: {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
-    <>
+    <div className="mb-20 rounded-xl bg-blue-990 p-6">
+      <WelcomeClose setOpen={setOpen} />
+
       <h1 className=" text-center text-4xl font-bold text-lime-600 shadow-lime-600 text-shadow-lg">
         Welcome to the Recommendations section!
       </h1>
@@ -39,9 +46,9 @@ export default function RecsWelcome() {
       </p>
 
       <p className="mt-4">
-        - Only shows with MAL scores above 6.5 are included here. (more info in
-        FAQ)
+        - Only shows with MAL scores above 6.8 are included here for now. (more
+        info in FAQ)
       </p>
-    </>
+    </div>
   );
 }

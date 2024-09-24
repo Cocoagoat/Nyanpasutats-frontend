@@ -1,35 +1,20 @@
 import { ShowPathType, SiteType, UserPathType } from "../interfaces";
 
 export function handleError(error: Error) {
-  let errorMessage = `An unexpected error occurred on our end - ${error.message}`;
+  let errorMessage = error.message;
   if (error instanceof TypeError) {
     errorMessage =
       "We couldn't fetch your data. This might be an issue on our end - please try again later.";
   }
-
   throw new Error(errorMessage);
 }
 
-export async function getUserData(taskId: string) {
-  const url = `http://localhost:8000/tasks/?task_id=${taskId}`;
-  try {
-    const res = await fetch(url, { cache: "force-cache" });
-    // The view connected to this endpoint will poll the Celery task
-    // until it's done, then return the data/error message.
-    const rawData = await res.text();
-    const data = JSON.parse(rawData);
-
-    return data;
-  } catch (error: any) {
-    handleError(error);
-  }
-}
 export async function startTask(
   username: string,
   path: UserPathType,
   site: SiteType,
 ): Promise<string> {
-  const url = `http://localhost:8000/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
+  const url = `http://localhost:80/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
   try {
     const res = await fetch(url, { cache: "no-store" });
 
@@ -42,8 +27,11 @@ export async function startTask(
   return ""; // This line is unreachable, but TypeScript requires it
 }
 
-export async function retrieveQueuePosition() {
-  const url = `http://localhost:8000/queue_pos/?test=${Math.random()}`;
+export async function retrieveQueuePosition(
+  type: "affs" | "recs" | "seasonal",
+) {
+  const url = `http://localhost:80/queue_pos/?type=${type}&random=${Math.random()}`;
+  // Random is added because next.js doesn't seem to care about the cache: "no-store" option
   const res = await fetch(url, { cache: "no-store" });
 
   const rawData = await res.text();
@@ -62,7 +50,7 @@ export async function retrieveQueuePosition() {
 // }
 
 export async function updateImageUrl(showName: string) {
-  const url = `http://localhost:8000/update_img_url/`;
+  const url = `http://localhost:80/update_img_url/`;
   const res = await fetch(url, {
     method: "POST",
     cache: "no-store",
@@ -82,7 +70,7 @@ export async function getShowData(
   try {
     const multipleShows = typeof showNames !== "string";
     const response = await fetch(
-      `http://localhost:8000/${path}/?show_name${multipleShows ? "s" : ""}=${
+      `http://localhost:80/${path}/?show_name${multipleShows ? "s" : ""}=${
         multipleShows
           ? encodeURIComponent(JSON.stringify(showNames))
           : encodeURIComponent(showNames)

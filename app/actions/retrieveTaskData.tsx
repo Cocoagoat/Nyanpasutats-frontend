@@ -1,6 +1,5 @@
 "use server";
-import { cookies } from "next/headers";
-import { getUserData } from "../home/api";
+import { handleError } from "../home/api";
 import { UserPathType } from "../interfaces";
 import updateCookie from "./updateCookie";
 
@@ -10,30 +9,21 @@ export async function retrieveTaskData(
   path?: UserPathType,
 ) {
   "use server";
-  let data = [];
-  let error = "";
-  try {
-    if (path) {
-      updateCookie("username", userName);
-    }
 
-    // if (path === "seasonal") {
-    //   let currentResetCount = cookies().get("resetCount")?.["value"];
-    //   console.log("currentResetCount", currentResetCount);
-    //   let resetCount = currentResetCount ? parseInt(currentResetCount) + 1 : 1;
-    //   updateCookie("resetCount", resetCount.toString());
-    // }
-    const taskData = await getUserData(taskId);
-    // getUserData will do backend polling until the task is
-    // successful or fails (in which case it will throw an error).
-    if (taskData.status === "error") {
-      throw new Error(taskData.data);
+  const url = `http://localhost:80/tasks/?task_id=${taskId}`;
+  try {
+    const res = await fetch(url, { cache: "force-cache" });
+    // The view connected to this endpoint will poll the Celery task
+    // until it's done, then return the data/error message.
+    const rawData = await res.text();
+    const data = JSON.parse(rawData);
+
+    if (res.status != 200) {
+      throw new Error(data["error"]);
     }
-    data = taskData["data"];
 
     return data;
-  } catch (err) {
-    error = (err as Error).message;
-    throw new Error(error);
+  } catch (error: any) {
+    handleError(error);
   }
 }

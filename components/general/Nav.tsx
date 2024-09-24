@@ -6,10 +6,13 @@ import NavItem from "./NavItem";
 export function Nav() {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [username, setUsername] = useState("");
+  const [site, setSite] = useState("MAL");
 
   useEffect(() => {
     let username = localStorage.getItem("username") || "";
     setUsername(username);
+    let site = localStorage.getItem("currentSite") || "MAL";
+    setSite(site);
   });
 
   return (
@@ -34,8 +37,13 @@ export function Nav() {
           style={{ justifyContent: "end" }} // justify-end is dumb in tailwind
         >
           <NavItem link={`/home`} text="Home" />
-          <NavItem link={`/${username}/affinity`} text="Affinity" />
-          <NavItem link={`/${username}/recs`} text="Recommendations" />
+          {site === "MAL" && (
+            <NavItem link={`/${username}/affinity`} text="Affinity" />
+          )}
+          <NavItem
+            link={username ? `/${username}/recs` : `/home`}
+            text="Recommendations"
+          />
           <NavItem link={`/${username}/seasonal`} text="Seasonal" />
           <NavItem link="/faq" text="FAQ" />
           <NavItem link="https://nyanpass.com" text="Nyanpasu?" />

@@ -4,7 +4,7 @@ import SeasonalStatsBox from "./SeasonalStatsBox";
 import { SeasonsData } from "@/app/interfaces";
 import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
 import { getSiteCookie } from "@/utils/CookieUtils";
-import { startTask } from "@/app/actions/startTask";
+import { sendRequestToView } from "@/app/actions/sendRequestToView";
 import { cookies } from "next/headers";
 import { roundToTwo } from "@/utils/general";
 
@@ -34,7 +34,7 @@ export default async function SeasonalStatsFetcher({
   username: string;
 }) {
   let error = null;
-  let data = [];
+  let data = null;
 
   const siteCookie = getSiteCookie();
 
@@ -51,15 +51,11 @@ export default async function SeasonalStatsFetcher({
   }
 
   try {
-    const taskId = await startTask(username, "seasonal", siteCookie);
-    if (taskId === undefined) {
-      throw new Error("Task ID is undefined");
-    }
-
-    data = await retrieveTaskData(taskId, username, "seasonal");
+    data = await sendRequestToView(username, "seasonal", siteCookie);
   } catch (err) {
     error = (err as Error).message;
   }
+
   let seasonalStats: SeasonsData = data["Stats"],
     noSequelsSeasonStats: SeasonsData = data["StatsNoSequels"];
 

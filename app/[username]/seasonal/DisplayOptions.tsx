@@ -27,7 +27,6 @@ export default function DisplayOptions({
         <SortingDropdown type="Full" />
         <FilterDropdown type="Full" />
         <SearchSeason />
-        {/* <SeasonalGraphDropdown setGraphOpen={setGraphOpen} /> */}
         <SettingsButton onClick={() => setGraphOpen(true)}>
           Graph
         </SettingsButton>

@@ -11,10 +11,10 @@ export default function useLoadBestXImagesFromCookies(
 ) {
   const username = useParams<{ username: string }>().username;
   useEffect(() => {
-    let savedWorstImages = sessionStorage.getItem(
+    let savedWorstImages = localStorage.getItem(
       `${username}_${season}_worstImages`,
     );
-    let savedBestImages = sessionStorage.getItem(
+    let savedBestImages = localStorage.getItem(
       `${username}_${season}_bestImages`,
     );
 

@@ -5,10 +5,12 @@ export default function useSetCookie(
   cookieValue: string,
   dependencies: any[],
   condition: boolean = true,
+  storageType: "local" | "session" = "local",
 ) {
   useEffect(() => {
+    let storage = storageType === "local" ? localStorage : sessionStorage;
     if (condition) {
-      sessionStorage.setItem(cookieName, cookieValue);
+      storage.setItem(cookieName, cookieValue);
     }
   }, dependencies);
 }

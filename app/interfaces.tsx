@@ -94,6 +94,7 @@ export const statNamesToKeys = {
 };
 
 export type AffinityData = {
+  Username: string;
   Affinity: number;
   CommonShows: number;
 };
@@ -161,11 +162,7 @@ export const siteLogosMap = {
   Anilist: AnilistLogo,
 };
 
-// Define the type based on the array
-
 export type SiteType = (typeof siteOptions)[number];
-
-// export type UserPathType = "recs" | "affinity" | "seasonal"
 
 export type ShowPathType = "img_url" | "img_urls" | "full";
 
@@ -185,6 +182,7 @@ export type TierState = {
   color: string;
   text: string;
 };
-// [showName, imageUrl]
 
 export type TiersState = Record<number, TierState>;
+
+export type TierListMode = "small" | "medium" | "large";

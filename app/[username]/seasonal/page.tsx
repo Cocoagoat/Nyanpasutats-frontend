@@ -1,7 +1,7 @@
 import { Nav } from "@/components/general/Nav";
-import Padoru from "@/components/general/Padoru";
 import { Suspense } from "react";
 import SeasonalStatsFetcher from "./SeasonalStatsFetcher";
+import Loading from "@/components/general/Loading";
 
 export async function generateMetadata({
   params,
@@ -22,7 +22,7 @@ export default async function page({
   return (
     <>
       <Nav />
-      <Suspense fallback={<Padoru />}>
+      <Suspense fallback={<Loading absolute={true} />}>
         <SeasonalStatsFetcher username={params.username} />
       </Suspense>
     </>

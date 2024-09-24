@@ -1,6 +1,7 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import SiteToggle from "./SiteToggle";
 import { SiteType } from "../interfaces";
+import Loading from "@/components/general/Loading";
 
 export default function UsernameInput({
   userInputField,
@@ -17,6 +18,7 @@ export default function UsernameInput({
   currentSite: SiteType;
   setCurrentSite: Dispatch<SetStateAction<SiteType>>;
 }) {
+  const [loading, setLoading] = useState(false);
   return (
     <div className="mt-10 flex  justify-center  transition-all duration-500">
       <div
@@ -43,9 +45,12 @@ export default function UsernameInput({
           className={`${redirectBoxClicked && ` `}  bg-lime-600 
      px-5 py-2.5 text-center font-bold text-white shadow-lime-600 
       hover:shadow-lg hover:shadow-lime-600`}
-          onClick={handleConfirmUsername}
+          onClick={() => {
+            handleConfirmUsername();
+            setLoading(true);
+          }}
         >
-          Get List
+          {loading ? <Loading width={25} /> : "Get List"}
         </button>
         <SiteToggle currentSite={currentSite} setCurrentSite={setCurrentSite} />
       </div>

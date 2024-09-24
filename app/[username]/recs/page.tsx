@@ -6,6 +6,7 @@ import { getSiteCookie } from "@/utils/CookieUtils";
 import { cookies } from "next/headers";
 import RecsBox from "./RecsBox";
 import { Nav } from "@/components/general/Nav";
+import { sendRequestToView } from "@/app/actions/sendRequestToView";
 
 export async function generateMetadata({
   params,
@@ -46,13 +47,7 @@ export default async function page({
     );
   }
 
-  // Start Celery task to get recommendations, then ping server in intervals
-  // until data is ready
-  const taskId = await startTask(params.username, "recs", siteCookie);
-  if (taskId === undefined) {
-    throw new Error("Unknown error. Please try again.");
-  }
-  data = await retrieveTaskData(taskId, params.username);
+  data = await sendRequestToView(params.username, "recs", siteCookie);
 
   let recs: RecommendationType[] = data["Recommendations"],
     recs_sorted_by_diff: RecommendationType[] =

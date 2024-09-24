@@ -1,4 +1,4 @@
-import Padoru from "@/components/general/Padoru";
+import Loading from "@/components/general/Loading";
 import React from "react";
 
 export default function TierListLoader({
@@ -20,7 +20,7 @@ export default function TierListLoader({
           width > 1000 ? `max(1000px, ${maxRowSize * 65 + 100}px)` : "100%",
       }}
     >
-      <Padoru />
+      <Loading absolute={true} />
     </div>
   );
 }

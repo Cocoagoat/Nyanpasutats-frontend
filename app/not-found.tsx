@@ -1,4 +1,3 @@
-import Link from "next/link";
 import GenericError from "@/components/general/GenericError";
 
 function NotFound() {

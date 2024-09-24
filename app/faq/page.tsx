@@ -8,11 +8,15 @@ import {
 } from "./QuestionsAnswers";
 import FAQSection from "./FAQSection";
 import { Nav } from "@/components/general/Nav";
-export default function () {
+export default function page() {
   return (
     <>
       <Nav />
-      <div className="max-h-front-n-center overflow-y-scroll">
+      <div
+        className={`hiddenscrollbar absolute inset-0 mx-auto my-auto
+      max-h-front-n-center max-w-front-n-center-80 overflow-y-scroll  
+       `}
+      >
         <FAQSection name="Affinity" answers={AffinityAnswers} />
         <FAQSection name="Recommendations" answers={RecommendationAnswers} />
         <FAQSection name="Seasonal" answers={SeasonalAnswers} />

@@ -82,3 +82,7 @@
     border-right: 12px;
   }
 }
+
+.mainbackground {
+  background: linear-gradient(to top right, #5dddfc, #99ceff, #74ceff);
+}

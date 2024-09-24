@@ -30,6 +30,7 @@ export default function SearchSeason() {
               type="text"
               placeholder="Search"
               value={searchText}
+              maxLength={11}
               onChange={(e) => setSearchText(e.target.value)}
               className=" border-none  bg-zinc-700 text-white focus:ring-2 focus:ring-lime-600"
             />

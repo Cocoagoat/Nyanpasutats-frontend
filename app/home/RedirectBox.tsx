@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import RedirectBoxText from "./RedirectBoxText";
 import useOutsideClick from "@/hooks/useOutsideClick";
@@ -36,6 +36,7 @@ export default function RedirectBox({
   }
 
   const ref = useRef<HTMLButtonElement>(null);
+  const [loading, setLoading] = useState(false);
 
   function onOutsideClick() {
     if (setRedirectBoxClicked) setRedirectBoxClicked(false);
@@ -56,11 +57,19 @@ export default function RedirectBox({
     });
   }
 
+  function handleRedirectBoxClicked() {
+    if (!link.includes("faq")) {
+      if (setRedirectBoxClicked) setRedirectBoxClicked(true);
+      let route = link.split("/")[2];
+      localStorage.setItem(route, "true");
+    }
+    setLoading(true);
+  }
+
   return disabled ? (
     <button
       ref={ref}
       className={`${redirectBoxStyle} relative ${!MAL && "grayscale"}`}
-      // style={{ backgroundImage: `url(${test.src})` }}
       onClick={handleRedirectBoxClickedEarly}
     >
       <Image
@@ -81,7 +90,7 @@ export default function RedirectBox({
     <Link
       href={link}
       className={`${redirectBoxStyle} `}
-      onClick={() => setRedirectBoxClicked && setRedirectBoxClicked(true)}
+      onClick={handleRedirectBoxClicked}
     >
       <Image
         src={test}
@@ -95,6 +104,7 @@ export default function RedirectBox({
         MAL={MAL}
         description={description}
         disabled={disabled}
+        loading={loading}
       />
     </Link>
   );

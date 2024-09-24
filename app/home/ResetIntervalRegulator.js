@@ -26,15 +26,11 @@ export function startGlobalIntervalServerSide() {
   if (!intervalSet) {
     setInterval(
       async () => {
-        console.log("Entered interval");
         let resetCount = await getCookie("resetCount");
-        console.log("Reset count: ", resetCount);
         if (resetCount !== null) {
           let count = parseInt(resetCount, 10);
           if (count > 0) {
             count--;
-            console.log("Entered if");
-            console.log("updatedCount", count.toString());
             updateCookie("resetCount", count.toString());
           }
         }

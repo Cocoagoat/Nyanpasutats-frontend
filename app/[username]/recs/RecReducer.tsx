@@ -107,7 +107,7 @@ export const recReducer = (
       };
 
     case FILTER_BY_MAL_SCORE:
-      if (!checkValidMALScore(action.payload.min)) action.payload.min = 6.5;
+      if (!checkValidMALScore(action.payload.min)) action.payload.min = 6.8;
       if (!checkValidMALScore(action.payload.max)) action.payload.max = 10;
       return {
         ...state,
@@ -120,7 +120,7 @@ export const recReducer = (
         ...state,
         startYear: 1960,
         endYear: new Date().getFullYear(),
-        minMALScore: 6.5,
+        minMALScore: 6.8,
         maxMALScore: 10,
       };
 

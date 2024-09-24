@@ -1,3 +1,4 @@
+import { ImageRow } from "@/app/interfaces";
 import { Lato } from "next/font/google";
 import {
   Dispatch,
@@ -9,8 +10,6 @@ import {
 } from "react";
 import { SingleSeasonContext } from "../reducer/SeasonalContext";
 import BestXImage from "./BestXImage";
-import ImageUrlUploadModal from "./ImageUrlUploadModal";
-import { ImageRow } from "@/app/interfaces";
 
 const lato = Lato({ weight: "700", subsets: ["latin"] });
 
@@ -129,50 +128,36 @@ export default function BestXImages({
       } 
       h-full w-full`}
     >
-      {true ? (
-        <div className="flex flex-col">
-          <div className="flex flex-wrap justify-center gap-4 text-sky-550">
-            {Object.entries(images).map(([index, image_url], _) => (
-              <BestXImage
-                index={Number(index)}
-                key={_}
-                image_url={image_url as string}
-                setUploadModalOpen={setUploadModalOpen}
-                handleNewImageUrl={handleNewImageUrl}
-                setClickedImageIndex={setClickedImageIndex}
-                lastImage={index === Object.keys(images).at(-1)}
-                ghost={editModeOpen && index === Object.keys(images).at(-1)}
-                solidifyGhost={handleAddImage}
-                remove={() => handleRemoveImage(Number(index))}
-              />
-            ))}
-          </div>
+      <div className="flex flex-col">
+        <div className="flex flex-wrap justify-center gap-4 text-sky-550">
+          {Object.entries(images).map(([index, image_url], _) => (
+            <BestXImage
+              index={Number(index)}
+              key={_}
+              image_url={image_url as string}
+              setUploadModalOpen={setUploadModalOpen}
+              handleNewImageUrl={handleNewImageUrl}
+              setClickedImageIndex={setClickedImageIndex}
+              lastImage={index === Object.keys(images).at(-1)}
+              ghost={editModeOpen && index === Object.keys(images).at(-1)}
+              solidifyGhost={handleAddImage}
+              remove={() => handleRemoveImage(Number(index))}
+            />
+          ))}
+        </div>
 
-          {Object.keys(images).length ? (
-            <input
-              type="text"
-              value={title}
-              aria-label="Best X Title"
-              onChange={(e) => setTitle(e.target.value)}
-              className={`place-self-center border-none
+        {Object.keys(images).length ? (
+          <input
+            type="text"
+            value={title}
+            aria-label="Best X Title"
+            onChange={(e) => setTitle(e.target.value)}
+            className={`place-self-center border-none
        bg-transparent  text-center shadow-black 
        text-shadow ${lato.className}`}
-            />
-          ) : null}
-        </div>
-      ) : (
-        <ImageUrlUploadModal
-          currentImageUrl={images[clickedImageIndex]}
-          onUpload={(index: number, newImageUrl: string) =>
-            setImages((prevImages: ImageRow[]) => {
-              const newImages = [...prevImages];
-              newImages[rowNum][index] = newImageUrl;
-              return newImages;
-            })
-          }
-          closeModal={() => setUploadModalOpen(false)}
-        />
-      )}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

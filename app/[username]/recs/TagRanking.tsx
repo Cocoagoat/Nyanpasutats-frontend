@@ -21,11 +21,16 @@ export default function TagRanking({
         <tbody>
           {tags.map((tag, index) => (
             <tr
-              className={` ${index % 2 == 0 ? " bg-gradient-to-br from-blue-970" : " bg-opacity-10 bg-gradient-to-tr from-lime-800"}`}
+              key={tag}
+              className={` ${
+                index % 2 == 0
+                  ? " bg-gradient-to-br from-blue-970"
+                  : " bg-opacity-10 bg-gradient-to-tr from-lime-800"
+              }`}
             >
               <td className="p-2 text-center font-extrabold">{index + 1}</td>
               <td
-                className={`p-2 text-center font-semibold ${
+                className={`p-2 text-center font-semibold shadow-sm text-shadow ${
                   least_fav || index > 2
                     ? "text-white"
                     : index == 0

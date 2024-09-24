@@ -14,18 +14,12 @@ export default function SeasonStat({
 }) {
   return (
     <div className=" bg-opacity-30 p-1 text-center shadow-black text-shadow">
-      <div className="mx-auto flex content-center justify-center text-4xl font-semibold">
-        {statValue && statValue.startsWith("https") ? (
-          <div>
-            <Image src={statValue} alt="Test image" width={75} height={105} />
-          </div>
-        ) : (
-          <p className={`${lato.className}`}>{statValue}</p>
-        )}
+      <div className="mx-auto flex  justify-center text-4xl font-semibold">
+        <p className={`${lato.className}`}>{statValue}</p>
 
         {statName.startsWith("Mean Score") && (
           <MdOutlineStar
-            className="inline-block"
+            className="inline-block translate-y-[10%]"
             style={{
               color: "gold",
               fontSize: "36px",

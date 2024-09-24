@@ -1,4 +1,4 @@
-// /[username] is not an actual page for now, I might add general user analytics in the future
+// /[username] is not an actual page for now, might add general user analytics in the future
 // and put it here.
 
 "use client";

@@ -5,11 +5,9 @@ import AffUserLink from "./AffUserLink";
 
 export default function AffRow({
   index,
-  username,
   aff,
 }: {
   index: number;
-  username: string;
   aff: AffinityData;
 }) {
   return (
@@ -18,7 +16,7 @@ export default function AffRow({
     >
       <td className="p-4">{index}</td>
       <td>
-        <AffUserLink affinity={aff["Affinity"]} username={username} />
+        <AffUserLink affinity={aff["Affinity"]} username={aff["Username"]} />
       </td>
       <td>
         <AffBar affinity={aff["Affinity"]} />

@@ -1,3 +1,4 @@
+import useToast from "@/hooks/useToast";
 import {
   copyCardAsImage,
   downloadCardAsImage,
@@ -15,8 +16,8 @@ import {
 } from "../../reducer/SeasonalContext";
 import TierListToolbarButton from "./TierListToolbarButton";
 
-function TierListToolbarUnmemoized({
-  tiersLength,
+export default function TierListToolbar({
+  tierListMode,
   expandTierList,
   contractTierList,
   colorMode,
@@ -27,10 +28,10 @@ function TierListToolbarUnmemoized({
   setAddImageMode,
   showText,
   setShowText,
-  setSeasonGraphOpen,
+  closeTierList,
   resetTierList,
 }: {
-  tiersLength: number;
+  tierListMode: string;
   expandTierList: () => void;
   contractTierList: () => void;
   colorMode: boolean;
@@ -41,13 +42,35 @@ function TierListToolbarUnmemoized({
   setAddImageMode: React.Dispatch<React.SetStateAction<boolean>>;
   showText: boolean;
   setShowText: (showText: boolean) => void;
-  setSeasonGraphOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  closeTierList: () => void;
   resetTierList: () => void;
 }) {
   const { season } = useContext(SingleSeasonContext)!;
   const { noSequels } = useContext(SeasonalContext)!;
+  const { notifyError } = useToast();
   const params = useParams<{ username: string }>();
   const modeSetters = [setColorMode, setDeleteMode, setAddImageMode];
+
+  function handleDownload() {
+    if (!colorMode && !deleteMode && !addImageMode) {
+      downloadCardAsImage(
+        `${season} Tier List`,
+        `${params.username} ${season} Tier List${
+          noSequels ? " (No Sequels)" : ""
+        }`,
+      );
+    } else {
+      notifyError("Please exit the current mode before downloading.");
+    }
+  }
+
+  function handleCopy() {
+    if (!colorMode && !deleteMode && !addImageMode) {
+      copyCardAsImage(`${season} Tier List`);
+    } else {
+      notifyError("Please exit the current mode before copying.");
+    }
+  }
 
   function toggleMode(
     open: boolean,
@@ -68,13 +91,13 @@ function TierListToolbarUnmemoized({
         <TbRestore />
       </TierListToolbarButton>
       <TierListToolbarButton
-        onClick={tiersLength < 20 ? expandTierList : () => {}}
+        onClick={tierListMode !== "large" ? expandTierList : () => {}}
         descText="Expand tier list"
       >
         <FaExpandArrowsAlt />
       </TierListToolbarButton>
       <TierListToolbarButton
-        onClick={tiersLength > 5 ? contractTierList : () => {}}
+        onClick={tierListMode !== "small" ? contractTierList : () => {}}
         descText="Contract tier list"
       >
         <FaCompressArrowsAlt />
@@ -105,33 +128,22 @@ function TierListToolbarUnmemoized({
         <PiTextTBold />
       </TierListToolbarButton>
       <TierListToolbarButton
-        onClick={() => {
-          downloadCardAsImage(
-            `${season} Tier List`,
-            `${params.username} ${season} Tier List${
-              noSequels ? " (No Sequels)" : ""
-            }`,
-          );
-        }}
+        onClick={() => handleDownload()}
         descText="Download as image"
       >
         <RiDownload2Fill />
       </TierListToolbarButton>
       <TierListToolbarButton
         onClick={() => {
-          copyCardAsImage(`${season} Tier List`);
+          handleCopy();
         }}
         descText="Copy as image"
       >
         <RiFileCopyLine />
       </TierListToolbarButton>
-      <TierListToolbarButton onClick={() => setSeasonGraphOpen(false)}>
+      <TierListToolbarButton onClick={closeTierList}>
         <MdClose />
       </TierListToolbarButton>
     </div>
   );
 }
-
-const TierListToolbar = React.memo(TierListToolbarUnmemoized);
-
-export default TierListToolbar;

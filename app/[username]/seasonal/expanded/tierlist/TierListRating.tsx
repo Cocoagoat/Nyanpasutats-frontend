@@ -41,6 +41,7 @@ export default function TierListRating({
         type="text"
         value={ratingText}
         onChange={handleScoreChange}
+        maxLength={20}
         className="absolute left-1/2 top-1/2 w-full -translate-x-1/2
          -translate-y-1/2 border-none bg-transparent p-2 text-center
            font-semibold text-white shadow-black outline-none text-shadow-smd"

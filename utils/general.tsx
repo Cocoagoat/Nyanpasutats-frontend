@@ -55,16 +55,22 @@ export function isUrlPartOfHosts(url: string, hostnames: string[]) {
 }
 
 export function handleNewImageUrl(newImageUrl: string, onUpload: any) {
-  const allowedHosts = ["imgur.com", "myanimelist.net", "anilist.co"];
-  if (!isUrlPartOfHosts(newImageUrl, allowedHosts)) {
+  const allowedHosts = [
+    "i.imgur.com",
+    "cdn.imgchest.com",
+    "cdn.myanimelist.net/images",
+    "s4.anilist.co/file/anilistcdn",
+  ];
+  if (!allowedHosts.some((host) => newImageUrl.includes(host))) {
     notifyError(
       `The site currently supports images from the following sites :
 
     - Imgur
-    - MyAnimeList
-    - Anilist
+    - Imgchest
+    - MyAnimeList (official images only)
+    - Anilist (official images only)
     
-    If your image is from another site, please upload it to Imgur and try again.`,
+    If your image is from another site, please upload it to Imgur/Imgchest and try again.`,
       undefined,
       15000,
     );

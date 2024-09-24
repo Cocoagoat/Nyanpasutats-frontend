@@ -27,7 +27,7 @@ function getFill(season: string): string {
 }
 
 const renderYearLabel = (props: any) => {
-  const { x, y, width, height, value } = props;
+  const { x, y, value } = props;
   const year = value.split(" ")[1];
   const season = value.split(" ")[0];
 
@@ -80,7 +80,8 @@ export default function SeasonalBarChart({
     <>
       <div
         id="seasonal-bar-chart"
-        className=" mx-auto mb-10 mt-3 flex h-full w-full  justify-center overflow-y-scroll text-xs text-black"
+        className=" mx-auto mb-10 mt-3 flex h-full w-full 
+         justify-center overflow-y-scroll text-xs text-black"
       >
         <ResponsiveContainer
           width="50%"

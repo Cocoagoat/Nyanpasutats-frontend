@@ -1,8 +1,8 @@
+import useToast from "@/hooks/useToast";
 import {
   copyCardAsImage,
   downloadCardAsImage,
 } from "@/utils/downloadCardAsImage";
-import { isFirefox } from "@/utils/general";
 import { useParams } from "next/navigation";
 import { useContext, useState } from "react";
 import { MdClose, MdEdit } from "react-icons/md";
@@ -29,6 +29,7 @@ export default function SeasonExpandedToolbar() {
   const [dragModeHovered, setDragModeHovered] = useState(false);
   const [closeHovered, setCloseHovered] = useState(false);
   const { noSequels } = useContext(SeasonalContext)!;
+  const { notifyError } = useToast();
   const {
     season,
     editModeOpen,
@@ -41,8 +42,30 @@ export default function SeasonExpandedToolbar() {
     setExpanded,
   } = useContext(SingleSeasonContext)!;
 
+  function handleDownload() {
+    if (!editModeOpen && !uploadModalOpen) {
+      downloadCardAsImage(
+        season,
+        `${params.username} ${season}${noSequels ? " (No Sequels)" : ""}`,
+      );
+    } else {
+      notifyError("Please exit the current mode before downloading.");
+    }
+  }
+
+  function handleCopy() {
+    if (!editModeOpen && !uploadModalOpen) {
+      copyCardAsImage(season);
+    } else {
+      notifyError("Please exit the current mode before copying.");
+    }
+  }
+
   return (
-    <div className="absolute -right-11 top-1/2  z-40 flex -translate-y-1/2 flex-col justify-center gap-10">
+    <div
+      className="absolute -right-11 top-1/2  z-40 flex 
+    -translate-y-1/2 flex-col justify-center gap-10"
+    >
       <SeasonExpandedButton
         onClick={() => setEditModeOpen(!editModeOpen)}
         Icon={<MdEdit />}
@@ -68,28 +91,21 @@ export default function SeasonExpandedToolbar() {
         open={uploadModalOpen}
       />
       <SeasonExpandedButton
-        onClick={() => {
-          downloadCardAsImage(
-            season,
-            `${params.username} ${season}${noSequels ? " (No Sequels)" : ""}`,
-          );
-        }}
+        onClick={handleDownload}
         Icon={<RiDownload2Fill />}
         hoverText="Download this card as an image"
         hovered={downloadHovered}
         setHovered={setDownloadHovered}
       />
-      {!isFirefox() && (
-        <SeasonExpandedButton
-          onClick={() => {
-            copyCardAsImage(season);
-          }}
-          Icon={<RiFileCopyLine />}
-          hoverText="Copy this card as an image"
-          hovered={copyHovered}
-          setHovered={setCopyHovered}
-        />
-      )}
+      {/* {!isFirefox() && ( */}
+      <SeasonExpandedButton
+        onClick={handleCopy}
+        Icon={<RiFileCopyLine />}
+        hoverText="Copy this card as an image"
+        hovered={copyHovered}
+        setHovered={setCopyHovered}
+      />
+      {/* )} */}
       <SeasonExpandedButton
         onClick={() => setTierListOpen(true)}
         Icon={<RiBarChart2Fill />}

@@ -40,7 +40,7 @@ export default function DisplayOptions({
       <div className="absolute right-0 top-0 z-50">
         {!welcomeOpen && (
           <MdArrowUpward
-            className="h-6 w-6 cursor-pointer rounded-full bg-blue-970 p-1 text-xs hover:bg-lime-600"
+            className="h-7 w-7 cursor-pointer rounded-full bg-blue-970 p-1 text-xs hover:bg-lime-600"
             onClick={() => {
               if (setWelcomeOpen) {
                 setWelcomeOpen(true);

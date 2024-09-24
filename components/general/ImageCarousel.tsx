@@ -90,7 +90,7 @@ export default function ImageCarousel({
     <div className="flex flex-col">
       <div
         className="relative aspect-[3/2] w-[500px] overflow-hidden
-      rounded-3xl shadow-2xl shadow-blue-900 xl:w-image-carousel "
+      rounded-3xl shadow-2xl shadow-blue-900 xl:w-image-carousel"
       >
         <ImageCarouselButton
           type="previous"
@@ -135,7 +135,7 @@ export default function ImageCarousel({
         {imagesText[currentImageIndex]}
         {currentImageIndex === imagesCount - 1 && (
           <p className="absolute w-full text-center text-[0.4rem] ">
-            *It's technically AI, but definitely not GPT-4, don't expect much
+            *Probably not the kind of AI you think about when you hear that word
           </p>
         )}
       </p>

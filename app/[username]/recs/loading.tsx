@@ -1,15 +1,15 @@
 import { retrieveQueuePosition } from "@/app/home/api";
-import Padoru from "@/components/general/Padoru";
+import Loading from "@/components/general/Loading";
 import UserQueueDisplay from "@/components/general/UserQueueDisplay";
 import { cookies } from "next/headers";
 
 export default async function loading() {
   let recsCookie = cookies().get("recs");
   if (recsCookie) {
-    return <Padoru />;
+    return <Loading absolute={true} />;
   } else {
-    let data = await retrieveQueuePosition();
+    let data = await retrieveQueuePosition("recs");
     let queuePosition = data["queuePosition"];
-    return <UserQueueDisplay queuePosition={queuePosition} />;
+    return <UserQueueDisplay queuePosition={Math.max(queuePosition, 1)} />;
   }
 }

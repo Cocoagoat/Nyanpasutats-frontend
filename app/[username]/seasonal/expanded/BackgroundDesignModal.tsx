@@ -6,6 +6,7 @@ import ColorPicker from "@/components/general/ColorPicker";
 export default function BackgroundDesignModal() {
   const {
     backgroundColor,
+    altBackgroundColor,
     setBackgroundColor,
     displayGradient,
     setDisplayGradient,
@@ -20,6 +21,7 @@ export default function BackgroundDesignModal() {
         onUpload={(newImageUrl: string) => setUploadedImage(newImageUrl)}
         closeModal={() => setUploadModalOpen(false)}
         verticalPlacement={25}
+        color={altBackgroundColor}
       />
       <div
         className="absolute   left-1/2
@@ -33,7 +35,8 @@ export default function BackgroundDesignModal() {
           <button
             onClick={() => setDisplayGradient(!displayGradient)}
             className="flex max-h-[50px] items-center rounded-3xl
-       bg-zinc-800 p-6 font-semibold text-lime-600 hover:bg-zinc-600"
+       bg-zinc-800 p-6 font-semibold hover:bg-zinc-600"
+            style={{ color: altBackgroundColor }}
           >
             {displayGradient ? "Remove Gradient" : "Add Gradient"}
           </button>

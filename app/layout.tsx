@@ -1,11 +1,8 @@
+import backgroundImage from "@/public/nnb5.png";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import backgroundImage from "@/public/nnb5.png";
 import Image from "next/image";
-import styles from "@/app/globals.module.css";
-import ToasterWithX from "@/components/general/ToasterWithX";
-import { Toaster } from "react-hot-toast";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -20,19 +17,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className=" relative">
-      <body className={`${inter.className} overflow-y-auto bg-blue-990`}>
-        <div className="absolute inset-0 -z-50 ">
+    <html lang="en" className="relative">
+      <body
+        className={`${inter.className} overflow-y-hidden bg-blue-990 bg-cover`}
+      >
+        <div className="absolute inset-0 -z-50 bg-repeat ">
           <Image
             src={backgroundImage}
             placeholder="blur"
             fill
             alt="Background"
             quality={95}
-            className=" object-cover "
+            className=" -z-[70] max-h-[100vh] object-cover"
           />
         </div>
-        <div className="relative  min-h-screen">{children}</div>
+        {/* <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%)`,
+          }}
+        ></div> */}
+        <div className="relative min-h-screen">{children}</div>
       </body>
     </html>
   );

@@ -1,13 +1,16 @@
 import React from "react";
 import AffCurrentShared from "./AffCurrentShared";
+import { cookies } from "next/headers";
 
 export default function AffWelcome({
   searchParams,
+  affCookie,
 }: {
   searchParams: URLSearchParams;
+  affCookie: string;
 }) {
   return (
-    <div className=" mx-auto my-12 w-full max-w-front-n-center-60 bg-blue-990  p-4 text-center text-slate-200">
+    <div className=" mx-auto my-12 w-full max-w-front-n-center-70 bg-blue-990  p-4 text-center text-slate-200">
       <h1 className=" text-center text-4xl font-bold text-lime-600 shadow-lime-600 text-shadow-lg">
         Welcome to the Affinity section!
       </h1>
@@ -23,7 +26,7 @@ export default function AffWelcome({
         since then.
       </p>
       <p className="font-semibold text-lime-600">Shared anime threshold : </p>
-      <AffCurrentShared initialSearchParams={searchParams} />
+      <AffCurrentShared initialSearchParams={searchParams} affCookie={affCookie}/>
     </div>
   );
 }

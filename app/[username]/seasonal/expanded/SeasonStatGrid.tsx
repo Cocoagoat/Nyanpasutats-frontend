@@ -90,14 +90,10 @@ export default function SeasonStatGrid() {
 
   function handleAddRow() {
     if (rows < 4) {
+      setDisplayedStatIndexes((prev) => {
+        return [...prev, 3 * rows, 3 * rows + 1, 3 * rows + 2].flat();
+      });
       setRows((prev) => prev + 1);
-      setDisplayedStatIndexes(
-        Array.from({ length: rows + 1 }, (_, i) => [
-          3 * i,
-          3 * i + 1,
-          3 * i + 2,
-        ]).flat(),
-      );
     } else {
       notifyError("A maximum of four rows are allowed.");
     }
@@ -106,13 +102,11 @@ export default function SeasonStatGrid() {
   function handleRemoveRow() {
     if (rows > 0) {
       setRows((prev) => prev - 1);
-      setDisplayedStatIndexes(
-        Array.from({ length: rows - 1 }, (_, i) => [
-          3 * i,
-          3 * i + 1,
-          3 * i + 2,
-        ]).flat(),
-      );
+      setDisplayedStatIndexes((prev) => {
+        const newStats = [...prev];
+        newStats.splice(-3, 3);
+        return newStats;
+      });
     } else {
       notifyError("A minimum of one row is required.");
     }
@@ -142,7 +136,7 @@ export default function SeasonStatGrid() {
       {displayedGridStats.map(([index, stat], cellIndex) => (
         <SeasonStatGridCell
           key={cellIndex}
-          name={stat["name"]}
+          name={!editModeOpen ? stat["name"] : `${stat["name"]} (${index + 1})`}
           value={stat["value"]}
           cellIndex={cellIndex}
           handleChangeStat={handleChangeStat}

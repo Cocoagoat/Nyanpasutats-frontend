@@ -26,6 +26,7 @@ export type singleSeasonContextType = {
   backgroundImage: string;
   backgroundColor: string;
   setBackgroundColor: Dispatch<React.SetStateAction<string>>;
+  altBackgroundColor: string;
   uploadedImage: string | null;
   setUploadedImage: Dispatch<React.SetStateAction<string | null>>;
   displayGradient: boolean;

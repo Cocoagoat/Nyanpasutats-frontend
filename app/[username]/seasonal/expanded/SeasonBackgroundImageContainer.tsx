@@ -81,7 +81,7 @@ export default function SeasonBackgroundImageContainer({
         text-white shadow-lg`}
         id={season}
         onMouseDown={handleMouseDown}
-        draggable={true}
+        draggable={dragModeOpen ? true : false}
       >
         <div
           // Div for changed background image
@@ -116,8 +116,6 @@ export default function SeasonBackgroundImageContainer({
           className="absolute inset-0 rounded-3xl"
           style={{
             backgroundColor: `rgba(${rgbColor}, 1)`,
-            //   backgroundImage: `${`linear-gradient(to bottom, rgba(${rgbColor}, 1)
-            //  ${"100%"}, transparent ${getGradientLength()})`}`,
             zIndex: 4,
           }}
         ></div>

@@ -4,6 +4,18 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   // Redirects users who change the URL to the username in the cookie
+
+  const { pathname } = request.nextUrl;
+
+  if (pathname.includes("/affinity")) {
+    const searchParams = new URL(request.url).searchParams;
+    if (!searchParams.has("minShared")) {
+      return NextResponse.redirect(
+        new URL(`${pathname}?minShared=20`, request.url),
+      );
+    }
+  }
+
   const usernameCookie = cookies().get("username")?.["value"] as string;
   let split_req = request.nextUrl.href.split("/");
   const username = split_req[split_req.length - 2];
@@ -16,10 +28,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    // match all routes except static files and APIs
-    "/:username/affinity",
-    "/:username/recs",
-    "/:username/seasonal",
-  ],
+  matcher: ["/:username/affinity", "/:username/recs", "/:username/seasonal"],
 };

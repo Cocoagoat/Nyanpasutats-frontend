@@ -16,10 +16,12 @@ export default function SeasonStatGridCell({
   handleChangeStat: (direction: "left" | "right", cellIndex: number) => void;
   tooltipText: string;
 }) {
-  const { editModeOpen } = useSingleSeasonContext()!;
+  const { editModeOpen, altBackgroundColor } = useSingleSeasonContext()!;
   return (
     <div className="relative">
-      {editModeOpen && <TooltipQuestionMark text={tooltipText} />}
+      {editModeOpen && (
+        <TooltipQuestionMark text={tooltipText} color={altBackgroundColor} />
+      )}
       <SeasonStat statName={name} statValue={value} />
       {editModeOpen && (
         <>

@@ -1,6 +1,5 @@
 import { retrieveQueuePosition } from "@/app/home/api";
 import { Nav } from "@/components/general/Nav";
-import Padoru from "@/components/general/Padoru";
 import { Suspense } from "react";
 import { URLSearchParams } from "url";
 import AffDisplay from "./AffDisplay";
@@ -9,6 +8,8 @@ import AffWelcome from "./AffWelcome";
 import { getMinShared } from "./getMinShared";
 import { cookies } from "next/headers";
 import GenericError from "@/components/general/GenericError";
+import Loading from "@/components/general/Loading";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -41,21 +42,35 @@ export default async function page({
     );
   }
 
+  const siteCookie = cookies().get("currentSite")?.["value"] as string;
+  if (siteCookie != "MAL") {
+    return (
+      <GenericError
+        errorMessage={"Affinity is only available for MyAnimeList users."}
+      />
+    );
+  }
+
   searchParams = new URLSearchParams(searchParams);
   let minShared = getMinShared(searchParams);
-  let queuePosition = (await retrieveQueuePosition()).queuePosition;
+  let queuePosition = (await retrieveQueuePosition("affs")).queuePosition;
+
+  const affCookie = cookies().get("affinity")?.["value"] as string;
 
   return (
     <>
       <Nav />
-      <>
-        <div className="flex flex-col">
-          <AffWelcome searchParams={searchParams} />
+      <div
+        className="hiddenscrollbar absolute inset-0
+       mx-auto my-auto mt-20 max-h-front-n-center max-w-front-n-center-80 overflow-y-scroll"
+      >
+        <div className=" flex flex-col ">
+          <AffWelcome searchParams={searchParams} affCookie={affCookie} />
         </div>
         <Suspense
           fallback={
-            searchParams.size ? (
-              <Padoru />
+            affCookie ? (
+              <Loading absolute={true} />
             ) : (
               <AffQueueDisplay queuePosition={queuePosition} />
             )
@@ -64,7 +79,7 @@ export default async function page({
         >
           <AffDisplay params={params} searchParams={searchParams} />
         </Suspense>
-      </>
+      </div>
     </>
   );
 }

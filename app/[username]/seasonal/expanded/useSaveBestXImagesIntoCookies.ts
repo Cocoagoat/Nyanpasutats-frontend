@@ -18,7 +18,6 @@ export default function useSaveBestXImagesIntoCookies(
   type: "best" | "worst",
 ) {
   const username = useParams<{ username: string }>().username;
-  console.log(`${username}_${season}_${type}Images`);
   useSetCookie(
     `${username}_${season}_${type}Images`,
     JSON.stringify(images),

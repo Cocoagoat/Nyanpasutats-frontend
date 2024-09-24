@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef, use } from "react";
-import { SiteType } from "@/app/interfaces";
+import { SiteType, siteOptions } from "@/app/interfaces";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
-import { startTask } from "../actions/startTask";
+import { sendRequestToView } from "../actions/sendRequestToView";
 import { retrieveQueuePosition } from "./api";
 import { retrieveTaskData } from "../actions/retrieveTaskData";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 import img1 from "@/public/Test-card.png";
-import img2 from "@/public/Test-edited-card.png";
+import img2 from "@/public/Test-edited-card2.png";
 import img3 from "@/public/Test-tierlist.png";
-import img4 from "@/public/Affinity.png";
+import img4 from "@/public/Affinity2.png";
 import img5 from "@/public/Recs.png";
 
 import ImageCarousel from "@/components/general/ImageCarousel";
@@ -20,23 +20,15 @@ import ToasterWithX from "@/components/general/ToasterWithX";
 import useToast from "@/hooks/useToast";
 import UsernameInput from "./UsernameInput";
 import ResetUsername from "./ResetUsername";
-import startGlobalInterval, {
-  startGlobalIntervalServerSide,
-} from "./ResetIntervalRegulator.js";
+import { startGlobalIntervalServerSide } from "./ResetIntervalRegulator.js";
 import UserQueueDisplay from "@/components/general/UserQueueDisplay";
 import resetAllServerCookies from "../actions/resetAllServerCookies";
 import Heading from "./Heading";
-import useSetFromCookie from "@/hooks/useSetFromCookie";
+import useSetFromClientCookie from "@/hooks/useSetFromCookie";
 import { useNotify } from "@/hooks/useNotify";
 import getCookie from "../actions/getCookie";
 import updateCookie from "../actions/updateCookie";
-
-// export async function generateMetadata() {
-//   return {
-//     title: `Nyanpasutats`,
-//     description: `Get your detailed seasonal anime statistics, anime recommendations and more here.`,
-//   };
-// }
+import { useUpdateRouteCookies } from "@/hooks/useUpdateRouteCookies";
 
 export default function Home() {
   const backgrounds = [img1.src, img2.src, img3.src, img4.src, img5.src];
@@ -44,7 +36,7 @@ export default function Home() {
   const backgroundsText = [
     "Automatically get summaries for every season",
     "Customize the cards to your liking",
-    "Automatically get tier lists for every season",
+    "Automatically get customizable tier lists for every season",
     "Find your soulmates and archenemies",
     "Get AI* anime recommendations",
   ];
@@ -54,6 +46,7 @@ export default function Home() {
   const [error, setError] = useState("");
 
   const [loading, setLoading] = useState(false);
+
   const [redirectBoxClicked, setRedirectBoxClicked] = useState(false);
   const [queuePosition, setQueuePosition] = useState(0);
   const [currentSite, setCurrentSite] = useState<SiteType>("MAL");
@@ -75,10 +68,19 @@ export default function Home() {
     setError("");
   }
 
+  function usernameIsValid(username: string) {
+    return username.length >= 2 && username.length <= 16;
+  }
+
+  function siteIsValid(site: string) {
+    return siteOptions.includes(site as SiteType);
+  }
+
   useOutsideClick(ref, onOutsideClick);
 
-  useSetFromCookie(setUserName, "username");
-  useSetFromCookie(setCurrentSite, "currentSite");
+  useSetFromClientCookie(setUserName, "username", usernameIsValid);
+  useSetFromClientCookie(setCurrentSite, "currentSite", siteIsValid);
+  useUpdateRouteCookies();
 
   useNotify(notifyError, error, [error], Boolean(error));
   const successMessage = `Successfully fetched your list and seasonal stats. 
@@ -104,27 +106,24 @@ export default function Home() {
     localStorage.removeItem("username");
     resetAllServerCookies(); // except for resetCount
     let resetCount = await getCookie("resetCount");
-
-    // let resetCount = localStorage.getItem("resetCount");
+    localStorage.removeItem("seasonal");
+    localStorage.removeItem("affinity");
+    localStorage.removeItem("recs");
     if (!resetCount) {
-      // localStorage.setItem("resetCount", "1");
       updateCookie("resetCount", "1");
     } else {
-      // let count = parseInt(localStorage.getItem("resetCount") as string);
-      // count++;
       updateCookie("resetCount", (parseInt(resetCount) + 1).toString());
-      // localStorage.setItem("resetCount", count.toString());
     }
   }
 
   async function handleConfirmUsername(e: React.MouseEvent<HTMLButtonElement>) {
-    if (userInputField === "") {
+    if (userInputField === "" || !usernameIsValid(userInputField)) {
       setError("Please enter a username.");
       return;
     }
+
     let resetCount = await getCookie("resetCount");
-    // let resetCount = localStorage.getItem("resetCount");
-    if (resetCount && parseInt(resetCount) >= 3) {
+    if (resetCount && parseInt(resetCount) >= 20) {
       setError(
         "You've been doing that too much lately. Please try again later.",
       );
@@ -132,20 +131,23 @@ export default function Home() {
     }
 
     try {
-      let data = await retrieveQueuePosition();
+      let data = await retrieveQueuePosition("seasonal");
       setQueuePosition(data.queuePosition);
       setLoading(true);
 
-      let taskId = await startTask(userInputField, "seasonal", currentSite);
-      let seasonalData = await retrieveTaskData(
-        taskId,
+      let seasonalData = await sendRequestToView(
         userInputField,
         "seasonal",
+        currentSite,
       );
 
+      console.log("After fetching seasonal data");
       localStorage.setItem("username", userInputField);
       setUserName(userInputField);
       localStorage.setItem("currentSite", currentSite);
+      updateCookie("currentSite", currentSite);
+      updateCookie("seasonal", "true", true);
+      console.log("After setting cookies");
     } catch (error) {
       const err = error as Error;
       let errorMessage = err.message;
@@ -153,14 +155,23 @@ export default function Home() {
         errorMessage = "Unable to reach the server. Please try again later.";
       setError(errorMessage);
     } finally {
+      console.log("Finally, before false loading");
       setLoading(false);
+      console.log("Finally, after false loading");
     }
   }
 
   return !loading ? (
     <>
-      <div className=" mx-auto mt-24 flex min-h-[80%] flex-col justify-between gap-8 xl:max-w-front-n-center-80 fullhd:max-w-front-n-center-60 ">
-        <div className="flex flex-col items-center justify-between gap-20 pt-0 xl:flex-row xl:items-start">
+      <div
+        className="hiddenscrollbar absolute inset-0 mx-auto my-auto  mt-14 flex 
+        max-h-front-n-center min-h-[80%] flex-col justify-between
+        gap-6 overflow-y-scroll xl:max-w-front-n-center-75  fullhd:mt-24 fullhd:max-w-front-n-center-60 "
+      >
+        <div
+          className="mx-6 flex flex-col items-center
+         justify-between gap-20 pt-0 xl:flex-row xl:items-start"
+        >
           <Heading />
           <div className="mt-10 flex flex-1 justify-end object-cover xl:mt-0">
             <ImageCarousel images={backgrounds} imagesText={backgroundsText} />
@@ -190,8 +201,8 @@ export default function Home() {
         </div>
 
         <div
-          className="grid grid-cols-1 justify-items-center pt-20 sm:grid-cols-2 
-         lg:mb-28  lg:flex lg:min-h-[250px] lg:justify-between"
+          className="mx-6 grid grid-cols-1 justify-items-center 
+         sm:grid-cols-2 lg:mb-28 lg:min-h-[250px] lg:justify-between xl:flex fullhd:pt-20"
         >
           {homeRedirectBoxContent.map((content, index) => (
             <RedirectBox

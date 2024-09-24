@@ -9,7 +9,7 @@ export function checkValidShowCount(showCount: number) {
 }
 
 export function checkValidMALScore(score: number) {
-  if (score < 6.5 || score > 10) return false;
+  if (score < 6.8 || score > 10) return false;
   return true;
 }
 

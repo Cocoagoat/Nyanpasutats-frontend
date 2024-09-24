@@ -8,7 +8,7 @@ export async function getShowData(
   try {
     const multipleShows = typeof showNames !== "string";
     const response = await fetch(
-      `http://localhost:8000/${path}/?show_name${multipleShows ? "s" : ""}=${
+      `http://localhost:80/${path}/?show_name${multipleShows ? "s" : ""}=${
         multipleShows
           ? encodeURIComponent(JSON.stringify(showNames))
           : encodeURIComponent(showNames)

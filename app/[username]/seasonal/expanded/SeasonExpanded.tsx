@@ -8,13 +8,16 @@ import {
   ShowToDisplay,
   TiersState,
 } from "@/app/interfaces";
-import Padoru from "@/components/general/Padoru";
-import { ModalContext } from "./ModalContext";
+import LoadingSpinner from "@/components/general/LoadingSpinner";
 import useWindowSize from "@/hooks/useWindowSize";
-import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "next/navigation";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { RiArrowUpDoubleFill } from "react-icons/ri";
 import LargeButton from "../../../../components/general/LargeButton";
-import { useSingleSeasonContext } from "../reducer/SeasonalContext";
+import {
+  SeasonalContext,
+  useSingleSeasonContext,
+} from "../reducer/SeasonalContext";
 import BackgroundDesignModal from "./BackgroundDesignModal";
 import BestX from "./BestX";
 import BestXRowToggle from "./BestXRowToggle";
@@ -23,34 +26,12 @@ import ControversialShow from "./ControversialShow";
 import FavoriteShows from "./FavoriteShows";
 import FavoriteShowsModal from "./FavoriteShowsModal";
 import Heading from "./Heading";
+import { ModalContext } from "./ModalContext";
 import SeasonBackgroundImageContainer from "./SeasonBackgroundImageContainer";
 import SeasonExpandedToolbar from "./SeasonExpandedToolbar";
+import { initialTierColors } from "./SeasonExpandedUtils";
 import SeasonStatGrid from "./SeasonStatGrid";
 import TierList from "./tierlist/TierList";
-import { useParams } from "next/navigation";
-
-export const initialTierColors: Record<number, string> = {
-  0.5: "#270202",
-  1: "#440404",
-  1.5: "#6f1515",
-  2: "#b71c1c",
-  2.5: "#d32f2f",
-  3: "#d84300",
-  3.5: "#e64a19",
-  4: "#ef6c00",
-  4.5: "#ff9100",
-  5: "#ffd000",
-  5.5: "#ffea00",
-  6: "#eeff41",
-  6.5: "#e1f515",
-  7: "#b3ff00",
-  7.5: "#97ff00",
-  8: "#56ff03",
-  8.5: "#00ff45",
-  9: "#00ff99",
-  9.5: "#00fff0",
-  10: "#00b0ff",
-};
 
 export default function SeasonExpanded({
   setCardOpen,
@@ -94,7 +75,11 @@ export default function SeasonExpanded({
     editModeOpen,
     setTierListOpen,
     tierListOpen,
+    backgroundColor,
+    altBackgroundColor,
   } = useSingleSeasonContext();
+
+  const { noSequels } = useContext(SeasonalContext)!;
 
   function handleAddNewRow() {
     setBestImages((prev) => [...prev, defaultBestImages]);
@@ -127,11 +112,20 @@ export default function SeasonExpanded({
       const showNames = Object.keys(showList);
       let imageUrls = await getShowData(showNames, "img_urls");
       let tempInitialTiers: TiersState = {};
+
+      let previousColors =
+        JSON.parse(sessionStorage.getItem("tierListColors_10") as string) ??
+        ({} as Record<number, string>);
+
+      let previousText =
+        JSON.parse(sessionStorage.getItem("tierListText_10") as string) ??
+        ({} as Record<number, string>);
+
       for (let i = 1; i <= 10; i++) {
         tempInitialTiers[i] = {
           imageData: [],
-          color: initialTierColors[i],
-          text: `${i}/10`,
+          color: previousColors[i] ?? initialTierColors[i],
+          text: previousText[i] ?? `${i}/10`,
         };
       }
 
@@ -171,15 +165,23 @@ export default function SeasonExpanded({
         }
       });
 
-      if (sessionStorage.getItem(`${username}_${season}_TierList`)) {
+      if (
+        localStorage.getItem(
+          `${username}_${season}_TierList${noSequels ? "_NoSequels" : ""}`,
+        )
+      ) {
         const savedTiers = JSON.parse(
-          sessionStorage.getItem(`${username}_${season}_TierList`) as string,
+          localStorage.getItem(
+            `${username}_${season}_TierList${noSequels ? "_NoSequels" : ""}`,
+          ) as string,
         );
-        // setTiers(savedTiers);
         tiers.current = savedTiers;
       } else {
-        // setTiers(tempInitialTiers);
         tiers.current = tempInitialTiers;
+        localStorage.setItem(
+          `${username}_${season}_TierList${noSequels ? "_NoSequels" : ""}_Initial`,
+          JSON.stringify(tiers.current),
+        );
       }
 
       setLoaded(true);
@@ -223,7 +225,10 @@ export default function SeasonExpanded({
 
                   {!loaded ? (
                     <div className=" relative col-span-1 col-start-1 h-full w-full ">
-                      <Padoru width={100} />
+                      <LoadingSpinner
+                        width={100}
+                        backgroundColor={backgroundColor}
+                      />
                     </div>
                   ) : displayContShow ? (
                     <ControversialShow
@@ -236,8 +241,9 @@ export default function SeasonExpanded({
                       <div
                         className={`flex h-[105px] w-[75px] cursor-pointer  
               items-center justify-center justify-self-center rounded-xl
-              bg-zinc-800 text-center text-xs text-lime-600 opacity-40 shadow-md shadow-black 
+              bg-zinc-800 text-center text-xs opacity-40 shadow-md shadow-black 
               hover:opacity-100`}
+                        style={{ color: altBackgroundColor }}
                         onClick={() => setDisplayContShow(true)}
                       >
                         <p className="font-semibold">Restore</p>
@@ -247,7 +253,10 @@ export default function SeasonExpanded({
 
                   {!loaded ? (
                     <div className=" relative col-span-2  col-start-2 h-full w-full ">
-                      <Padoru width={100} />
+                      <LoadingSpinner
+                        width={100}
+                        backgroundColor={backgroundColor}
+                      />
                     </div>
                   ) : Object.keys(displayedFavorites).length ? (
                     <FavoriteShows
@@ -314,7 +323,7 @@ export default function SeasonExpanded({
           <TierList
             tiersFromRef={tiers.current}
             imagesLoaded={loaded}
-            setSeasonGraphOpen={setTierListOpen}
+            setTierListOpen={setTierListOpen}
           />
         </div>
       )}

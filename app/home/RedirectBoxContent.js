@@ -14,7 +14,7 @@ export const redirectBoxContent = [
   {
     title: "Seasonal Cards",
     description:
-      "Create a mini-infographic that will summarize how a certain season went for you.",
+      "Get auto-generated mini-infographics and tier lists for every season.",
     link: "/seasonal",
   },
   {

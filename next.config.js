@@ -22,3 +22,11 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
+process.on("unhandledRejection", (reason, promise) => {
+  if (reason.message.includes("Cookies can only be modified")) {
+    // Ignore the cookie modification warning
+    return;
+  }
+  // console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});

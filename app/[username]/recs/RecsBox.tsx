@@ -10,6 +10,7 @@ import { SORT_BY_PREDICTION_SCORE, recReducer } from "./RecReducer";
 import RecsTable from "./RecsTable";
 import RecsWelcome from "./RecsWelcome";
 import TagRanking from "./TagRanking";
+import { useUpdateRouteCookies } from "@/hooks/useUpdateRouteCookies";
 
 export default function RecsBox({
   recs,
@@ -29,7 +30,7 @@ export default function RecsBox({
     startYear: 1960,
     endYear: new Date().getFullYear(),
     tag: "",
-    minMALScore: 6.5,
+    minMALScore: 6.8,
     maxMALScore: 10,
     sortedBy: SORT_BY_PREDICTION_SCORE,
     noWatchedOnly: false,
@@ -61,27 +62,17 @@ export default function RecsBox({
     fetchImgUrl();
   }, [state.displayedRecs]);
 
-  useEffect(() => {
-    updateCookie("recs", "true");
-  }, []); // Remove?
+  useUpdateRouteCookies("recs");
 
   return (
     <>
       <div className="flex flex-col xl:flex-row">
         <p className="flex-grow-1 mx-auto basis-1/6"></p>
         <div
-          className={`flex-grow-1 relative mx-auto my-auto mt-32 flex max-h-[75vh] max-w-front-n-center-600 basis-2/3 flex-col overflow-y-scroll
+          className={`flex-grow-1 relative mx-auto my-auto mt-32 flex max-h-[75vh] max-w-front-n-center-45 basis-2/3 flex-col overflow-y-scroll
         text-white xl:mt-16 ${scrollbarStyles.hiddenscrollbar}`}
         >
-          {welcomeOpen && (
-            <div className="mb-20 rounded-xl bg-blue-990 p-3  ">
-              <RecsWelcome />
-              <TbX
-                className="absolute right-0 top-0 h-6 w-6 cursor-pointer"
-                onClick={() => setWelcomeOpen(false)}
-              />
-            </div>
-          )}
+          {welcomeOpen && <RecsWelcome setOpen={setWelcomeOpen} />}
           <DisplayOptions
             sortedBy={state.sortedBy}
             noWatchedOnly={state.noWatchedOnly}
@@ -96,7 +87,10 @@ export default function RecsBox({
             imageLoading={imgLoading}
           />
         </div>
-        <div className=" mx-auto mt-32 flex flex-col justify-between  gap-24  text-white  xl:mt-16 xl:gap-60">
+        <div
+          className=" mx-auto mt-32 flex flex-col justify-between gap-24 text-white
+          xl:mt-16 fullhd:gap-60"
+        >
           <TagRanking tags={favTags} />
           <TagRanking tags={leastFavTags} least_fav={true} />
         </div>

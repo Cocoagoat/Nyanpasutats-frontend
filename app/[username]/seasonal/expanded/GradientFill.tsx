@@ -21,6 +21,7 @@ export default function GradientFill() {
           backgroundImage: `${`linear-gradient(to bottom, rgba(${rgbColor}, 1)
          ${"7%"}, transparent ${getGradientLength()})`}`,
           zIndex: 6,
+          opacity: 0.95,
         }}
       ></div>
     </>

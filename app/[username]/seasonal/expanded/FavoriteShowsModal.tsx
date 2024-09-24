@@ -2,6 +2,7 @@ import React from "react";
 import FavoriteShows from "./FavoriteShows";
 import { ShowsToDisplay } from "@/app/interfaces";
 import LargeButton from "@/components/general/LargeButton";
+import { useSingleSeasonContext } from "../reducer/SeasonalContext";
 
 export default function FavoriteShowsModal({
   favorites,
@@ -22,6 +23,8 @@ export default function FavoriteShowsModal({
     Object.entries(favorites).filter((show) => !show[1].displayed),
   );
 
+  const { altBackgroundColor } = useSingleSeasonContext()!;
+
   return (
     <div className="absolute top-0 z-40 flex h-full w-full flex-col items-center justify-center gap-20 bg-zinc-700 text-white">
       <div>
@@ -39,7 +42,10 @@ export default function FavoriteShowsModal({
           leftovers={true}
         />
       </div>
-      <LargeButton onClick={() => setFavoritesModalOpen(false)}>
+      <LargeButton
+        onClick={() => setFavoritesModalOpen(false)}
+        color={altBackgroundColor}
+      >
         Close
       </LargeButton>
     </div>

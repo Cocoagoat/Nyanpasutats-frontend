@@ -2,44 +2,16 @@
 
 import { SeasonData, SeasonName } from "@/app/interfaces";
 import useFirstTimeOpenMessage from "@/hooks/useFirstTimeOpenMessage";
-import fallBackground from "@/public/FallBackground.png";
-import springBackground from "@/public/SpringBackground.png";
-import summerBackground from "@/public/SummerBackground.png";
-import winterBackground from "@/public/WinterBackground.png";
+
 import { useEffect, useState } from "react";
 import SeasonCollapsed from "./SeasonCollapsed";
 import SeasonExpanded from "./expanded/SeasonExpanded";
 import { SingleSeasonContext } from "./reducer/SeasonalContext";
-
-function getBackgroundColor(seasonName: SeasonName) {
-  switch (seasonName) {
-    case "Winter":
-      return "#7DD3FC"; // RGB: 125, 211, 252
-    case "Spring":
-      return "#36C55E"; // RGB: 54, 197, 94
-    case "Summer":
-      return "#EBBF4D"; // RGB: 235, 191, 77
-    case "Fall":
-      return "#CD5722"; // RGB: 205, 87, 34
-    default:
-      throw Error("Invalid season name");
-  }
-}
-
-function getDayBackgroundImage(seasonName: SeasonName) {
-  switch (seasonName) {
-    case "Winter":
-      return winterBackground.src;
-    case "Spring":
-      return springBackground.src;
-    case "Summer":
-      return summerBackground.src;
-    case "Fall":
-      return fallBackground.src;
-    default:
-      throw Error("Invalid season name");
-  }
-}
+import {
+  getAltBackgroundColor,
+  getBackgroundColor,
+  getDayBackgroundImage,
+} from "./SeasonUtils";
 
 export default function Season({
   season,
@@ -61,8 +33,13 @@ export default function Season({
 
   const seasonName = season.split(" ")[0] as SeasonName;
 
-  let background_color = getBackgroundColor(seasonName);
-  const [backgroundColor, setBackgroundColor] = useState(background_color);
+  const [backgroundColor, setBackgroundColor] = useState(
+    getBackgroundColor(seasonName),
+  );
+  const [altBackgroundColor, setAltBackgroundColor] = useState(
+    getAltBackgroundColor(seasonName),
+  );
+
   let backgroundImg = getDayBackgroundImage(seasonName);
 
   const [backgroundImage, setBackgroundImage] = useState(backgroundImg);
@@ -94,8 +71,8 @@ export default function Season({
          change the amount of images in each category, and reorder the stats displayed
          in the card.
 
-         Note : The site currently supports images only from Imgur, MyAnimeList and Anilist.
-         If you want to upload an image from a different source, please upload it to Imgur first.`;
+         Note : The site currently supports images only from Imgur, Imgchest, MyAnimeList and Anilist.
+         If you want to upload an image from a different source, please upload it to Imgur/Imgchest first.`;
 
   useFirstTimeOpenMessage(
     editModeOpen,
@@ -104,8 +81,7 @@ export default function Season({
   );
 
   const dragModeOpenMessage = `You can now drag the background image horizontally to change its position. 
-
-  To continue editing other parts of the card, first leave this mode. `;
+ `;
 
   useFirstTimeOpenMessage(
     dragModeOpen,
@@ -115,8 +91,8 @@ export default function Season({
 
   const uploadModalOpenMessage = `Here you can upload a custom background image and change/remove the gradient color.
   
-  Note : The site currently supports images only from Imgur, MyAnimeList and Anilist.
-         If you want to upload an image from a different source, please upload it to Imgur first.`;
+  Note : The site currently supports images only from Imgur, Imgchest, MyAnimeList and Anilist.
+         If you want to upload an image from a different source, please upload it to Imgur/Imgchest first.`;
 
   useFirstTimeOpenMessage(
     uploadModalOpen,
@@ -133,6 +109,7 @@ export default function Season({
         setExpanded,
         backgroundColor,
         setBackgroundColor,
+        altBackgroundColor,
         displayGradient,
         setDisplayGradient,
         uploadedImage,

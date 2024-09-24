@@ -13,7 +13,8 @@ export default function GenericError({
       </h2>
       <Link
         href={"/home"}
-        className="rounded-3xl bg-blue-990 p-4 text-white shadow-lg shadow-lime-600"
+        className="rounded-3xl bg-blue-990
+         p-4 text-white shadow-lg shadow-lime-600 hover:bg-blue-970"
       >
         Go back
       </Link>

@@ -38,7 +38,9 @@ const config: Config = {
         "1/2": "50%",
         "3/4": "75%",
         "front-n-center": "max(500px, 45%)",
-        "front-n-center-600": "max(600px, 45%)",
+        "front-n-center-45": "max(600px, 45%)",
+        "front-n-center-50": "max(600px, 50%)",
+        "front-n-center-55": "max(600px, 55%)",
         "front-n-center-60": "max(600px, 60%)",
         "front-n-center-65": "max(600px, 65%)",
         "front-n-center-70": "max(600px, 70%)",
@@ -49,6 +51,7 @@ const config: Config = {
         "front-n-center": "88%",
       },
       textShadow: {
+        xs: "0 1px 1px var(--tw-shadow-color)",
         sm: "0 1px 2px var(--tw-shadow-color)",
         smd: "0 1px 3px var(--tw-shadow-color)",
         DEFAULT: "0 2px 4px var(--tw-shadow-color)",
@@ -78,7 +81,7 @@ const config: Config = {
         "1/5": "20%",
       },
       width: {
-        "image-carousel": "clamp(300px, 35vw, 550px)",
+        "image-carousel": "clamp(300px, 25vw, 550px)",
         "small-screen-card": "clamp(500px, 80vw, 900px)",
       },
     },

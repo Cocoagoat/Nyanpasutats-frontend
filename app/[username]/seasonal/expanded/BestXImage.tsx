@@ -5,6 +5,7 @@ import { PiPlusBold } from "react-icons/pi";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import ImageUrlUploadModal from "./ImageUrlUploadModal";
 
+// Some props are unnecessary, revise component in a future version
 export default function BestXImage({
   index,
   image_url,
@@ -27,13 +28,15 @@ export default function BestXImage({
   remove: () => void;
 }) {
   const { notifyError } = useToast();
-  const { editModeOpen } = useContext(SingleSeasonContext)!;
+  const { editModeOpen, backgroundColor, altBackgroundColor } =
+    useContext(SingleSeasonContext)!;
   const [imageClicked, setImageClicked] = useState(false);
   return imageClicked ? (
     <ImageUrlUploadModal
       currentImageUrl={image_url}
       onUpload={(newImageUrl: string) => handleNewImageUrl(newImageUrl)}
       closeModal={() => setImageClicked(false)}
+      color={backgroundColor}
     />
   ) : (
     <div className="relative flex flex-col">
@@ -80,9 +83,17 @@ export default function BestXImage({
        rounded-xl bg-zinc-800 ${ghost ? "opacity-40" : ""} text-center text-xs shadow-md  shadow-black`}
           >
             {lastImage && ghost ? (
-              <p className="font-semibold text-lime-600">Add Image</p>
+              <p
+                style={{ color: altBackgroundColor }}
+                className="font-semibold"
+              >
+                Add Image
+              </p>
             ) : (
-              <PiPlusBold className=" text-3xl font-semibold text-lime-600" />
+              <PiPlusBold
+                className=" text-3xl font-semibold opacity-100"
+                style={{ color: altBackgroundColor }}
+              />
             )}
           </div>
         )}

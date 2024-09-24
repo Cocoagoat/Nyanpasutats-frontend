@@ -38,6 +38,7 @@ export default function TierListHeader({
       className={`w-full ${!loaded && "hidden"}  bg-zinc-800 pb-6 pt-6 font-bold ${latoBold.className}
        pt-2 text-center text-4xl text-white text-shadow-md`}
       value={headerText}
+      maxLength={60}
       style={{ textShadow: `1px 2px 4px #${seasonalColor}` }}
       onChange={(e) => setHeaderText(e.target.value)}
     />

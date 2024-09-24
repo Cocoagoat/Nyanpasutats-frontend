@@ -1,8 +1,14 @@
+import WelcomeClose from "@/components/WelcomeClose";
 import React from "react";
 
-export default function SeasonalWelcome() {
+export default function SeasonalWelcome({
+  setOpen,
+}: {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
-    <div className="text-slate-200">
+    <div className="rounded-xl bg-blue-990 p-5 text-slate-200">
+      <WelcomeClose setOpen={setOpen} />
       <h1 className=" text-center text-4xl font-bold text-lime-600 shadow-lime-600 text-shadow-lg">
         Welcome to the Seasonals section!
       </h1>
@@ -10,8 +16,8 @@ export default function SeasonalWelcome() {
         Down below you can see a list of seasonal "cards", which are basically
         mini-summaries of how each* season went for you. You can expand each
         card and customize it to your liking - add/remove favorites, change the
-        amount and type of visible stats and the background image***, and create
-        your own Best/Worst X rankings. Once you're done, you can copy** or
+        amount and type of visible stats and the background image**, and create
+        your own Best/Worst X rankings. Once you're done, you can copy or
         download the card as an image.
       </p>
 
@@ -41,11 +47,11 @@ export default function SeasonalWelcome() {
       <p className="mt-8 text-[0.5rem]">
         *Only seasons with 5 or more shows scored are included in the list.
       </p>
-      <p className="mt-2 text-[0.5rem]">
+      {/* <p className="mt-2 text-[0.5rem]">
         **Copying is currently not supported on Firefox.
-      </p>
+      </p> */}
       <p className="mt-2 text-[0.5rem]">
-        ***The default backgrounds are screenshots from the anime "Non Non
+        **The default backgrounds are screenshots from the anime "Non Non
         Biyori", which the creator of this website highly recommends.
       </p>
     </div>

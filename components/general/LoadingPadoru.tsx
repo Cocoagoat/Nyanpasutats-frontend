@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import padoru from "@/public/padoru.gif";
 
-export default function Padoru({ width }: { width?: number }) {
+export default function LoadingPadoru({ width }: { width?: number }) {
   return (
     <Image
       src={padoru}
