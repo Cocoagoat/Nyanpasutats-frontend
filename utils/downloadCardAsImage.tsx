@@ -1,14 +1,9 @@
 import * as htmlToImage from "html-to-image";
 
-const PROXY_URL = "http://localhost:8080/";
-function getProxiedUrl(url: string) {
-  return `${PROXY_URL}${url}`;
-}
-
 export async function downloadCardAsImage(cardId: string, imageName: string) {
   const cardElement = document.getElementById(cardId);
   if (cardElement) {
-    const aspectRatio = cardElement.offsetHeight / cardElement.offsetWidth;
+    // const aspectRatio = cardElement.offsetHeight / cardElement.offsetWidth;
 
     htmlToImage
       .toPng(cardElement, {
@@ -24,7 +19,7 @@ export async function downloadCardAsImage(cardId: string, imageName: string) {
         document.body.removeChild(link);
       })
       .catch((error) => {
-        console.error("Could not generate image", error);
+        console.error("Could not generate image.");
       });
   }
 }
@@ -32,7 +27,7 @@ export async function downloadCardAsImage(cardId: string, imageName: string) {
 export async function copyCardAsImage(cardId: string) {
   const cardElement = document.getElementById(cardId);
   if (cardElement) {
-    const aspectRatio = cardElement.offsetHeight / cardElement.offsetWidth;
+    // const aspectRatio = cardElement.offsetHeight / cardElement.offsetWidth;
 
     try {
       const dataUrl = await htmlToImage.toPng(cardElement, {
@@ -59,9 +54,9 @@ export async function copyCardAsImage(cardId: string) {
         document.body.removeChild(link);
       }
     } catch (error) {
-      console.error("Could not generate image", error);
+      console.error("Could not copy element.");
     }
   } else {
-    console.error("Element not found");
+    console.error("Could not copy element.");
   }
 }
