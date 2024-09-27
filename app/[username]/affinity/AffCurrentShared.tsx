@@ -49,7 +49,10 @@ export default function AffCurrentShared({
               : () => {}
           }
         >
-          <MdArrowLeft size={28} className="font-semibold text-lime-600" />
+          <MdArrowLeft
+            size={28}
+            className="font-semibold text-lime-600 transition-colors duration-200 hover:text-lime-800"
+          />
         </button>
       )}
 
@@ -61,7 +64,11 @@ export default function AffCurrentShared({
         <button
           onClick={affCookie ? () => handleFilter(minShared + 10) : () => {}}
         >
-          <MdArrowRight size={28} className="font-semibold text-lime-600" />
+          <MdArrowRight
+            size={28}
+            className="font-semibold text-lime-600
+             transition-colors duration-200 hover:text-lime-800"
+          />
         </button>
       )}
     </div>
