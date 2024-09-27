@@ -6,6 +6,7 @@ export function middleware(request: NextRequest) {
   // Redirects users who change the URL to the username in the cookie
 
   const { pathname } = request.nextUrl;
+  const origin = request.nextUrl.origin;
 
   if (pathname.includes("/affinity")) {
     const searchParams = new URL(request.url).searchParams;
@@ -17,13 +18,18 @@ export function middleware(request: NextRequest) {
   }
 
   const usernameCookie = cookies().get("username")?.["value"] as string;
+  console.log("usernameCookie", usernameCookie);
   let split_req = request.nextUrl.href.split("/");
   const username = split_req[split_req.length - 2];
 
-  if (usernameCookie && usernameCookie != username) {
-    split_req[split_req.length - 2] = usernameCookie;
-    let new_url = split_req.join("/");
-    return NextResponse.redirect(new URL(new_url, request.url));
+  if (usernameCookie != username) {
+    if (usernameCookie) {
+      split_req[split_req.length - 2] = usernameCookie;
+      let new_url = split_req.join("/");
+      return NextResponse.redirect(new URL(new_url, request.url));
+    } else {
+      return NextResponse.redirect(new URL(`${origin}/home`, request.url));
+    }
   }
 }
 
