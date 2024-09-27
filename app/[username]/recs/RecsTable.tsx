@@ -14,20 +14,22 @@ const showColumns = [
 
 export default function RecsTable({
   displayedRecs,
-  imageUrls,
-  imageError,
-  imageLoading,
 }: {
   displayedRecs: RecommendationType[];
-  imageUrls: string[];
-  imageError: boolean;
-  imageLoading: boolean;
 }) {
+  function constructImageUrl(rec: RecommendationType) {
+    try {
+      var image_url = `https://cdn.myanimelist.net/images/anime/${rec["ImageUrlSuffix1"]}/${rec["ImageUrlSuffix2"]}.jpg`;
+    } catch (e) {
+      var image_url = "";
+    }
+    return image_url;
+  }
   return (
     <table>
       <TableHead
         // Remove the image column if there was an error loading images
-        columnNames={!imageError ? showColumns : showColumns.slice(1)}
+        columnNames={showColumns}
         extraStyles="bg-gradient-to-tr from-lime-800"
       />
       <tbody>
@@ -35,10 +37,9 @@ export default function RecsTable({
           <Rec
             rec={rec}
             index={index}
-            imageUrl={imageUrls[index]}
+            imageUrl={constructImageUrl(rec)}
             key={rec["ShowName"]}
-            error={imageUrls[index] === undefined}
-            loading={imageLoading}
+            error={false}
           />
         ))}
       </tbody>

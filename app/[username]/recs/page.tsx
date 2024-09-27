@@ -1,12 +1,10 @@
-import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
-import { startTask } from "@/app/home/api";
+import { sendRequestToView } from "@/app/actions/sendRequestToView";
 import { RecommendationType } from "@/app/interfaces";
 import GenericError from "@/components/general/GenericError";
+import { Nav } from "@/components/general/Nav";
 import { getSiteCookie } from "@/utils/CookieUtils";
 import { cookies } from "next/headers";
 import RecsBox from "./RecsBox";
-import { Nav } from "@/components/general/Nav";
-import { sendRequestToView } from "@/app/actions/sendRequestToView";
 
 export async function generateMetadata({
   params,
@@ -52,7 +50,6 @@ export default async function page({
   let recs: RecommendationType[] = data["Recommendations"],
     recs_sorted_by_diff: RecommendationType[] =
       data["RecommendationsSortedByDiff"];
-
   let favTags = data["FavTags"],
     leastFavTags = data["LeastFavTags"];
 

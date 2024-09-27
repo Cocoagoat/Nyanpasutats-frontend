@@ -1,16 +1,13 @@
 "use client";
-import updateCookie from "@/app/actions/updateCookie";
 import scrollbarStyles from "@/app/globals.module.css";
-import { getShowData } from "@/app/home/api";
 import { RecommendationType } from "@/app/interfaces";
-import { useEffect, useReducer, useState } from "react";
-import { TbX } from "react-icons/tb";
+import { useUpdateRouteCookies } from "@/hooks/useUpdateRouteCookies";
+import { useReducer, useState } from "react";
 import DisplayOptions from "./DisplayOptions";
 import { SORT_BY_PREDICTION_SCORE, recReducer } from "./RecReducer";
 import RecsTable from "./RecsTable";
 import RecsWelcome from "./RecsWelcome";
 import TagRanking from "./TagRanking";
-import { useUpdateRouteCookies } from "@/hooks/useUpdateRouteCookies";
 
 export default function RecsBox({
   recs,
@@ -37,30 +34,7 @@ export default function RecsBox({
   };
 
   const [state, dispatch] = useReducer(recReducer, initialState);
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const [imgError, setImgError] = useState(false);
-  const [imgLoading, setImgLoading] = useState(true);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
-
-  // Currently fetching images for each rec on-demand to avoid fetching
-  // a very large amount of images at the start, since there are hundreds of recommendations.
-  useEffect(() => {
-    async function fetchImgUrl() {
-      try {
-        const show_names = state.displayedRecs
-          .slice(0, 50)
-          .map((rec) => rec["ShowName"]);
-        const urls = await getShowData(show_names, "img_urls");
-        setImgUrls(urls);
-      } catch (error) {
-        setImgError(true);
-      } finally {
-        setImgLoading(false);
-      }
-    }
-    setImgLoading(true);
-    fetchImgUrl();
-  }, [state.displayedRecs]);
 
   useUpdateRouteCookies("recs");
 
@@ -80,12 +54,7 @@ export default function RecsBox({
             welcomeOpen={welcomeOpen}
             setWelcomeOpen={setWelcomeOpen}
           />
-          <RecsTable
-            displayedRecs={state.displayedRecs}
-            imageUrls={imgUrls}
-            imageError={imgError}
-            imageLoading={imgLoading}
-          />
+          <RecsTable displayedRecs={state.displayedRecs} />
         </div>
         <div
           className=" mx-auto mt-32 flex flex-col justify-between gap-24 text-white
