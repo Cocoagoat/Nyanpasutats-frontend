@@ -71,8 +71,8 @@ export default function Season({
          change the amount of images in each category, and reorder the stats displayed
          in the card.
 
-         Note : The site currently supports images only from Imgur, Imgchest, MyAnimeList and Anilist.
-         If you want to upload an image from a different source, please upload it to Imgur/Imgchest first.`;
+         Note : The site currently supports images only from Imgur, MyAnimeList and Anilist.
+         If you want to upload an image from a different source, please upload it to Imgur first.`;
 
   useFirstTimeOpenMessage(
     editModeOpen,
@@ -91,8 +91,8 @@ export default function Season({
 
   const uploadModalOpenMessage = `Here you can upload a custom background image and change/remove the gradient color.
   
-  Note : The site currently supports images only from Imgur, Imgchest, MyAnimeList and Anilist.
-         If you want to upload an image from a different source, please upload it to Imgur/Imgchest first.`;
+  Note : The site currently supports images only from Imgur, MyAnimeList and Anilist.
+         If you want to upload an image from a different source, please upload it to Imgur first.`;
 
   useFirstTimeOpenMessage(
     uploadModalOpen,

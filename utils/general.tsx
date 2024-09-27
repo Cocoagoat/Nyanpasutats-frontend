@@ -17,7 +17,6 @@ export function isImgurUrl(url: string) {
     );
   } catch (e) {
     // If the URL is invalid, it will throw an error
-    console.error("Invalid URL:", e);
     return false;
   }
 }
@@ -31,7 +30,6 @@ export function isMyAnimeListUrl(url: string) {
     );
   } catch (e) {
     // If the URL is invalid, it will throw an error
-    console.error("Invalid URL:", e);
     return false;
   }
 }
@@ -45,7 +43,6 @@ export function isUrlPartOfHost(url: string, hostname: string) {
     );
   } catch (e) {
     // If the URL is invalid, it will throw an error
-    console.error("Invalid URL:", e);
     return false;
   }
 }
@@ -57,7 +54,7 @@ export function isUrlPartOfHosts(url: string, hostnames: string[]) {
 export function handleNewImageUrl(newImageUrl: string, onUpload: any) {
   const allowedHosts = [
     "i.imgur.com",
-    "cdn.imgchest.com",
+    // "cdn.imgchest.com",
     "cdn.myanimelist.net/images",
     "s4.anilist.co/file/anilistcdn",
   ];
@@ -66,11 +63,10 @@ export function handleNewImageUrl(newImageUrl: string, onUpload: any) {
       `The site currently supports images from the following sites :
 
     - Imgur
-    - Imgchest
     - MyAnimeList (official images only)
     - Anilist (official images only)
     
-    If your image is from another site, please upload it to Imgur/Imgchest and try again.`,
+    If your image is from another site, please upload it to Imgur and try again.`,
       undefined,
       15000,
     );

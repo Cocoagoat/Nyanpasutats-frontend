@@ -36,7 +36,7 @@ export default function BestXImage({
       currentImageUrl={image_url}
       onUpload={(newImageUrl: string) => handleNewImageUrl(newImageUrl)}
       closeModal={() => setImageClicked(false)}
-      color={backgroundColor}
+      color={altBackgroundColor}
     />
   ) : (
     <div className="relative flex flex-col">

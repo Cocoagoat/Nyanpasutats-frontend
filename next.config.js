@@ -12,16 +12,28 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ["cdn.myanimelist.net", "i.imgur.com", "imgur.com"],
+    domains: [
+      "cdn.myanimelist.net",
+      // "cdn.imgchest.com",
+      "i.imgur.com",
+      "imgur.com",
+    ],
     remotePatterns: [
       { protocol: "https", hostname: "cdn.myanimelist.net" },
       { protocol: "https", hostname: "i.imgur.com", port: "", pathname: "*" },
       { protocol: "https", hostname: "imgur.com" },
+      // {
+      //   protocol: "https",
+      //   hostname: "cdn.imgchest.com",
+      //   port: "",
+      //   pathname: "*",
+      // },
     ],
   },
 };
 
 module.exports = nextConfig;
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 process.on("unhandledRejection", (reason, promise) => {
   if (reason.message.includes("Cookies can only be modified")) {
