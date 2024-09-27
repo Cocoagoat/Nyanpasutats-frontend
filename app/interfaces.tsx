@@ -19,7 +19,9 @@ export type RecommendationType = {
   MALScore: number;
   Year: number;
   Season: SeasonName;
-  Tags: string[];
+  ImageUrlSuffix1?: number;
+  ImageUrlSuffix2?: number;
+  // Tags: string[];
 };
 
 export type RecommendationSortOptions =
