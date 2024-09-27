@@ -29,6 +29,7 @@ import { useNotify } from "@/hooks/useNotify";
 import getCookie from "../actions/getCookie";
 import updateCookie from "../actions/updateCookie";
 import { useUpdateRouteCookies } from "@/hooks/useUpdateRouteCookies";
+import { set } from "lodash";
 
 export default function Home() {
   const backgrounds = [img1.src, img2.src, img3.src, img4.src, img5.src];
@@ -46,7 +47,7 @@ export default function Home() {
   const [error, setError] = useState("");
 
   const [loading, setLoading] = useState(false);
-
+  const [inputLoading, setInputLoading] = useState(false);
   const [redirectBoxClicked, setRedirectBoxClicked] = useState(false);
   const [queuePosition, setQueuePosition] = useState(0);
   const [currentSite, setCurrentSite] = useState<SiteType>("MAL");
@@ -101,6 +102,12 @@ export default function Home() {
     startGlobalIntervalServerSide();
   }, []);
 
+  useEffect(() => {
+    if (error) {
+      setInputLoading(false);
+    }
+  }, [error]);
+
   async function handleResetUsername(e: React.MouseEvent<HTMLButtonElement>) {
     setUserName("");
     localStorage.removeItem("username");
@@ -141,13 +148,11 @@ export default function Home() {
         currentSite,
       );
 
-      console.log("After fetching seasonal data");
       localStorage.setItem("username", userInputField);
       setUserName(userInputField);
       localStorage.setItem("currentSite", currentSite);
       updateCookie("currentSite", currentSite);
       updateCookie("seasonal", "true", true);
-      console.log("After setting cookies");
     } catch (error) {
       const err = error as Error;
       let errorMessage = err.message;
@@ -155,9 +160,8 @@ export default function Home() {
         errorMessage = "Unable to reach the server. Please try again later.";
       setError(errorMessage);
     } finally {
-      console.log("Finally, before false loading");
       setLoading(false);
-      console.log("Finally, after false loading");
+      setInputLoading(false);
     }
   }
 
@@ -193,6 +197,8 @@ export default function Home() {
             redirectBoxClicked={redirectBoxClicked}
             currentSite={currentSite}
             setCurrentSite={setCurrentSite}
+            loading={inputLoading}
+            setLoading={setInputLoading}
           />
         )}
 

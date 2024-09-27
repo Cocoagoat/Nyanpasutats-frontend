@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
-import SiteToggle from "./SiteToggle";
-import { SiteType } from "../interfaces";
 import Loading from "@/components/general/Loading";
+import { Dispatch, SetStateAction } from "react";
+import { SiteType } from "../interfaces";
+import SiteToggle from "./SiteToggle";
 
 export default function UsernameInput({
   userInputField,
@@ -10,6 +10,8 @@ export default function UsernameInput({
   redirectBoxClicked,
   currentSite,
   setCurrentSite,
+  loading,
+  setLoading,
 }: {
   userInputField: string;
   setUserInputField: Dispatch<SetStateAction<string>>;
@@ -17,8 +19,9 @@ export default function UsernameInput({
   redirectBoxClicked: boolean;
   currentSite: SiteType;
   setCurrentSite: Dispatch<SetStateAction<SiteType>>;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [loading, setLoading] = useState(false);
   return (
     <div className="mt-10 flex  justify-center  transition-all duration-500">
       <div
