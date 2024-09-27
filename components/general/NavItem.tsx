@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
+import Loading from "./Loading";
+import { usePathname } from "next/navigation";
 
 export default function NavItem({
   link,
@@ -9,22 +11,27 @@ export default function NavItem({
   link: string;
   text: string;
 }) {
-  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const currentPath = usePathname();
+
   return (
     <li
-      className={`${
-        hovered && "bg-lime-600"
-      } z-50 cursor-pointer py-2 transition-colors duration-200 2xl:py-4`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className={`
+      z-50 w-36 cursor-pointer py-2 text-center 
+      transition-colors duration-300 hover:bg-lime-600 2xl:py-4`}
+      onClick={() => {
+        if (link !== currentPath && !link.includes("nyanpass")) {
+          setClicked(true);
+        }
+      }}
     >
       <Link
-        className="px-8 py-4"
+        className="relative px-8 py-4"
         href={link}
         target={link.startsWith("https") ? "_blank" : ""}
         rel="noopener noreferrer"
       >
-        {text}
+        {!clicked ? text : <Loading width={25} absolute={true} />}
       </Link>
     </li>
   );
