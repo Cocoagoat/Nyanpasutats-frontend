@@ -30,13 +30,12 @@ export async function startTask(
 export async function retrieveQueuePosition(
   type: "affs" | "recs" | "seasonal",
 ) {
-  const url = `http://localhost:80/queue_pos/?type=${type}&random=${Math.random()}`;
+  const url = `https://localhost/queue_pos/?type=${type}&random=${Math.random()}`;
   // Random is added because next.js doesn't seem to care about the cache: "no-store" option
   const res = await fetch(url, { cache: "no-store" });
 
   const rawData = await res.text();
   const data = JSON.parse(rawData);
-
   return { queuePosition: data["queuePosition"] };
 }
 
@@ -70,7 +69,7 @@ export async function getShowData(
   try {
     const multipleShows = typeof showNames !== "string";
     const response = await fetch(
-      `http://localhost:80/${path}/?show_name${multipleShows ? "s" : ""}=${
+      `http://localhost/${path}/?show_name${multipleShows ? "s" : ""}=${
         multipleShows
           ? encodeURIComponent(JSON.stringify(showNames))
           : encodeURIComponent(showNames)
