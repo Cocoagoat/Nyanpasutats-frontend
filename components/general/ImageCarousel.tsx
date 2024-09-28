@@ -131,14 +131,14 @@ export default function ImageCarousel({
           setOnHover={setHovered}
         />
       </div>
-      <p className="text-wrap relative  text-center text-[1.2rem] font-semibold leading-tight text-zinc-400 shadow-black text-shadow">
+      <h3 className="text-wrap relative  text-center text-[1.2rem] font-semibold leading-tight text-zinc-400 shadow-black text-shadow">
         {imagesText[currentImageIndex]}
         {currentImageIndex === imagesCount - 1 && (
           <p className="absolute w-full text-center text-[0.4rem] ">
             *Probably not the kind of AI you think about when you hear that word
           </p>
         )}
-      </p>
+      </h3>
     </div>
   );
 }
