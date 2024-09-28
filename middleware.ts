@@ -18,7 +18,6 @@ export function middleware(request: NextRequest) {
   }
 
   const usernameCookie = cookies().get("username")?.["value"] as string;
-  console.log("usernameCookie", usernameCookie);
   let split_req = request.nextUrl.href.split("/");
   const username = split_req[split_req.length - 2];
 
