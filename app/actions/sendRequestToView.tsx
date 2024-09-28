@@ -1,9 +1,9 @@
 "use server";
-import { SiteType, UserPathType } from "../interfaces";
-
 import { handleError } from "@/app/home/api";
-import updateCookie from "./updateCookie";
+import fetch from "node-fetch";
+import { SiteType, UserPathType } from "../interfaces";
 import { retrieveTaskData } from "./retrieveTaskData";
+import updateCookie from "./updateCookie";
 
 // Starts the Celery task to get the user's data.
 // Data is then retrieved in a separate action (retrieveTaskData).
@@ -14,15 +14,9 @@ export async function sendRequestToView(
 ) {
   "use server";
 
-  const url = `http://localhost:80/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
+  const url = `http://localhost/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
   try {
-    // console.log("Sending request to view", url);
-    const res = await fetch(url, {
-      headers: {
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(url);
     const rawData = await res.text();
     let data = JSON.parse(rawData);
 

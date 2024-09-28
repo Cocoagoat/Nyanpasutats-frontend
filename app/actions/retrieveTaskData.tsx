@@ -1,7 +1,6 @@
 "use server";
 import { handleError } from "../home/api";
 import { UserPathType } from "../interfaces";
-import updateCookie from "./updateCookie";
 
 export async function retrieveTaskData(
   taskId: string,
@@ -10,7 +9,7 @@ export async function retrieveTaskData(
 ) {
   "use server";
 
-  const url = `http://localhost:80/tasks/?task_id=${taskId}`;
+  const url = `https://localhost/tasks/?task_id=${taskId}`;
   try {
     const res = await fetch(url, { cache: "force-cache" });
     // The view connected to this endpoint will poll the Celery task
