@@ -31,17 +31,15 @@ export default function SearchSeason() {
               placeholder="Search"
               value={searchText}
               maxLength={11}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleFilterByName(searchText);
+                }
+              }}
               onChange={(e) => setSearchText(e.target.value)}
               className=" border-none  bg-zinc-700 text-white focus:ring-2 focus:ring-lime-600"
             />
-            <LargeButton
-              onClick={() => handleFilterByName(searchText)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  handleFilterByName(searchText.toLowerCase());
-                }
-              }}
-            >
+            <LargeButton onClick={() => handleFilterByName(searchText)}>
               Apply
             </LargeButton>
             <LargeButton onClick={handleResetFilter}>Reset</LargeButton>
