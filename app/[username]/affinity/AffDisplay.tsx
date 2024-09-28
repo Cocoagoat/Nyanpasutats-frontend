@@ -1,15 +1,8 @@
-import { retrieveTaskData } from "@/app/actions/retrieveTaskData";
 import { sendRequestToView } from "@/app/actions/sendRequestToView";
 import { AffinityData } from "@/app/interfaces";
-import { redirect } from "next/navigation";
+import AffCookieUpdateDummyComponent from "./AffCookieUpdateDummyComponent";
 import AffTable from "./AffTable";
 import { getMinShared } from "./getMinShared";
-import { cookies } from "next/headers";
-import Loading from "@/components/general/Loading";
-import { useMemo } from "react";
-import useSetCookie from "@/hooks/useSetCookie";
-import updateCookie from "@/app/actions/updateCookie";
-import AffCookieUpdateDummyComponent from "./AffCookieUpdateDummyComponent";
 
 function filterAffs(affs: AffinityData[], minShared: number) {
   let filteredAffs = [] as AffinityData[];
