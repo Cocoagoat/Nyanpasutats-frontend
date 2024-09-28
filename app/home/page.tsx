@@ -1,35 +1,33 @@
 "use client";
 
-import { useState, useEffect, useRef, use } from "react";
 import { SiteType, siteOptions } from "@/app/interfaces";
-import RedirectBox from "./RedirectBox";
-import { redirectBoxContent } from "./RedirectBoxContent";
+import useOutsideClick from "@/hooks/useOutsideClick";
+import { useEffect, useRef, useState } from "react";
 import { sendRequestToView } from "../actions/sendRequestToView";
 import { retrieveQueuePosition } from "./api";
-import { retrieveTaskData } from "../actions/retrieveTaskData";
-import useOutsideClick from "@/hooks/useOutsideClick";
+import RedirectBox from "./RedirectBox";
+import { redirectBoxContent } from "./RedirectBoxContent";
 
+import img4 from "@/public/Affinity2.png";
+import img5 from "@/public/Recs.png";
 import img1 from "@/public/Test-card.png";
 import img2 from "@/public/Test-edited-card2.png";
 import img3 from "@/public/Test-tierlist.png";
-import img4 from "@/public/Affinity2.png";
-import img5 from "@/public/Recs.png";
 
 import ImageCarousel from "@/components/general/ImageCarousel";
 import ToasterWithX from "@/components/general/ToasterWithX";
-import useToast from "@/hooks/useToast";
-import UsernameInput from "./UsernameInput";
-import ResetUsername from "./ResetUsername";
-import { startGlobalIntervalServerSide } from "./ResetIntervalRegulator.js";
 import UserQueueDisplay from "@/components/general/UserQueueDisplay";
-import resetAllServerCookies from "../actions/resetAllServerCookies";
-import Heading from "./Heading";
-import useSetFromClientCookie from "@/hooks/useSetFromCookie";
 import { useNotify } from "@/hooks/useNotify";
-import getCookie from "../actions/getCookie";
-import updateCookie from "../actions/updateCookie";
+import useSetFromClientCookie from "@/hooks/useSetFromCookie";
+import useToast from "@/hooks/useToast";
 import { useUpdateRouteCookies } from "@/hooks/useUpdateRouteCookies";
-import { set } from "lodash";
+import getCookie from "../actions/getCookie";
+import resetAllServerCookies from "../actions/resetAllServerCookies";
+import updateCookie from "../actions/updateCookie";
+import Heading from "./Heading";
+import { startGlobalIntervalServerSide } from "./ResetIntervalRegulator.js";
+import ResetUsername from "./ResetUsername";
+import UsernameInput from "./UsernameInput";
 
 export default function Home() {
   const backgrounds = [img1.src, img2.src, img3.src, img4.src, img5.src];
