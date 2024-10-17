@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Nyanpasutats",
   description:
     "Anime seasonal statistics and tier lists + recommendations based on your MyAnimeList profile",
+  icons: {
+    icon: "/nyanpasu.png",
+  },
 };
 
 export default function RootLayout({
@@ -18,6 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="relative">
+      {/* <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head> */}
       <body
         className={`${inter.className} overflow-y-hidden bg-blue-990 bg-cover`}
       >
