@@ -1,7 +1,7 @@
 import { retrieveQueuePosition } from "@/app/home/api";
 import { Nav } from "@/components/general/Nav";
 import { Suspense } from "react";
-import { URLSearchParams } from "url";
+// import { URLSearchParams } from "url";
 import AffDisplay from "./AffDisplay";
 import AffQueueDisplay from "./AffQueueDisplay";
 import AffWelcome from "./AffWelcome";
