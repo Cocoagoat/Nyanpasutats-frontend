@@ -89,8 +89,8 @@ export default function ImageCarousel({
   return (
     <div className="flex flex-col">
       <div
-        className="relative aspect-[3/2] w-[500px] overflow-hidden
-      rounded-3xl shadow-2xl shadow-blue-900 xl:w-image-carousel"
+        className="relative aspect-[3/2] w-[400px] overflow-hidden rounded-3xl
+      shadow-2xl shadow-blue-900 sm:w-[500px] xl:w-image-carousel"
       >
         <ImageCarouselButton
           type="previous"

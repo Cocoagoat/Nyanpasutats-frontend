@@ -205,8 +205,8 @@ export default function Home() {
         </div>
 
         <div
-          className="mx-6 grid grid-cols-1 justify-items-center 
-         sm:grid-cols-2 lg:mb-28 lg:min-h-[250px] lg:justify-between xl:flex fullhd:pt-20"
+          className="mx-6 mb-28 grid grid-cols-1 
+         justify-items-center sm:grid-cols-2 lg:min-h-[250px] lg:justify-between xl:flex fullhd:pt-20"
         >
           {homeRedirectBoxContent.map((content, index) => (
             <RedirectBox

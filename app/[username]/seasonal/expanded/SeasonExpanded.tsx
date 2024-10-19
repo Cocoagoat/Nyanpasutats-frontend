@@ -197,8 +197,8 @@ export default function SeasonExpanded({
     >
       <div
         className={`fixed left-1/2 top-1/2 z-[400] -translate-x-1/2 -translate-y-1/2 
-           overflow-y-scroll ${styles.hiddenscrollbar} w-small-screen-card  fullhd:w-[978px] 
-            ultrahd:w-[1478px]`}
+           overflow-y-scroll ${styles.hiddenscrollbarVerticalOnly}  w-small-screen-card overflow-x-scroll
+             fullhd:w-[978px] ultrahd:w-[1478px]`}
         style={{
           maxHeight: `max(300px, ${height - 150}px)`,
         }}
@@ -211,7 +211,7 @@ export default function SeasonExpanded({
               // the gradient.
             }
           }
-          className="relative mx-16 mb-8  rounded-3xl"
+          className="relative mx-16 mb-8 w-[900px] lg:w-auto"
         >
           {uploadModalOpen && <BackgroundDesignModal />}
           <SeasonBackgroundImageContainer>

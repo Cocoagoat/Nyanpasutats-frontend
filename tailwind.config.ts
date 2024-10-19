@@ -82,7 +82,7 @@ const config: Config = {
       },
       width: {
         "image-carousel": "clamp(300px, 25vw, 550px)",
-        "small-screen-card": "clamp(500px, 80vw, 900px)",
+        "small-screen-card": "clamp(300px, 80vw, 900px)",
       },
     },
   },
