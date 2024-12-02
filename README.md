@@ -9,19 +9,33 @@ Note : The site is now up and available for all to use, but is still a work in p
 ## Table of Contents
 
 1. [Sections](#sections)
+   
 1.1 [Seasonal Stats](#seasonal-stats)
+   
 1.2. [Recommendations](#recommendations)
+
 1.3. [Affinity Finder](#affinity-finder)
-2. [Program Flow](#program-flow)
+
+
 2.1. [Data Gathering](#data-gathering)
+
 2.1.1. [AnimeDB](#anime-db)
+
 2.1.2. [UserDB](#user-db)
+
 2.1.3. [Tags](#tags)
+
 2.1.4. [Graphs/Relations](#graphs)
+
 2.1.5. [AffinityDB](#affinity-db)
+
 2.1.6. [Model](#model)
+
 2.2. [Request Flow](#request-flow)
-3. [Tech Stack](#tech-stack)
+
+3. [Program Flow](#program-flow)
+   
+4. [Tech Stack](#tech-stack)
 
 ## Sections
 
