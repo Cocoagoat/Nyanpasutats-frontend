@@ -1,4 +1,4 @@
-**Test file**
+**test file, WIP**
 
 # Nyanpasutats (nps.moe)
 
@@ -17,54 +17,106 @@ Note : The site is now up and available for all to use, but is still a work in p
 1.3. [Affinity Finder](#affinity-finder)
 
 
-2.1. [Data Gathering](#data-gathering)
-
-2.1.1. [AnimeDB](#anime-db)
-
-2.1.2. [UserDB](#user-db)
-
-2.1.3. [Tags](#tags)
-
-2.1.4. [Graphs/Relations](#graphs)
-
-2.1.5. [AffinityDB](#affinity-db)
-
-2.1.6. [Model](#model)
-
 2.2. [Request Flow](#request-flow)
 
 3. [Program Flow](#program-flow)
    
 4. [Tech Stack](#tech-stack)
 
+5. [Credits](#credits)
+
 ## Sections
 
 ### Seasonal Stats
 
-This section provides automatic customizable seasonal infographics and tier lists to the user. Example 1 Example 2
+This section provides automatic customizable seasonal infographics and tier lists to the user for each season they've watched at least 5 shows in.
+
+#### Navigation
+
+Seasons are sortable and filterable by several metrics and are searchable. For example, you could search for "Winter", sort by mean score, and filter by year to find your highest scored Winter season in a specific year range.
+
+<img src="https://i.imgur.com/04Luj0O.png" alt="drawing" width="200"/>
+
+#### Graph
+
+The above comparison can also be displayed as a graph rather than a set of cards.
+
+#### Exclude Sequels
+
+Removes (or at least tries its best to) remove everything that isn't a new show from the statistics.
+
+Note : This may not work perfectly for every show, as the definition of what a "new" show is can become very muddy in extremely complex franchises such as Fate. For more details on how the distinction is done, check out the backend repository.
+
+#### Infographic Customizations
+
+1. Edit mode - allows you to customize the layout of the card.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+2. Upload image - allows you to upload a different background image for your card and change/remove the gradient color of the background.
+
+3. Drag mode - allows you to drag the background image.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+4. Best X rankings - allows you to create custom rankings for the season (Best Girl, Best Guy, Best Couple, etc) by uploading your own images.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+#### Sharing
+
+You can copy or download the infographic as an image. Direct sharing via link is currently being worked on.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+#### Tier List Customizations
+
+1. Expand/Collapse - allows you to switch between the default 10-tier format to a 20-tier format (half points) or a 5-tier format.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+2. Add Image - in case a show is missing from the automatically generated tier list (whether because of a bug or because it's a leftover from a previous season), you may add it using via a custom image.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+3. Change Colors - allows you to change the colors of every tier.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+4. Delete Mode - allows you to delete shows or tiers you don't want.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+5. Display text - displays text over the images on the tier list.
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+
+6. Reset - undoes all changes and reverts the tier list to its auto-generated state (minus added images).
+
+<img src="https://i.imgur.com/04Luj0.png" alt="drawing"/>
+
+#### Sharing
+
+Similar to infographics, you can copy or download the tier list as an image. Direct sharing via link is currently being worked on.
+
 
 
 ### Recommendations
 
-This section analyzes the user's list using the neural network [Model](#model), which attempts to guess the user's score for every single anime that meets certain thresholds (popularity, score, duration - for full list see meets_conditions function in AnimeDB), and displays the highest scores, as well as the Anilist tags/genres the system deemed the user to have the highest affinity to.
+This section analyzes the user's list using a neural network which attempts to guess the user's score for every single anime that meets certain thresholds :
+
+<img src ="https://i.imgur.com/oKqIDUC.png" alt="drawing" width="500"/>
+
+and displays the highest scores, as well as the Anilist tags/genres the system deemed the user to have the highest affinity to.
+
+#### Navigation
+
+Sorting and filtering options are available, however searching for an anime directly is not, as not all guesses made by the neural network are sent to the user - only the top few hundred out of a tho
 
 
 ## Program Flow
 
-### AnimeDB
 
-This is a .parquet database which holds the following information on every single ranked anime entry on MyAnimeList at the time of gathering :
-    - ID (as it appears on the relevant URL on MyAnimeList, for example https://myanimelist.net/anime/34822/Tsuki_ga_Kirei)
-    - Mean Score 
-    - Scores (how many users scored the show)
-    - Members (how many users have the show in their list)
-    - Episodes (episode count)
-    - Duration (of each episode)
-    - Type (TV/Movie/OVA/ONA/Special)
-    - Year of airing
-    - Season (Winter/Spring/Summer/Fall)
-
-There are two copies of this database - AnimeDB.parquet, which is only gathered once at the start of every data gathering cycle (every time ALL databases and the recommendations model are refreshed, roughly once per season), and AnimeDB-U.parquet, which is updated automatically daily. The former is used for parts of the app where data isn't updated daily (such as the Affinity Finder, as it works directly in tandem with UserDB which is only updated once per season)
 
 
 ## Tech Stack
