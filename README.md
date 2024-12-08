@@ -36,7 +36,7 @@ For example, you could search for "Winter", sort by mean score, and filter by ye
 <source src="https://i.imgur.com/NP13hGg.mp4" type="video/mp4">
 </video>
 
-![](https://i.imgur.com/tP0nHoF.gif)
+![](./READMEdemos/WinterFilter.gif)
 
 #### Graph
 
@@ -148,7 +148,7 @@ Sorting by score difference is also available. As the model is naturally biased 
 
 If you take a closer look at the above image, you'll notice that one of the predictions is heavily off the mark, missing the real score the user gave to the show "Toradora!" by a whole 5 out of 10 points. (The current margin of error of the model is slightly below 0.8 points for the average guess).
 
-This stems from the inherent limitations of the model - what this model is capable of learning about a user is merely their preferences for certain tags and scoring patterns (since the only information it gets about a user is their anime scores). As long as the show fits the template of a show you'll enjoy, said show will get a high score from the model. 
+This stems from the inherent limitations of the model - what this model is capable of learning about a user is merely their preferences for certain tags and scoring patterns (since the only information it gets about a user is their anime scores). As long as the show lines up with your general taste, said show will get a high score from the model.
 
 In this case, the user clearly enjoys slice of life and romance stories (as seen by the recommendations given in both of the above images), but likely had a specific reason to dislike that particular show that's too "deep" for the model to capture - perhaps they strongly disliked the ending, or a specific character, or maybe the reason is something even deeper that relates to their real life, and the model isn't capable of accounting for any of those.
 
@@ -172,7 +172,7 @@ While the amount of users compared to is fairly large, for the above reasons it 
 
 ## Program Flow
 
-1. The user sends a request by either clicking on "Get List" on the homepage or visiting one of the three sections ("Get List" required beforehand). "Get List" will fetch and cache their list as well the seasonal stats (since those take by far the shortest amount of time to fetch).
+1. The user sends a request by either clicking on "Get List" on the homepage or visiting one of the three sections ("Get List" required beforehand). "Get List" will fetch and cache their MAL/Anilist list object, as well as generate their seasonal stats (to avoid having to make the user wait twice before they can access any section).
 2. The request goes through Cloudflare's WAF, reaching the Nginx server behind which the frontend and backend are running.
 3. The Nginx server redirects it to the Gunicorn socket, where the Django backend is running.
 4. Celery workers, split into three queues (one for each section), await requests on the backend. Once a request gets there, it is redirected to the appropriate queue based on the request's URL, and the relevant worker picks it up and begins/queues a task to generate the relevant data.
