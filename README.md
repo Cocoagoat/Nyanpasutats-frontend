@@ -32,19 +32,13 @@ Seasons are sortable, filterable by several metrics, and searchable.
 
 For example, you could search for "Winter", sort by mean score, and filter by year to find your highest scored Winter season in a specific year range.
 
-<video width="500" autoplay loop alt="Filter Demo">
-<source src="https://i.imgur.com/M1OyiUy.gif" type="video/mp4">
-</video>
-
-![hippo](https://i.imgur.com/NIoI9ob.gif)
+![Filter Demo](https://i.imgur.com/ZuNait7.gif)
 
 #### Graph
 
 The above comparison can also be displayed as a graph rather than a set of infographics.
 
-<video width="500" autoplay loop alt="Graph Demo" >
-<source src="https://i.imgur.com/HuVHClI.mp4" type="video/mp4">
-</video>
+![Graph Demo](https://i.imgur.com/SgVJ8Wq.gif)
 
 #### Exclude Sequels
 
@@ -58,31 +52,22 @@ However, this may not work perfectly for every show, as the definition of what a
 
 1. Edit mode - allows you to customize the layout of the card.
 
-<video width="500" autoplay loop alt="Edit Mode Demo" >
-<source src="https://i.imgur.com/19Nq8Tg.mp4" type="video/mp4">
-</video>
+![Edit Mode Demo](https://i.imgur.com/D8XySzL.gif)
 
 2. Upload image - allows you to upload a different background image for your card and change/remove the gradient color of the background.
-
 3. Drag mode - allows you to drag the background image.
 
-<video width="500" autoplay loop alt="Upload Image Demo" >
-<source src="https://i.imgur.com/98XO4sl.mp4" type="video/mp4">
-</video>
+![Upload Image Demo](https://i.imgur.com/kVLcrOw.gif)
 
 4. Best X rankings - allows you to create custom rankings for the season (Best Girl, Best Guy, Best Couple, etc) by uploading your own images.
 
-<video width="500" autoplay loop alt="Best X Demo" >
-<source src="https://i.imgur.com/rDiVjM7.mp4" type="video/mp4">
-</video>
+![Best X Rankings](https://i.imgur.com/3EN1S7g.gif)
 
 #### Sharing
 
 You can copy or download the infographic as an image. Direct sharing via link is currently being worked on.
 
-<video width="500" autoplay loop alt="Copy/Download Demo" >
-<source src="https://i.imgur.com/GzvwLrw.mp4" type="video/mp4">
-</video>
+![Copy and Download Demo](https://i.imgur.com/LCijdXg.gif)
 
 #### Tier List Customizations
 
