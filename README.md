@@ -1,6 +1,6 @@
 # Nyanpasutats (nps.moe)
 
-Nyanpasutats is a website that provides personalized anime recommendations, user affinity comparisons, and seasonal statistics for anime fans. Now supports both MyAnimeList and Anilist accounts.
+Nyanpasutats is a website that provides customizable auto-generated infographics, personalized anime recommendations and user affinity comparisons for MyAnimeList and Anilist users.
 
 Note : The site is now up and available for all to use, but is still a work in progress - bugs and unexpected maintenance periods may occur. 
 
@@ -17,7 +17,7 @@ Note : The site is now up and available for all to use, but is still a work in p
 2. [Program Flow](#program-flow)
 3. [Simplified Flowchart](#simplified-flowchart)
 4. [Tech Stack](#tech-stack)
-5. [Credits](#credits)
+
    
 ----
 ## Sections
@@ -73,27 +73,19 @@ You can copy or download the infographic as an image. Direct sharing via link is
 
 1. Expand/Collapse - allows you to switch between the default 10-tier format to a 20-tier format (half points) or a 5-tier format.
 
-<video width="500" autoplay loop alt="Expand/Collapse Demo" >
-<source src="https://i.imgur.com/yatTHem.mp4" type="video/mp4">
-</video>
+![Tier List Expand/Collapse Demo](https://i.imgur.com/8APEnhS.gif)
 
 2. Add Image - in case a show is missing from the automatically generated tier list (whether because of a bug or because it's a leftover from a previous season), you may add it using via a custom image.
 
-<video width="500" autoplay loop alt="Add Image Demo" >
-<source src="https://i.imgur.com/pgI4yke.mp4" type="video/mp4">
-</video>
+![Tier List Add Image Demo](https://i.imgur.com/tYaAxRm.gif)
 
 3. Change Colors - allows you to change the colors of every tier.
 
-<video width="500" autoplay loop alt="Change Colors Demo" >
-<source src="https://i.imgur.com/dX2XW7K.mp4" type="video/mp4">
-</video>
+![Tier List Colors Demo](https://i.imgur.com/lqJpeiq.gif)
 
 4. Delete Mode - allows you to delete shows or tiers you don't want.
 
-<video width="500" autoplay loop alt="Delete Mode Demo" >
-<source src="https://i.imgur.com/pmQIDoW.mp4" type="video/mp4">
-</video>
+![Tier List Delete Mode Demo](https://i.imgur.com/rvn8MYB.gif)
 
 5. Display text - displays text over the images on the tier list.
 
