@@ -36,6 +36,7 @@ For example, you could search for "Winter", sort by mean score, and filter by ye
 <source src="https://i.imgur.com/NP13hGg.mp4" type="video/mp4">
 </video>
 
+![](https://i.imgur.com/tP0nHoF.gif)
 
 #### Graph
 
