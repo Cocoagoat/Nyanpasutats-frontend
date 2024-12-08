@@ -33,10 +33,10 @@ Seasons are sortable, filterable by several metrics, and searchable.
 For example, you could search for "Winter", sort by mean score, and filter by year to find your highest scored Winter season in a specific year range.
 
 <video width="500" autoplay loop alt="Filter Demo">
-<source src="https://i.imgur.com/NP13hGg.mp4" type="video/mp4">
+<source src="https://i.imgur.com/M1OyiUy.gif" type="video/mp4">
 </video>
 
-![](./READMEdemos/WinterFilter.gif)
+![hippo](https://i.imgur.com/NIoI9ob.gif)
 
 #### Graph
 
