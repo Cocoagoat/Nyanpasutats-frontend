@@ -1,5 +1,3 @@
-**test file, WIP**
-
 # Nyanpasutats (nps.moe)
 
 Nyanpasutats is a website that provides personalized anime recommendations, user affinity comparisons, and seasonal statistics for anime fans. Now supports both MyAnimeList and Anilist accounts.
@@ -10,21 +8,18 @@ Note : The site is now up and available for all to use, but is still a work in p
 
 1. [Sections](#sections)
    
-1.1 [Seasonal Stats](#seasonal-stats)
+1.1.  [Seasonal Stats](#seasonal-stats)
    
 1.2. [Recommendations](#recommendations)
 
 1.3. [Affinity Finder](#affinity-finder)
 
-
-2.2. [Request Flow](#request-flow)
-
-3. [Program Flow](#program-flow)
-   
+2. [Program Flow](#program-flow)
+3. [Simplified Flowchart](#simplified-flowchart)
 4. [Tech Stack](#tech-stack)
-
 5. [Credits](#credits)
-
+   
+----
 ## Sections
 
 ### Seasonal Stats
@@ -33,96 +28,162 @@ This section provides automatic customizable seasonal infographics and tier list
 
 #### Navigation
 
-Seasons are sortable and filterable by several metrics and are searchable. For example, you could search for "Winter", sort by mean score, and filter by year to find your highest scored Winter season in a specific year range.
+Seasons are sortable, filterable by several metrics, and searchable.
 
-<img src="https://i.imgur.com/04Luj0O.png" alt="drawing" width="200"/>
+For example, you could search for "Winter", sort by mean score, and filter by year to find your highest scored Winter season in a specific year range.
+
+<video width="500" autoplay loop alt="Filter Demo">
+<source src="https://i.imgur.com/NP13hGg.mp4" type="video/mp4">
+</video>
+
 
 #### Graph
 
-The above comparison can also be displayed as a graph rather than a set of cards.
+The above comparison can also be displayed as a graph rather than a set of infographics.
+
+<video width="500" autoplay loop alt="Graph Demo" >
+<source src="https://i.imgur.com/HuVHClI.mp4" type="video/mp4">
+</video>
 
 #### Exclude Sequels
 
-Removes (or at least tries its best to) remove everything that isn't a new show from the statistics.
+Removes everything that isn't a new show (sequels, OVAs, etc) from the statistics.
 
-Note : This may not work perfectly for every show, as the definition of what a "new" show is can become very muddy in extremely complex franchises such as Fate. For more details on how the distinction is done, check out the backend repository.
+**Technical Note** : To do this, the site utilizes Python's graph libraries (igraph, networkx) and a custom algorithm to create clusters of shows and find the "main" show within each cluster. So for example, the My Hero Academia cluster will be very straightforward since it has several seasons, movies and OVAs, and the first season will of course be the "main" show.
+
+However, this may not work perfectly for every show, as the definition of what a "main" show is can become very muddy in extremely complex and non-linear franchises such as Fate.
 
 #### Infographic Customizations
 
 1. Edit mode - allows you to customize the layout of the card.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Edit Mode Demo" >
+<source src="https://i.imgur.com/19Nq8Tg.mp4" type="video/mp4">
+</video>
 
 2. Upload image - allows you to upload a different background image for your card and change/remove the gradient color of the background.
 
 3. Drag mode - allows you to drag the background image.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Upload Image Demo" >
+<source src="https://i.imgur.com/98XO4sl.mp4" type="video/mp4">
+</video>
 
 4. Best X rankings - allows you to create custom rankings for the season (Best Girl, Best Guy, Best Couple, etc) by uploading your own images.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Best X Demo" >
+<source src="https://i.imgur.com/rDiVjM7.mp4" type="video/mp4">
+</video>
 
 #### Sharing
 
 You can copy or download the infographic as an image. Direct sharing via link is currently being worked on.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Copy/Download Demo" >
+<source src="https://i.imgur.com/GzvwLrw.mp4" type="video/mp4">
+</video>
 
 #### Tier List Customizations
 
 1. Expand/Collapse - allows you to switch between the default 10-tier format to a 20-tier format (half points) or a 5-tier format.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Expand/Collapse Demo" >
+<source src="https://i.imgur.com/yatTHem.mp4" type="video/mp4">
+</video>
 
 2. Add Image - in case a show is missing from the automatically generated tier list (whether because of a bug or because it's a leftover from a previous season), you may add it using via a custom image.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Add Image Demo" >
+<source src="https://i.imgur.com/pgI4yke.mp4" type="video/mp4">
+</video>
 
 3. Change Colors - allows you to change the colors of every tier.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Change Colors Demo" >
+<source src="https://i.imgur.com/dX2XW7K.mp4" type="video/mp4">
+</video>
 
 4. Delete Mode - allows you to delete shows or tiers you don't want.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<video width="500" autoplay loop alt="Delete Mode Demo" >
+<source src="https://i.imgur.com/pmQIDoW.mp4" type="video/mp4">
+</video>
 
 5. Display text - displays text over the images on the tier list.
 
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing" width="200"/>
+<img src="https://i.imgur.com/sTyFGpi.png" alt="Display Text Demo" width="500"/>
 
-6. Reset - undoes all changes and reverts the tier list to its auto-generated state (minus added images).
-
-<img src="https://i.imgur.com/04Luj0.png" alt="drawing"/>
+6. Reset - undoes all changes and reverts the tier list to its auto-generated state (but does not delete manually added images).
 
 #### Sharing
 
 Similar to infographics, you can copy or download the tier list as an image. Direct sharing via link is currently being worked on.
 
-
+----------
 
 ### Recommendations
 
-This section analyzes the user's list using a neural network which attempts to guess the user's score for every single anime that meets certain thresholds :
+This section analyzes the user's list using a neural network, which is trained to guess the user's score for every single anime that meets certain thresholds :
 
 <img src ="https://i.imgur.com/oKqIDUC.png" alt="drawing" width="500"/>
 
-and displays the highest scores, as well as the Anilist tags/genres the system deemed the user to have the highest affinity to.
+and displays the shows with the highest scores, as well as the Anilist tags/genres the system deemed the user to have the highest affinity to. 
+
+**Note** : Score predictions are also performed on shows you have already seen (with data being adjusted to remove the influence of said show on the prediction of its own score). This along with the tags allows you to judge how well the model learned your tastes.
+
+<img src ="https://i.imgur.com/YgOlsQg.png" alt="drawing" width="700" title="Recommendations"/>
+
+**Note 2** : Only the user's existing scores are used for the predictions. The site does not gather any private information that the user may have publicized on their profile, such as gender/age/country etc, and does not use it for predictions or any other purpose.
 
 #### Navigation
 
-Sorting and filtering options are available, however searching for an anime directly is not, as not all guesses made by the neural network are sent to the user - only the top few hundred out of a tho
+Filtering options are available, however searching for an anime directly is not, as currently, to reduce the volume of data being transferred, not all guesses made by the neural network are sent to the user - only the top few hundred predictions are. So for example, if Steins;Gate is not predicted to be in your top 400, you will not see it even if you try filtering by year and MAL score to single it out.
 
+Sorting by score difference is also available. As the model is naturally biased towards shows with higher MAL scores, this is the preferred type of sorting for getting recommendations of shows you might have never heard of before, as the displayed shows will be those that the model thinks you are the most likely to score higher than the average person.
+
+<img src ="https://i.imgur.com/MDadz2q.png" alt="drawing" width="500" title="Sorted by score difference"/>
+
+#### Limitations
+
+If you take a closer look at the above image, you'll notice that one of the predictions is heavily off the mark, missing the real score the user gave to the show "Toradora!" by a whole 5 out of 10 points. (The current margin of error of the model is slightly below 0.8 points for the average guess).
+
+This stems from the inherent limitations of the model - what this model is capable of learning about a user is merely their preferences for certain tags and scoring patterns (since the only information it gets about a user is their anime scores). As long as the show fits the template of a show you'll enjoy, said show will get a high score from the model. 
+
+In this case, the user clearly enjoys slice of life and romance stories (as seen by the recommendations given in both of the above images), but likely had a specific reason to dislike that particular show that's too "deep" for the model to capture - perhaps they strongly disliked the ending, or a specific character, or maybe the reason is something even deeper that relates to their real life, and the model isn't capable of accounting for any of those.
+
+Though while this is a clear showcase of the model's limitation, it's also a showcase of its success in capturing this user's tastes and a proof of the fact that the user's given score for a show is not known to the model when it performs the guess.
+
+----------
+
+### Affinity Finder
+
+This section finds the users with the highest and lowest affinity to your MAL account (only available for MAL, as Anilist does not have the concept of affinity). Similar to what affinity.animesos.net did before shutting down.
+
+<img src ="https://i.imgur.com/5XpgBTM.png" alt="drawing" width="500"/>
+
+#### Limitations
+
+As the site does not have direct access to MAL's databases, the information displayed by this section may be outdated - the user list data that it uses is currently a mix of publicly available Kaggle data and the score data gathered for the recommendation system. 
+
+While the amount of users compared to is fairly large, for the above reasons it also does not encompass the entirety of MAL's user base.
+
+---
 
 ## Program Flow
 
+1. The user sends a request by either clicking on "Get List" on the homepage or visiting one of the three sections ("Get List" required beforehand). "Get List" will fetch and cache their list as well the seasonal stats (since those take by far the shortest amount of time to fetch).
+2. The request goes through Cloudflare's WAF, reaching the Nginx server behind which the frontend and backend are running.
+3. The Nginx server redirects it to the Gunicorn socket, where the Django backend is running.
+4. Celery workers, split into three queues (one for each section), await requests on the backend. Once a request gets there, it is redirected to the appropriate queue based on the request's URL, and the relevant worker picks it up and begins/queues a task to generate the relevant data.
+5. Once the data generation is complete, the data is sent back to the frontend and cached inside a Redis cache for several hours for quick subsequent retrieval. The user's list is also cached to ensure we only need one call to the MAL/Anilist APIs per user.
 
+#### Simplified Flowchart
+
+<img src ="https://i.imgur.com/tXJOOY9.png" alt="drawing" width="500" title="Recommendations"/>
 
 
 ## Tech Stack
 
-- **Frontend:** React, Next.js (App Router), Tailwind CSS
-- **Backend:** Python, Django, Celery
-- **Data Processing:** Cython, Pandas, TensorFlow
-- **Task Queue & Cache:** Redis
-- **Hosting:** Self-hosted VPS with Nginx and Gunicorn
+- **Frontend:** React, Next.js (App Router), TypeScript, Tailwind CSS, Nginx
+- **Backend:** Python, Django, Celery, Gunicorn, Redis, SQLite
+- **Data Processing:** Pandas + Polars, TensorFlow, Cython
