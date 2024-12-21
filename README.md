@@ -36,7 +36,7 @@ For example, you could search for "Winter", sort by mean score, and filter by ye
 
 #### Graph
 
-The above comparison can also be displayed as a graph rather than a set of infographics.
+The above comparison can also be displayed as a graph.
 
 ![Graph Demo](https://i.imgur.com/SgVJ8Wq.gif)
 
@@ -46,7 +46,7 @@ Removes everything that isn't a new show (sequels, OVAs, etc) from the statistic
 
 **Technical Note** : To do this, the site utilizes Python's graph libraries (igraph, networkx) and a custom algorithm to create clusters of shows and find the "main" show within each cluster. So for example, the My Hero Academia cluster will be very straightforward since it has several seasons, movies and OVAs, and the first season will of course be the "main" show.
 
-However, this may not work perfectly for every show, as the definition of what a "main" show is can become very muddy in extremely complex and non-linear franchises such as Fate.
+However, this may not work perfectly for every show, as the definition of a "main" show becomes very muddy in extremely complex and non-linear franchises such as Fate.
 
 #### Infographic Customizations
 
@@ -75,7 +75,7 @@ You can copy or download the infographic as an image. Direct sharing via link is
 
 ![Tier List Expand/Collapse Demo](https://i.imgur.com/8APEnhS.gif)
 
-2. Add Image - in case a show is missing from the automatically generated tier list (whether because of a bug or because it's a leftover from a previous season), you may add it using via a custom image.
+2. Add Image - in case a show is missing from the automatically generated tier list (whether because of a bug or because it's a leftover from a previous season), you may add the show by adding a custom image (simplest way is to use the image the show has on MAL/Anilist).
 
 ![Tier List Add Image Demo](https://i.imgur.com/tYaAxRm.gif)
 
@@ -129,7 +129,7 @@ This stems from the inherent limitations of the model - what this model is capab
 
 In this case, the user clearly enjoys slice of life and romance stories (as seen by the recommendations given in both of the above images), but likely had a specific reason to dislike that particular show that's too "deep" for the model to capture - perhaps they strongly disliked the ending, or a specific character, or maybe the reason is something even deeper that relates to their real life, and the model isn't capable of accounting for any of those.
 
-Though while this is a clear showcase of the model's limitation, it's also a showcase of its success in capturing this user's tastes and a proof of the fact that the user's given score for a show is not known to the model when it performs the guess.
+Though while this is a clear showcase of the model's limits, it's also a showcase of its ability to capture this user's tastes, and a proof of the fact that the user's given score for a show is not known to the model when it performs the guess.
 
 ----------
 
