@@ -25,7 +25,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head> */}
       <body
-        className={`${inter.className} overflow-y-hidden bg-blue-990 bg-cover`}
+        className={`${inter.className} mx-auto max-w-screen-ultrahd overflow-y-hidden bg-blue-990 bg-cover`}
       >
         <div className="absolute inset-0 -z-50 bg-repeat ">
           <Image
@@ -43,7 +43,7 @@ export default function RootLayout({
             backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%)`,
           }}
         ></div> */}
-        <div className="relative min-h-screen">{children}</div>
+        <div className="relative min-h-screen ">{children}</div>
       </body>
     </html>
   );

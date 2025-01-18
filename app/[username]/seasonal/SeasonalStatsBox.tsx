@@ -150,7 +150,7 @@ export default function SeasonalStatsBox({
               hasMore={hasMore}
               loader={
                 Object.keys(seasonalStats).length > 0 ? (
-                  <Loading width={50} absolute={true} />
+                  <Loading width={50} spinnerType="Absolute" />
                 ) : null
               }
               scrollableTarget="scrollableDiv"

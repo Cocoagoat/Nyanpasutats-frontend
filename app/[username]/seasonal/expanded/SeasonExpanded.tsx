@@ -41,7 +41,7 @@ export default function SeasonExpanded({
   const [favorites, setFavorites] = useState<ShowsToDisplay>({});
   const [loaded, setLoaded] = useState(false);
   const [displayContShow, setDisplayContShow] = useState(true);
-  const { height } = useWindowSize();
+  const { width, height } = useWindowSize();
   const tiers = useRef<TiersState>({});
   const username = useParams<{ username: string }>().username;
 
@@ -197,8 +197,8 @@ export default function SeasonExpanded({
     >
       <div
         className={`fixed left-1/2 top-1/2 z-[400] -translate-x-1/2 -translate-y-1/2 
-           overflow-y-scroll ${styles.hiddenscrollbarVerticalOnly}  w-small-screen-card overflow-x-scroll
-             fullhd:w-[978px] ultrahd:w-[1478px]`}
+           overflow-y-scroll ${width > 1024 ? styles.hiddenscrollbar : styles.hiddenscrollbarVerticalOnly}
+             w-small-screen-card overflow-x-scroll fullhd:w-[978px] ultrahd:w-[1478px]`}
         style={{
           maxHeight: `max(300px, ${height - 150}px)`,
         }}
@@ -211,7 +211,7 @@ export default function SeasonExpanded({
               // the gradient.
             }
           }
-          className="relative mx-16 mb-8 w-[900px] lg:w-auto"
+          className="relative mx-16 mb-8 w-[800px] lg:w-auto"
         >
           {uploadModalOpen && <BackgroundDesignModal />}
           <SeasonBackgroundImageContainer>
@@ -252,7 +252,7 @@ export default function SeasonExpanded({
                   )}
 
                   {!loaded ? (
-                    <div className=" relative col-span-2  col-start-2 h-full w-full ">
+                    <div className="relative col-span-2 col-start-2 h-full w-full ">
                       <LoadingSpinner
                         width={100}
                         backgroundColor={backgroundColor}

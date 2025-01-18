@@ -340,7 +340,7 @@ export default function TierList({
       )}
 
       <div
-        className={`fixed left-1/2  top-1/2 z-[500]  flex  -translate-x-1/2
+        className={`fixed left-1/2 top-1/2 z-[500] flex -translate-x-1/2
          -translate-y-1/2 flex-col overflow-x-scroll 
          ${width < 1000 ? styles.hiddenscrollbarVerticalOnly : styles.hiddenscrollbar} 
          overflow-y-scroll  bg-zinc-800

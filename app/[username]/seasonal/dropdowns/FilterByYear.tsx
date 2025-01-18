@@ -82,7 +82,7 @@ export default function FilterByYear({
               handleResetInputs();
             }
           }}
-          className=" border-none bg-zinc-700
+          className=" border-none bg-zinc-700 p-1
            text-white outline-none focus:outline-none focus:ring-2
             focus:ring-lime-600"
         />
@@ -97,7 +97,7 @@ export default function FilterByYear({
               handleResetInputs();
             }
           }}
-          className="border-none bg-zinc-700
+          className="border-none bg-zinc-700 p-1
            text-white focus:ring-2 focus:ring-lime-600"
         />
         <div className="flex justify-center gap-10">
