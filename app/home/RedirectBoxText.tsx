@@ -32,7 +32,7 @@ export default function RedirectBoxText({
       {!loading ? (
         <>
           <p
-            className={`text-wrap balance-text text-md text-center text-zinc-300  shadow-black text-shadow-lg ${
+            className={`balance-text text-md text-wrap text-center text-zinc-300  shadow-black text-shadow-lg ${
               !disabled && `group-hover:text-white`
             }`}
           >

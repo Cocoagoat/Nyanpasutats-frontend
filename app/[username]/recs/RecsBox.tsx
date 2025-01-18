@@ -43,7 +43,8 @@ export default function RecsBox({
       <div className="flex flex-col xl:flex-row">
         <p className="flex-grow-1 mx-auto basis-1/6"></p>
         <div
-          className={`flex-grow-1 relative mx-auto my-auto mt-32 flex max-h-[75vh] max-w-front-n-center-45 basis-2/3 flex-col overflow-y-scroll
+          className={`flex-grow-1 relative mx-auto my-auto mt-32 flex
+             max-h-[75vh] max-w-front-n-center-45 basis-2/3 flex-col overflow-y-scroll
         text-white xl:mt-16 ${scrollbarStyles.hiddenscrollbar}`}
         >
           {welcomeOpen && <RecsWelcome setOpen={setWelcomeOpen} />}

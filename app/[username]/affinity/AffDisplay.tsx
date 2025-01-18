@@ -40,7 +40,10 @@ export default async function AffDisplay({
       </div>
       {posAffs.length == 0 && negAffs.length == 0 && (
         <>
-          <div className="mx-24 text-center text-3xl font-bold text-lime-600">
+          <div
+            className="mx-24 text-center text-xl font-bold
+           text-lime-600 lg:text-3xl"
+          >
             <p className="mt-10">
               Looks like there aren't any users you have {minShared} shared
               shows with.{" "}
