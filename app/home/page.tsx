@@ -137,14 +137,16 @@ export default function Home() {
 
     try {
       let data = await retrieveQueuePosition("seasonal");
+      console.log("Got past retrieveQueuePosition");
       setQueuePosition(data.queuePosition);
       setLoading(true);
-
+      console.log("Before sendRequestToView");
       let seasonalData = await sendRequestToView(
         userInputField,
         "seasonal",
         currentSite,
       );
+      console.log("After sendRequestToView");
 
       localStorage.setItem("username", userInputField);
       setUserName(userInputField);
@@ -164,11 +166,12 @@ export default function Home() {
   }
 
   return !loading ? (
-    <>
+    <div className="">
       <div
-        className="hiddenscrollbar absolute inset-0 mx-auto my-auto  mt-14 flex 
-        max-h-front-n-center min-h-[80%] flex-col justify-between
-        gap-6 overflow-y-scroll xl:max-w-front-n-center-75  fullhd:mt-24 fullhd:max-w-front-n-center-60 "
+        className="hiddenscrollbar absolute inset-0 mx-auto my-auto mt-14 flex max-h-front-n-center 
+        min-h-[80%] max-w-front-n-center-75 flex-col justify-between gap-6 overflow-y-scroll
+        fullhd:mt-24 fullhd:max-w-front-n-center-60
+         "
       >
         <div
           className="mx-6 flex flex-col items-center
@@ -224,7 +227,7 @@ export default function Home() {
         </div>
         <ToasterWithX />
       </div>
-    </>
+    </div>
   ) : (
     <UserQueueDisplay queuePosition={queuePosition} />
   );
