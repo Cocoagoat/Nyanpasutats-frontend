@@ -153,8 +153,8 @@ export default function BestXImages({
             maxLength={20}
             aria-label="Best X Title"
             onChange={(e) => setTitle(e.target.value)}
-            className={`place-self-center border-none
-       bg-transparent  text-center shadow-black 
+            className={`mt-1 place-self-center
+       border-none  bg-transparent text-center shadow-black 
        text-shadow ${lato.className}`}
           />
         ) : null}

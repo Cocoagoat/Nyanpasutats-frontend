@@ -24,7 +24,10 @@ export default function SearchSeason() {
     <div ref={ref} className="relative">
       <SettingsButton onClick={() => setIsOpen(!isOpen)}>Search</SettingsButton>
       {isOpen && (
-        <div className="absolute left-0 z-50 mt-2 rounded-lg bg-blue-970 p-4 shadow-lg">
+        <div
+          className="absolute left-0 right-0 z-50 mt-2 rounded-lg bg-blue-970
+         p-4 shadow-lg lg:right-auto"
+        >
           <div className="flex flex-col space-y-4">
             <input
               type="text"

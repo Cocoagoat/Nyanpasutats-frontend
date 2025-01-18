@@ -28,7 +28,10 @@ export default function SeasonCollapsed({
   const rgbColor = hexToRgb(backgroundColor);
 
   return (
-    <div className="relative mx-4 lg:mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg">
+    <div
+      className="relative mx-4 mb-5 overflow-hidden rounded-3xl text-sky-100
+     shadow-lg lg:mx-16"
+    >
       <Image
         src={backgroundImage}
         fill
@@ -51,8 +54,8 @@ export default function SeasonCollapsed({
         <div className="flex items-center justify-between p-4">
           <div>
             <h2
-              className={`text-lg lg:text-2xl font-bold shadow-black 
-                text-shadow-sm`}
+              className={`text-lg font-bold shadow-black text-shadow-sm 
+                lg:text-2xl`}
             >
               {season}
             </h2>
