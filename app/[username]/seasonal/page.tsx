@@ -22,7 +22,7 @@ export default async function page({
   return (
     <>
       <Nav />
-      <Suspense fallback={<Loading absolute={true} />}>
+      <Suspense fallback={<Loading spinnerType="Absolute" />}>
         <SeasonalStatsFetcher username={params.username} />
       </Suspense>
     </>

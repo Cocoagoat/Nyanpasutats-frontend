@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 export default async function loading() {
   let seasonalCookie = cookies().get("seasonal");
   if (seasonalCookie) {
-    return <Loading absolute={true} />;
+    return <Loading spinnerType="Absolute" />;
   } else {
     let data = await retrieveQueuePosition("seasonal");
     let queuePosition = data["queuePosition"];
