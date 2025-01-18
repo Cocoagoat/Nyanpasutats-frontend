@@ -7,7 +7,7 @@ import Loading from "@/components/general/Loading";
 export default async function loading() {
   let affCookie = cookies().get("affinity");
   if (affCookie) {
-    return <Loading absolute={true} />;
+    return <Loading spinnerType="Absolute" />;
   } else {
     let data = await retrieveQueuePosition("affs");
     let queuePosition = data["queuePosition"];

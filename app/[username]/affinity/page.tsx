@@ -69,7 +69,7 @@ export default async function page({
         <Suspense
           fallback={
             affCookie ? (
-              <Loading absolute={true} />
+              <Loading spinnerType="Absolute" />
             ) : (
               <AffQueueDisplay queuePosition={queuePosition} />
             )

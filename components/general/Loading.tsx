@@ -5,16 +5,23 @@ import LoadingSpinner from "./LoadingSpinner";
 export default function Loading({
   width,
   height,
-  absolute,
+  backgroundColor,
+  spinnerType,
 }: {
   width?: number;
   height?: number;
-  absolute?: boolean;
+  backgroundColor?: string;
+  spinnerType?: "Absolute" | "Flex" | "Regular";
 }) {
   const currentMonth = new Date().getMonth();
   return currentMonth === 11 ? (
     <LoadingPadoru width={width} />
   ) : (
-    <LoadingSpinner width={width} height={height} absolute={absolute} />
+    <LoadingSpinner
+      width={width}
+      height={height}
+      backgroundColor={backgroundColor}
+      spinnerType={spinnerType}
+    />
   );
 }

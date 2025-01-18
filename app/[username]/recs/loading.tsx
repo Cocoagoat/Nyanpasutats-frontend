@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 export default async function loading() {
   let recsCookie = cookies().get("recs");
   if (recsCookie) {
-    return <Loading absolute={true} />;
+    return <Loading spinnerType="Absolute" />;
   } else {
     let data = await retrieveQueuePosition("recs");
     let queuePosition = data["queuePosition"];
