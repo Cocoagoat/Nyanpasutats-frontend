@@ -17,18 +17,18 @@ export function Nav() {
 
   return (
     <nav
-      className="z-50 flex 
-      w-full justify-end bg-gradient-to-tl from-blue-970 text-lg text-white
+      className="z-50 flex w-full justify-end bg-gradient-to-tl
+       from-blue-970 py-2 text-lg text-white md:py-0
      "
     >
       <div className={`z-[170] flex w-full flex-col`}>
         <button
-          className={`flex justify-end bg-blue-990 px-8 
-             transition-colors duration-500 md:hidden
+          className={`flex justify-end bg-blue-990 px-8 transition-colors 
+             duration-300  md:hidden
            ${isAccordionOpen ? "text-right" : "text-left"}`}
           onClick={() => setIsAccordionOpen(!isAccordionOpen)}
         >
-          <RiMenuFill />
+          <RiMenuFill className="h-6 w-6 rounded-md p-1 hover:bg-lime-600" />
         </button>
 
         <ul

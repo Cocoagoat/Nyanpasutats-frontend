@@ -17,8 +17,8 @@ export default function NavItem({
   return (
     <li
       className={`
-      z-50 w-36 cursor-pointer py-2 text-center 
-      transition-colors duration-300 hover:bg-lime-600 2xl:py-4`}
+      z-50 w-full cursor-pointer py-2 text-center transition-colors 
+      duration-300 hover:bg-lime-600 md:w-36 2xl:py-4`}
       onClick={() => {
         if (link !== currentPath && !link.includes("nyanpass")) {
           setClicked(true);
@@ -31,7 +31,7 @@ export default function NavItem({
         target={link.startsWith("https") ? "_blank" : ""}
         rel="noopener noreferrer"
       >
-        {!clicked ? text : <Loading width={25} absolute={true} />}
+        {!clicked ? text : <Loading width={25} spinnerType="Absolute" />}
       </Link>
     </li>
   );
