@@ -20,7 +20,7 @@ export default function TierListLoader({
           width > 1000 ? `max(1000px, ${maxRowSize * 65 + 100}px)` : "100%",
       }}
     >
-      <Loading absolute={true} />
+      <Loading spinnerType="Absolute" />
     </div>
   );
 }
