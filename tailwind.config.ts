@@ -10,6 +10,30 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // fluid: {
+      //   textSizes: {
+      //     fullhd_2xl: {
+      //       minSize: "16px",
+      //       maxSize: "24px",
+      //       minScreen: "1920px",
+      //       maxScreen: "2560px",
+      //     },
+      //     fullhd_md: {
+      //       min: "11px",
+      //       max: "16px",
+      //       minvw: "1920px",
+      //       maxvw: "2560px",
+      //     },
+      //   },
+      //   width: {
+      //     fullhd_container: {
+      //       min: "192px",
+      //       max: "256px",
+      //       minvw: "1920px",
+      //       maxvw: "2560px",
+      //     },
+      //   },
+      // },
       colors: {
         "sky-550": "#74ceff",
         "lime-550": "#74b811",
@@ -31,6 +55,12 @@ const config: Config = {
         clampmd: ["clamp(1.25rem, 1.5vw, 1.75rem)", "1.5rem"],
         clamplg: ["clamp(1.75rem, 2vw, 2.25rem)", "2rem"],
         clampxl: ["clamp(3.5rem, 4vw, 4.5rem)", "4rem"],
+        "fluid-md-ultrahd": "clamp(16px, 0.95vw, 24px)",
+        "fluid-md-4k": "clamp(24px, 0.95vw, 1000px)",
+        "fluid-sm-ultrahd": "clamp(10px, 0.65vw, 16px)",
+        "fluid-sm-4k": "clamp(16px, 0.65vw, 1000px)",
+        "fluid-xs-ultrahd": "clamp(7px, 0.4vw, 10px)",
+        "fluid-xs-4k": "clamp(10px, 0.4vw, 1000px)",
       },
       maxWidth: {
         "1/4": "25%",
@@ -45,7 +75,8 @@ const config: Config = {
         "front-n-center-65": "max(600px, 65%)",
         "front-n-center-70": "max(600px, 70%)",
         "front-n-center-75": "max(600px, 75%)",
-        "front-n-center-80": "max(600px,80%)",
+        "front-n-center-80": "max(600px, 80%)",
+        "fluid-redirectbox": "clamp(192px, 12vw, 256px)",
       },
       maxHeight: {
         "front-n-center": "88%",
@@ -83,12 +114,21 @@ const config: Config = {
       width: {
         "image-carousel": "clamp(300px, 25vw, 550px)",
         "small-screen-card": "clamp(300px, 80vw, 900px)",
+        "fluid-redirectbox": "clamp(192px, 12vw, 10000px)",
+        "fluid-page": "clamp(1920px, 100vw, 10000px)",
+      },
+      height: {
+        "fluid-redirectbox": "clamp(192px, 12vw, 10000px)",
+      },
+      minWidth: {
+        "fluid-redirectbox": "clamp(192px, 12vw, 256px)",
       },
     },
   },
   plugins: [
     require("tailwindcss"),
     require("autoprefixer"),
+    require("tailwindcss-fluid"),
     plugin(function ({ matchUtilities, theme }: any) {
       matchUtilities(
         {
