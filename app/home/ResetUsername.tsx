@@ -19,12 +19,13 @@ export default function ResetUsername({
         placeholder={userName}
         disabled
         onChange={(e) => setUserInputField(e.target.value)}
-        className="max-w-md rounded-l-lg p-2.5 text-clampsm outline-none"
+        className="max-w-md rounded-l-lg p-2.5 bg-blue-970 text-white opacity-100 text-clampsm outline-none"
         required
       ></input>
 
       <button
-        className="rounded-r-lg bg-red-500 px-5 py-2.5 text-center font-bold text-white hover:bg-red-700"
+        className="rounded-r-lg bg-red-500 px-5 py-2.5 text-center
+         font-bold text-white hover:bg-red-700"
         onClick={handleResetUsername}
       >
         Reset Username

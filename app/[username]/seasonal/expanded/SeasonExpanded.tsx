@@ -41,7 +41,7 @@ export default function SeasonExpanded({
   const [favorites, setFavorites] = useState<ShowsToDisplay>({});
   const [loaded, setLoaded] = useState(false);
   const [displayContShow, setDisplayContShow] = useState(true);
-  const { height } = useWindowSize();
+  const { width, height } = useWindowSize();
   const tiers = useRef<TiersState>({});
   const username = useParams<{ username: string }>().username;
 

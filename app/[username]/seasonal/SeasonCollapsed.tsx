@@ -28,7 +28,7 @@ export default function SeasonCollapsed({
   const rgbColor = hexToRgb(backgroundColor);
 
   return (
-    <div className="relative mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg">
+    <div className="relative mx-4 lg:mx-16 mb-5 overflow-hidden rounded-3xl text-sky-100 shadow-lg">
       <Image
         src={backgroundImage}
         fill
@@ -51,7 +51,7 @@ export default function SeasonCollapsed({
         <div className="flex items-center justify-between p-4">
           <div>
             <h2
-              className={`text-2xl font-bold shadow-black 
+              className={`text-lg lg:text-2xl font-bold shadow-black 
                 text-shadow-sm`}
             >
               {season}
@@ -62,10 +62,11 @@ export default function SeasonCollapsed({
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           >
-            <p className="text-md bg-black bg-opacity-40 p-1 font-semibold shadow-black text-shadow-sm">
+            <p className="text-xs sm:text-sm lg:text-md bg-black bg-opacity-40 p-1 
+            font-semibold shadow-black text-shadow-sm">
               Shows Watched: {seasonStats["Shows"]}
             </p>
-            <p className="text-md  bg-black bg-opacity-40 p-1 font-semibold shadow-black text-shadow-sm">
+            <p className="text-xs sm:text-sm lg:text-md bg-black bg-opacity-40 p-1 font-semibold shadow-black text-shadow-sm">
               {`Mean Score ${displayedMean == "AvgScore" ? "" : "(Top 10)"}`}:{" "}
               {seasonStats[displayedMean]}
             </p>
@@ -93,7 +94,8 @@ export default function SeasonCollapsed({
             setExpanded(true);
             setCardOpen(true);
           }}
-          className="cursor-pointer bg-black bg-opacity-50 py-2 text-center"
+          className="text-xs sm:text-sm lg:text-md cursor-pointer 
+          bg-black bg-opacity-50 py-1 lg:py-2 text-center"
         >
           Expand
           <RiArrowDownDoubleFill className="inline-block" />
