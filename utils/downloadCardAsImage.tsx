@@ -5,30 +5,25 @@ export async function downloadCardAsImage(cardId: string, imageName: string) {
   if (cardElement) {
     // const aspectRatio = cardElement.offsetHeight / cardElement.offsetWidth;
 
-    htmlToImage
-      .toPng(cardElement, {
-        pixelRatio: 1.8,
-        backgroundColor: "#000000",
-      })
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = `${imageName}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      })
-      .catch((error) => {
-        console.error("Could not generate image.");
-      });
+    const dataUrl = await htmlToImage.toPng(cardElement, {
+      pixelRatio: 1.8,
+      backgroundColor: "#000000",
+    });
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = `${imageName}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    return true;
+  } else {
+    return false;
   }
 }
 
 export async function copyCardAsImage(cardId: string) {
   const cardElement = document.getElementById(cardId);
   if (cardElement) {
-    // const aspectRatio = cardElement.offsetHeight / cardElement.offsetWidth;
-
     try {
       const dataUrl = await htmlToImage.toPng(cardElement, {
         backgroundColor: "#000000",
@@ -43,20 +38,88 @@ export async function copyCardAsImage(cardId: string) {
       ) {
         const clipboardItem = new ClipboardItem({ "image/png": blob });
         await navigator.clipboard.write([clipboardItem]);
+        return true;
       } else {
-        // Fallback for browsers that do not support ClipboardItem
-        // Provide a link for the user to download the image
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "card-image.png";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Will not work on browsers that do not support ClipboardItem
+        return false;
       }
     } catch (error) {
-      console.error("Could not copy element.");
+      return false;
     }
   } else {
-    console.error("Could not copy element.");
+    return false;
   }
+}
+
+export async function getImageShareUrl(
+  cardId: string,
+  imageName: string,
+  imageType: "seasonalCard" | "tierList",
+): Promise<boolean> {
+  const cardElement = document.getElementById(cardId);
+  if (!cardElement) {
+    console.error("Card element not found.");
+    return false; // Return false if card element doesn't exist
+  }
+
+  try {
+    // Generate the image as a PNG
+    const dataUrl = await htmlToImage.toPng(cardElement, {
+      pixelRatio: 1.25,
+      backgroundColor: "#000000",
+    });
+
+    // Convert dataUrl to a Blob
+    const blob = dataURLToBlob(dataUrl);
+
+    // Create a File object
+    const file = new File([blob], `${imageName}.png`, { type: "image/png" });
+
+    // Use FormData to send the file
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("image_type", imageType);
+    formData.append("image_name", imageName);
+
+    // Upload the file to the backend
+    const response = await fetch(
+      "http://localhost:8000/upload_infographic_img/",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    if (!response.ok) {
+      console.error("Failed to upload image. Status:", response.status);
+      return false; // Return false if the upload fails
+    }
+
+    const data = await response.json();
+    if (!data.url) {
+      console.error("No URL returned from the server.");
+      return false; // Return false if no URL is received
+    }
+
+    // Copy the URL to the clipboard
+    await navigator.clipboard.writeText(data.url);
+
+    return true; // Return true if everything succeeds
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return false; // Return false if any error occurs
+  }
+}
+
+// Helper function to convert dataUrl to Blob
+function dataURLToBlob(dataUrl: string): Blob {
+  const byteString = atob(dataUrl.split(",")[1]);
+  const mimeString = dataUrl.split(",")[0].split(":")[1].split(";")[0];
+
+  const byteArray = new Uint8Array(byteString.length);
+  for (let i = 0; i < byteString.length; i++) {
+    byteArray[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([byteArray], { type: mimeString });
 }
