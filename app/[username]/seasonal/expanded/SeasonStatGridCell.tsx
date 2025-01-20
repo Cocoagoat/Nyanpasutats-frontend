@@ -2,6 +2,7 @@ import TooltipQuestionMark from "@/components/general/TooltipQuestionMark";
 import { PiArrowLeftBold, PiArrowRightBold } from "react-icons/pi";
 import { useSingleSeasonContext } from "../reducer/SeasonalContext";
 import SeasonStat from "./SeasonStat";
+import SeasonStatArrowButton from "./SeasonStatArrowButton";
 
 export default function SeasonStatGridCell({
   name,
@@ -25,20 +26,8 @@ export default function SeasonStatGridCell({
       <SeasonStat statName={name} statValue={value} />
       {editModeOpen && (
         <>
-          <button
-            onClick={() => handleChangeStat("left", cellIndex)}
-            className="absolute left-0 top-1/4 rounded-full bg-zinc-800 p-2"
-            aria-label="Previous Stat"
-          >
-            <PiArrowLeftBold className="" />
-          </button>
-          <button
-            onClick={() => handleChangeStat("right", cellIndex)}
-            className="absolute right-0 top-1/4 rounded-full bg-zinc-800 p-2 "
-            aria-label="Next Stat"
-          >
-            <PiArrowRightBold className="" />
-          </button>
+          <SeasonStatArrowButton onClick={() => handleChangeStat("left", cellIndex)} type="left" />
+          <SeasonStatArrowButton onClick={() => handleChangeStat("right", cellIndex)} type="right"/>
         </>
       )}
     </div>
