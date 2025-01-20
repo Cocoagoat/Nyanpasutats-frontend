@@ -9,6 +9,11 @@ const nextConfig = {
         destination: "/home",
         permanent: true,
       },
+      {
+        source: "/faq",
+        destination: "/home",
+        permanent: true,
+      }
     ];
   },
   images: {
@@ -33,7 +38,7 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
 process.on("unhandledRejection", (reason, promise) => {
   if (reason.message.includes("Cookies can only be modified")) {

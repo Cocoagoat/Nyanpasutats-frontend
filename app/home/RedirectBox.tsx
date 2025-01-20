@@ -62,8 +62,19 @@ export default function RedirectBox({
       if (setRedirectBoxClicked) setRedirectBoxClicked(true);
       let route = link.split("/")[2];
       localStorage.setItem(route, "true");
+      setLoading(true);
     }
-    setLoading(true);
+    else{
+      toast("The FAQ is currently a work in progress, and will be available with the site's full release.", {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          backgroundColor: "#ff0055",
+          color: "white",
+          fontSize: "1.2rem",
+        },
+      })
+    }
   }
 
   return disabled ? (
