@@ -9,7 +9,6 @@ import { getMinShared } from "./getMinShared";
 import { cookies } from "next/headers";
 import GenericError from "@/components/general/GenericError";
 import Loading from "@/components/general/Loading";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params,
