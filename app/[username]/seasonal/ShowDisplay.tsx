@@ -64,10 +64,10 @@ export default function ShowDisplay({
     }
   }, [show.imageUrl]);
 
-  function handleImageError() {
-    setError(true);
-    updateImageUrl(show.name);
-  }
+  //function handleImageError() {
+  //  setError(true);
+  //  updateImageUrl(show.name);
+  //}
 
   return (
     <div className="relative flex flex-col">
@@ -115,7 +115,7 @@ export default function ShowDisplay({
             className={`mx-auto h-full rounded-xl shadow-md shadow-black ${
               hovered ? "opacity-50" : ""
             }`}
-            onError={handleImageError}
+            // onError={handleImageError}
           />
         ) : (
           <div
