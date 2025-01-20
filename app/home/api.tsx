@@ -14,7 +14,7 @@ export async function startTask(
   path: UserPathType,
   site: SiteType,
 ): Promise<string> {
-  const url = `http://localhost:80/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
+  const url = `https://nps.moe/api/${path}/?username=${encodeURIComponent(username)}&site=${encodeURIComponent(site)}`;
   try {
     const res = await fetch(url, { cache: "no-store" });
 
@@ -30,10 +30,9 @@ export async function startTask(
 export async function retrieveQueuePosition(
   type: "affs" | "recs" | "seasonal",
 ) {
-  const url = `https://localhost/queue_pos/?type=${type}&random=${Math.random()}`;
+  const url = `https://nps.moe/api/queue_pos/?type=${type}&random=${Math.random()}`;
   // Random is added because next.js doesn't seem to care about the cache: "no-store" option
   const res = await fetch(url, { cache: "no-store" });
-
   const rawData = await res.text();
   const data = JSON.parse(rawData);
   return { queuePosition: data["queuePosition"] };
@@ -49,7 +48,7 @@ export async function retrieveQueuePosition(
 // }
 
 export async function updateImageUrl(showName: string) {
-  const url = `http://localhost:80/update_img_url/`;
+  const url = `https://nps.moe/api/update_img_url/`;
   const res = await fetch(url, {
     method: "POST",
     cache: "no-store",
@@ -69,7 +68,7 @@ export async function getShowData(
   try {
     const multipleShows = typeof showNames !== "string";
     const response = await fetch(
-      `http://localhost/${path}/?show_name${multipleShows ? "s" : ""}=${
+      `https://nps.moe/api/${path}/?show_name${multipleShows ? "s" : ""}=${
         multipleShows
           ? encodeURIComponent(JSON.stringify(showNames))
           : encodeURIComponent(showNames)
