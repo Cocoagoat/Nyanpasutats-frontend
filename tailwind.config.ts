@@ -87,7 +87,6 @@ const config: Config = {
     },
   },
   plugins: [
-    require("flowbite/plugin"),
     require("tailwindcss"),
     require("autoprefixer"),
     plugin(function ({ matchUtilities, theme }: any) {
