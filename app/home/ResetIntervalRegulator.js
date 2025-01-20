@@ -16,8 +16,8 @@ export default function startGlobalInterval() {
           }
         }
       },
-      2 * 60 * 1000,
-    ); // 2 minutes
+      5 * 60 * 1000,
+    ); // 5 minutes
     intervalSet = true;
   }
 }
