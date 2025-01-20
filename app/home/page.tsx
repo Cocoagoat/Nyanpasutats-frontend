@@ -4,7 +4,6 @@ import { SiteType, siteOptions } from "@/app/interfaces";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { useEffect, useRef, useState } from "react";
 import { sendRequestToView } from "../actions/sendRequestToView";
-import { retrieveQueuePosition } from "./api";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
 
@@ -28,6 +27,7 @@ import Heading from "./Heading";
 import { startGlobalIntervalServerSide } from "./ResetIntervalRegulator.js";
 import ResetUsername from "./ResetUsername";
 import UsernameInput from "./UsernameInput";
+import { retrieveQueuePosition } from "../actions/getQueuePosition";
 
 export default function Home() {
   const backgrounds = [img1.src, img2.src, img3.src, img4.src, img5.src];
@@ -128,7 +128,7 @@ export default function Home() {
     }
 
     let resetCount = await getCookie("resetCount");
-    if (resetCount && parseInt(resetCount) >= 20) {
+    if (resetCount && parseInt(resetCount) >= 5) {
       setError(
         "You've been doing that too much lately. Please try again later.",
       );
@@ -137,6 +137,9 @@ export default function Home() {
 
     try {
       let data = await retrieveQueuePosition("seasonal");
+      if ('error' in data){
+        throw Error(data["error"])
+      }
       setQueuePosition(data.queuePosition);
       setLoading(true);
 
@@ -144,7 +147,12 @@ export default function Home() {
         userInputField,
         "seasonal",
         currentSite,
+        "return"
       );
+
+      if('error' in seasonalData){
+        throw Error(seasonalData["error"])
+      }
 
       localStorage.setItem("username", userInputField);
       setUserName(userInputField);

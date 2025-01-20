@@ -1,4 +1,5 @@
 "use server";
+import { sanitizeError } from "@/utils/sanitizeError";
 import { handleError } from "../home/api";
 import { UserPathType } from "../interfaces";
 
@@ -9,8 +10,9 @@ export async function retrieveTaskData(
 ) {
   "use server";
 
-  const url = `https://localhost/tasks/?task_id=${taskId}`;
+  const url = `https://nps.moe/api/tasks/?task_id=${taskId}`;
   try {
+
     const res = await fetch(url, { cache: "force-cache" });
     // The view connected to this endpoint will poll the Celery task
     // until it's done, then return the data/error message.
@@ -23,6 +25,8 @@ export async function retrieveTaskData(
 
     return data;
   } catch (error: any) {
-    handleError(error);
+    return {
+      error : sanitizeError(error.message)
+    }
   }
 }
