@@ -47,6 +47,7 @@ export default function ImageUrlUploadModal({
            border-zinc-600  text-black
             focus:ring-4 focus:ring-zinc-500"
                 value={imageUrl}
+                maxLength={150}
                 onChange={(e) => setImageUrl(e.target.value)}
                 aria-label={`Paste image URL here`}
               />
@@ -63,6 +64,7 @@ export default function ImageUrlUploadModal({
                 <input
                   type="text"
                   id="text"
+                  maxLength={150}
                   className="h-[48px] w-full min-w-[50%] rounded-3xl
            border-zinc-600 text-black focus:ring-4
             focus:ring-zinc-500"

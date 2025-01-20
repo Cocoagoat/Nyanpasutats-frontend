@@ -33,6 +33,7 @@ export default function FilterByShowAmount({
           value={minShows}
           onChange={(e) => setMinShows(e.target.value)}
           className="border border-zinc-600 bg-zinc-700 text-white"
+          maxLength={3}
         />
         <input
           type="number"
@@ -43,6 +44,7 @@ export default function FilterByShowAmount({
             handleFilterByShowCount(Number(minShows), Number(maxShows));
           }}
           className="border border-zinc-600 bg-zinc-700 text-white"
+          maxLength={3}
         />
         <div className="flex justify-center gap-10">
           <button

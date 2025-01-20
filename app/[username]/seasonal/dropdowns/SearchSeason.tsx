@@ -37,7 +37,8 @@ export default function SearchSeason() {
                 }
               }}
               onChange={(e) => setSearchText(e.target.value)}
-              className=" border-none  bg-zinc-700 text-white focus:ring-2 focus:ring-lime-600"
+              className=" border-none outline-none focus:outline-none
+               bg-zinc-700 text-white p-1 focus:ring-2 focus:ring-lime-600"
             />
             <LargeButton onClick={() => handleFilterByName(searchText)}>
               Apply

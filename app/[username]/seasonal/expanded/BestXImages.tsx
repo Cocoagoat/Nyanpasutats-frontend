@@ -150,6 +150,7 @@ export default function BestXImages({
           <input
             type="text"
             value={title}
+            maxLength={20}
             aria-label="Best X Title"
             onChange={(e) => setTitle(e.target.value)}
             className={`place-self-center border-none

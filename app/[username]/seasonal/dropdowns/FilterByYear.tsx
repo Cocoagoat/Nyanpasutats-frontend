@@ -82,14 +82,17 @@ export default function FilterByYear({
               handleResetInputs();
             }
           }}
-          className=" border-none bg-zinc-700
-           text-white outline-none focus:outline-none focus:ring-2
+          max={2100}
+          maxLength={4}
+          className="border-none bg-zinc-700
+           text-white outline-none p-1 focus:outline-none focus:ring-2
             focus:ring-lime-600"
         />
         <input
           type="number"
           placeholder={`Max ${placeholderText}`}
           value={max}
+          maxLength={4}
           onChange={(e) => setMax(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -98,7 +101,8 @@ export default function FilterByYear({
             }
           }}
           className="border-none bg-zinc-700
-           text-white focus:ring-2 focus:ring-lime-600"
+           text-white focus:ring-2 p-1 outline-none focus:outline-none
+            focus:ring-lime-600"
         />
         <div className="flex justify-center gap-10">
           <button
