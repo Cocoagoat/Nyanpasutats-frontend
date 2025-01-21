@@ -58,7 +58,6 @@ export async function getImageShareUrl(
 ): Promise<boolean> {
   const cardElement = document.getElementById(cardId);
   if (!cardElement) {
-    console.error("Card element not found.");
     return false; // Return false if card element doesn't exist
   }
 
@@ -83,7 +82,7 @@ export async function getImageShareUrl(
 
     // Upload the file to the backend
     const response = await fetch(
-      "http://localhost:8000/upload_infographic_img/",
+      "https://nps.moe/api/upload_infographic_img/",
       {
         method: "POST",
         body: formData,
@@ -91,13 +90,11 @@ export async function getImageShareUrl(
     );
 
     if (!response.ok) {
-      console.error("Failed to upload image. Status:", response.status);
       return false; // Return false if the upload fails
     }
 
     const data = await response.json();
     if (!data.url) {
-      console.error("No URL returned from the server.");
       return false; // Return false if no URL is received
     }
 
@@ -106,7 +103,6 @@ export async function getImageShareUrl(
 
     return true; // Return true if everything succeeds
   } catch (error) {
-    console.error("An error occurred:", error);
     return false; // Return false if any error occurs
   }
 }

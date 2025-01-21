@@ -142,14 +142,12 @@ export default function Home() {
       }
       setQueuePosition(data.queuePosition);
       setLoading(true);
-      console.log("Before sendRequestToView");
       let seasonalData = await sendRequestToView(
         userInputField,
         "seasonal",
         currentSite,
         "return"
       );
-      console.log("After sendRequestToView");
 
       if('error' in seasonalData){
         throw Error(seasonalData["error"])

@@ -6,7 +6,7 @@ export default async function page({
 }: {
   params: { imageID: string };
 }) {
-  const url = `http://localhost:8000/fetch_infographic_img/?unique_id=${params.imageID}`;
+  const url = `https://nps.moe/api/fetch_infographic_img/?unique_id=${params.imageID}`;
   try {
     const res = await fetch(url);
     if (!res.ok) {

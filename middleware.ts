@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   // Redirects users who change the URL to the username in the cookie
 
   const { pathname } = request.nextUrl;
-  console.log("pathname", pathname);
+  //console.log("pathname", pathname);
   const origin = request.nextUrl.origin;
 
   if (pathname.includes("/affinity")) {
