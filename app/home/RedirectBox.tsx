@@ -3,7 +3,7 @@ import Link from "next/link";
 import RedirectBoxText from "./RedirectBoxText";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import toast from "react-hot-toast";
-import test from "@/public/nnb6.png";
+import test from "@/public/nnb6.jpg";
 import Image from "next/image";
 
 type RedirectBoxProps = {

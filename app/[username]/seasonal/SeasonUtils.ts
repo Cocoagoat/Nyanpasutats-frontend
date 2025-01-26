@@ -1,8 +1,8 @@
 import { SeasonName } from "@/app/interfaces";
-import fallBackground from "@/public/FallBackground.png";
-import springBackground from "@/public/SpringBackground.png";
-import summerBackground from "@/public/SummerBackground.png";
-import winterBackground from "@/public/WinterBackground.png";
+import fallBackground from "@/public/FallBackground.jpg";
+import springBackground from "@/public/SpringBackground.jpg";
+import summerBackground from "@/public/SummerBackground.jpg";
+import winterBackground from "@/public/WinterBackground.jpg";
 
 export function getBackgroundColor(seasonName: SeasonName) {
   switch (seasonName) {

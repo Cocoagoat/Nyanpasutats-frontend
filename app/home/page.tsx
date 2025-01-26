@@ -7,11 +7,11 @@ import { sendRequestToView } from "../actions/sendRequestToView";
 import RedirectBox from "./RedirectBox";
 import { redirectBoxContent } from "./RedirectBoxContent";
 
-import img4 from "@/public/Affinity2.png";
-import img5 from "@/public/Recs.png";
-import img1 from "@/public/Test-card.png";
-import img2 from "@/public/Test-edited-card2.png";
-import img3 from "@/public/Test-tierlist.png";
+import img4 from "@/public/Affinity.jpg";
+import img5 from "@/public/Recs.jpg";
+import img1 from "@/public/Test-card.jpg";
+import img2 from "@/public/Test-edited-card2.jpg";
+import img3 from "@/public/Test-tierlist.jpg";
 
 import ImageCarousel from "@/components/general/ImageCarousel";
 import ToasterWithX from "@/components/general/ToasterWithX";

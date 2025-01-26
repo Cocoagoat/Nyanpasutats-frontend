@@ -1,4 +1,4 @@
-import backgroundImage from "@/public/nnb5.png";
+import backgroundImage from "@/public/nnb5.jpg";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
