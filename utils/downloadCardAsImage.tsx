@@ -5,7 +5,8 @@ export async function downloadCardAsImage(cardId: string, imageName: string) {
   if (cardElement) {
     // const aspectRatio = cardElement.offsetHeight / cardElement.offsetWidth;
 
-    const dataUrl = await htmlToImage.toPng(cardElement, {
+    const dataUrl = await htmlToImage.toJpeg(cardElement, {
+      quality: 0.8,
       pixelRatio: 1.8,
       backgroundColor: "#000000",
     });
@@ -22,6 +23,7 @@ export async function downloadCardAsImage(cardId: string, imageName: string) {
 }
 
 export async function copyCardAsImage(cardId: string) {
+  // Can't use jpeg for copying due to no Clipboard support for it
   const cardElement = document.getElementById(cardId);
   if (cardElement) {
     try {
@@ -63,8 +65,9 @@ export async function getImageShareUrl(
 
   try {
     // Generate the image as a PNG
-    const dataUrl = await htmlToImage.toPng(cardElement, {
-      pixelRatio: 1.25,
+    const dataUrl = await htmlToImage.toJpeg(cardElement, {
+      quality: 0.8,
+      pixelRatio: 1.8,
       backgroundColor: "#000000",
     });
 
@@ -82,7 +85,7 @@ export async function getImageShareUrl(
 
     // Upload the file to the backend
     const response = await fetch(
-      "https://nps.moe/api/upload_infographic_img/",
+      "/inner-api/uploadImage",
       {
         method: "POST",
         body: formData,

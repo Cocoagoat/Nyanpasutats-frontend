@@ -1,21 +1,19 @@
 import GenericError from "@/components/general/GenericError";
 import { Nav } from "@/components/general/Nav";
+import { getUploadedImage } from "@/app/actions/getUploadedImage";
 
 export default async function page({
   params,
 }: {
   params: { imageID: string };
 }) {
-  const url = `https://nps.moe/api/fetch_infographic_img/?unique_id=${params.imageID}`;
   try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      return (
-        <GenericError errorMessage="Wrong image ID or image no longer exists." />
-      );
+    const data = await getUploadedImage(params.imageID);
+    
+    if (!data?.url) {
+      return <GenericError errorMessage={data.error} />;
     }
 
-    const data = await res.json();
     return (
       <>
         <Nav />
@@ -25,5 +23,7 @@ export default async function page({
         />
       </>
     );
-  } catch (err) {}
+  } catch (e : any) {
+    return <GenericError errorMessage={e.message} />;
+  }
 }
